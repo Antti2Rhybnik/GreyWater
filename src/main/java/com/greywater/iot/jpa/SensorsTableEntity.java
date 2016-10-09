@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "SENSORS_TABLE", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
-@NamedQuery(name = "SensorsTableEntity.getAll", query = "SELECT s from SensorsTableEntity s")
+@NamedQuery(name = "getAll", query = "SELECT s from SensorsTableEntity s")
 @XmlRootElement
 public class SensorsTableEntity implements Serializable {
     private String gDevice;

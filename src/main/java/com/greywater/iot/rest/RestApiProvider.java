@@ -68,8 +68,7 @@ public class RestApiProvider {
     @Produces(MediaType.APPLICATION_JSON)
     public List<SensorsTableEntity> getAllSensors() {
 
-        List<SensorsTableEntity> list = (List<SensorsTableEntity>)em.createNamedQuery("SensorsTableEntity.getAll").getResultList();
-        return list;
+        return em.createNamedQuery("getAll", SensorsTableEntity.class).getResultList();
     }
 
 
