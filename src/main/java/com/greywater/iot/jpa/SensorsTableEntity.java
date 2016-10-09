@@ -1,6 +1,7 @@
 package com.greywater.iot.jpa;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -10,8 +11,9 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "SENSORS_TABLE", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
-@NamedQuery(name = "SensorsTableEntity.getAll", query = "SELECT s from SensorsTableEntity s")
-public class  SensorsTableEntity implements Serializable {
+@NamedQuery(name = "getAll", query = "SELECT s from SensorsTableEntity s")
+@XmlRootElement
+public class SensorsTableEntity implements Serializable {
     private String gDevice;
     private Timestamp gCreated;
     private Timestamp timestamp;
@@ -20,9 +22,7 @@ public class  SensorsTableEntity implements Serializable {
     private Double sensorValue;
 
 
-    public SensorsTableEntity() {
-
-    }
+    public SensorsTableEntity() {}
 
     @Basic
     @Column(name = "G_DEVICE")
