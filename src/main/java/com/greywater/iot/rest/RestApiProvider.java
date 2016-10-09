@@ -27,24 +27,6 @@ public class RestApiProvider {
     DataSource ds = null;
     EntityManager em = null;
 
-    @GET
-    @Path("connect")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String connect() {
-
-        if (ds == null || em == null) {
-
-            try {
-                InitialContext ctx = new InitialContext();
-                ds = (DataSource) ctx.lookup("java:comp/env/jdbc/DefaultDB");
-                em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-            } catch (NamingException e) {
-                return e.getMessage();
-            }
-        }
-
-        return "connected";
-    }
 
     @GET
     @Path("test")
@@ -70,6 +52,16 @@ public class RestApiProvider {
 
         List<SensorsTableEntity> list = (List<SensorsTableEntity>)em.createNamedQuery("SensorsTableEntity.getAll").getResultList();
         return list.toString();
+    }
+
+    public RestApiProvider() {
+        if (ds == null || em == null) try {
+            InitialContext ctx = new InitialContext();
+            ds = (DataSource) ctx.lookup("java:comp/env/jdbc/DefaultDB");
+            em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
+        } catch (NamingException e) {
+             e.getMessage();
+        }
     }
 
 
