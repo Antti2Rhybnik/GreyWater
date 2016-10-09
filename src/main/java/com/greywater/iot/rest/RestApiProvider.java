@@ -13,6 +13,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 /**
  * Created by antti on 09.10.16.
@@ -61,6 +62,17 @@ public class RestApiProvider {
         SensorsTableEntity s = em.find(SensorsTableEntity.class, id);
         return s.toString();
     }
+
+    @GET
+    @Path("sensors")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getAllSensors() {
+
+        List<SensorsTableEntity> list = (List<SensorsTableEntity>)em.createNamedQuery("SensorsTableEntity.getAll").getResultList();
+        return list.toString();
+    }
+
+
 
 
 }
