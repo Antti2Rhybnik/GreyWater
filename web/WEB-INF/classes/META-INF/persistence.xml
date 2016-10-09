@@ -4,9 +4,11 @@
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<jta-data-source>java:comp/env/jdbc/DefaultDB</jta-data-source>
 		<class>com.greywater.iot.jpa.SensorsTableEntity</class>
+		<class>com.greywater.iot.jpa.VirtualSensor</class>
 		<properties>
 			<!--<property name="eclipselink.ddl-generation" value="create-tables"/>-->
 			<!--<property name="javax.persistence.schema-generation.create-source" value="metadata"/>-->
+            <property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
 		</properties>
 
 	</persistence-unit>
