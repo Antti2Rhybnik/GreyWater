@@ -1,6 +1,7 @@
 package com.greywater.iot.jpa;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +10,9 @@ import java.util.List;
  * Created by alexander on 10/10/16.
  */
 @Entity
-@Table(name = "VIRTUAL_SENSORS",schema="NEO_77I8IO0F4PQ8TZ67A28RD0L2L")
-@NamedQuery(name = "VirtualSensors.getAll", query = "SELECT v from VIRTUAL_SENSORS v")
+@Table(name = "VIRTUAL_SENSORS", schema="NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
+@NamedQuery(name = "getAll", query = "SELECT v from VIRTUAL_SENSORS v")
+@XmlRootElement
 public class VirtualSensor {
     @TableGenerator(name = "CustomerGenerator", table = "ESPM_ID_GENERATOR", pkColumnName = "GENERATOR_NAME", valueColumnName = "GENERATOR_VALUE", pkColumnValue = "Customer", initialValue = 100000000, allocationSize = 100)
     @Id
@@ -81,11 +83,6 @@ public class VirtualSensor {
 
     public void setSensorValue(Double sensorValue) {
         this.sensorValue = sensorValue;
-    }
-
-    public List<VirtualSensor> getAllVirtualSensors() {
-
-        return new ArrayList<>();
     }
 
     @Override

@@ -14,7 +14,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,21 +49,21 @@ public class RestApiProvider {
     @GET
     @Path("sensors")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getAllSensors() {
+    public List<SensorsTableEntity> getAllSensors() {
         em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-        List<SensorsTableEntity> list = (List<SensorsTableEntity>)em.createNamedQuery("SensorsTableEntity.getAll").getResultList();
+        List<SensorsTableEntity> list = em.createNamedQuery("getAll", SensorsTableEntity.class).getResultList();
         em.close();
-        return list.toString();
+        return list;
     }
 
     @GET
     @Path("virtualsensors")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getAllVirtualSensors(){
+    public List<VirtualSensor> getAllVirtualSensors(){
         em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-        List<VirtualSensor> list = (List<VirtualSensor>) em.createNamedQuery("VirtualSensors.getAll").getResultList();
+        List<VirtualSensor> list = em.createNamedQuery("getAll", VirtualSensor.class).getResultList();
         em.close();
-        return list.toString();
+        return list;
     }
 
     public RestApiProvider() {

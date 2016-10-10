@@ -1,7 +1,7 @@
 package com.greywater.iot.handlers;
 
 import com.greywater.iot.jpa.VirtualSensor;
-import org.eclipse.persistence.internal.jpa.transaction.EntityTransactionWrapper;
+//import org.eclipse.persistence.internal.jpa.transaction.EntityTransactionWrapper;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
