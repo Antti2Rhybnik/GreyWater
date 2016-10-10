@@ -15,6 +15,7 @@ import javax.persistence.Persistence;
 public class InserIntoVirtualSensor implements Runnable{
     @Override
     public void run() {
+        System.out.println("In runnable");
         VirtualSensor virtualSensor = new VirtualSensor();
         virtualSensor.setgDevice("azazazs");
         try {

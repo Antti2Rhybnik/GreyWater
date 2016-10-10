@@ -2,6 +2,7 @@ package com.greywater.iot.jpa;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 @Table(name = "VIRTUAL_SENSORS", catalog = "")
 @NamedQuery(name = "getAll", query = "SELECT v from VirtualSensor v")
 @XmlRootElement
-public class VirtualSensor {
+public class VirtualSensor implements Serializable{
     @TableGenerator(name = "CustomerGenerator", table = "ESPM_ID_GENERATOR", pkColumnName = "GENERATOR_NAME", valueColumnName = "GENERATOR_VALUE", pkColumnValue = "Customer", initialValue = 100000000, allocationSize = 100)
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "VirtualSensorGenerator")
