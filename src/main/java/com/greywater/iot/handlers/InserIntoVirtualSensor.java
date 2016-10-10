@@ -16,7 +16,6 @@ public class InserIntoVirtualSensor implements Runnable{
     @Override
     public void run() {
         VirtualSensor virtualSensor = new VirtualSensor();
-        virtualSensor.setSensorValue(1.2);
         virtualSensor.setgDevice("azazazs");
         try {
             InitialContext ctx = new InitialContext();
