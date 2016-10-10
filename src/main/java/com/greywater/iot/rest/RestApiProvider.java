@@ -1,6 +1,7 @@
 package com.greywater.iot.rest;
 
 import com.greywater.iot.jpa.SensorsTableEntity;
+import com.greywater.iot.jpa.VirtualSensor;
 
 import javax.inject.Singleton;
 import javax.naming.InitialContext;
@@ -49,17 +50,30 @@ public class RestApiProvider {
     @Path("sensors")
     @Produces(MediaType.APPLICATION_JSON)
     public List<SensorsTableEntity> getAllSensors() {
+        em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
+        List<SensorsTableEntity> list = em.createNamedQuery("getAll", SensorsTableEntity.class).getResultList();
+        em.close();
+        return list;
+    }
 
-        return em.createNamedQuery("getAll", SensorsTableEntity.class).getResultList();
+    @GET
+    @Path("virtualsensors")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<VirtualSensor> getAllVirtualSensors(){
+        em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
+        List<VirtualSensor> list = em.createNamedQuery("getAll", VirtualSensor.class).getResultList();
+        em.close();
+        return list;
     }
 
     public RestApiProvider() {
+
         if (ds == null || em == null) try {
             InitialContext ctx = new InitialContext();
             ds = (DataSource) ctx.lookup("java:comp/env/jdbc/DefaultDB");
-            em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
+//            em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
         } catch (NamingException e) {
-             e.getMessage();
+            e.getMessage();
         }
     }
 
