@@ -14,6 +14,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,8 +51,9 @@ public class RestApiProvider {
     @Path("sensors")
     @Produces(MediaType.APPLICATION_JSON)
     public String getAllSensors() {
-
+        em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
         List<SensorsTableEntity> list = (List<SensorsTableEntity>)em.createNamedQuery("SensorsTableEntity.getAll").getResultList();
+        em.close();
         return list.toString();
     }
 
@@ -59,7 +61,9 @@ public class RestApiProvider {
     @Path("virtualsensors")
     @Produces(MediaType.APPLICATION_JSON)
     public String getAllVirtualSensors(){
+        em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
         List<VirtualSensor> list = (List<VirtualSensor>) em.createNamedQuery("VirtualSensors.getAll").getResultList();
+        em.close();
         return list.toString();
     }
 
@@ -68,7 +72,7 @@ public class RestApiProvider {
         if (ds == null || em == null) try {
             InitialContext ctx = new InitialContext();
             ds = (DataSource) ctx.lookup("java:comp/env/jdbc/DefaultDB");
-            em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
+//            em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
         } catch (NamingException e) {
             e.getMessage();
         }
