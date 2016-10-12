@@ -1,7 +1,6 @@
 package com.greywater.iot.rest;
 
 import com.greywater.iot.jpa.SensorsTableEntity;
-import com.greywater.iot.jpa.VirtualSensor;
 
 import javax.inject.Singleton;
 import javax.naming.InitialContext;
@@ -56,15 +55,6 @@ public class RestApiProvider {
         return list;
     }
 
-    @GET
-    @Path("virtualsensors")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<VirtualSensor> getAllVirtualSensors(){
-        em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-        List<VirtualSensor> list = em.createNamedQuery("getAll", VirtualSensor.class).getResultList();
-        em.close();
-        return list;
-    }
 
     public RestApiProvider() {
 

@@ -1,51 +1,51 @@
 package com.greywater.iot.jpa;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
-import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
+import javax.xml.stream.StreamFilter;
+import java.util.Date;
+import java.util.UUID;
 
 /**
- * Created by alexander on 10/10/16.
+ * Created by alexander on 10/12/16.
  */
-@Entity
-@Table(name = "VIRTUAL_SENSORS", catalog = "")
-@NamedQuery(name = "getAll", query = "SELECT v from VirtualSensor v")
-@XmlRootElement
-public class VirtualSensor implements Serializable{
-    @TableGenerator(name = "CustomerGenerator", table = "ESPM_ID_GENERATOR", pkColumnName = "GENERATOR_NAME", valueColumnName = "GENERATOR_VALUE", pkColumnValue = "Customer", initialValue = 100000000, allocationSize = 100)
+@MappedSuperclass
+public abstract class VirtualSensor {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "VirtualSensorGenerator")
-    @Column(name = "VIRTUAL_SENSOR_ID", length = 10)
-    private String  virtualSensorId;
+    @Column(name = "ID")
+    private String id = UUID.randomUUID().toString();
 
-    private String gDevice;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "INCOME_DATE")
+    private Date incomedAt = null;
 
-    public void setgDevice(String gDevice) {
-        this.gDevice = gDevice;
+    @PrePersist
+    protected void generateInitialData(){
+        final Date now = new Date();
+        incomedAt = now;
     }
 
-    public String getVirtualSensorId() {
-        return virtualSensorId;
+
+    //Add sensor value to virtual sensor and then evaluate virtual sensor logic
+    protected void addSensorValue(SensorsTableEntity sensorsTableEntity){}
+
+    //evaluation method for virtual sensor
+    protected void computeVirtualSensorValue(){}
+
+
+    public String getId() {
+        return id;
     }
 
-    public void setVirtualSensorId(String virtualSensorId) {
-        this.virtualSensorId = virtualSensorId;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    @Basic
-    @Column(name = "G_DEVICE")
-    public String getgDevice() {
-        return gDevice;
+    public Date getIncomedAt() {
+        return incomedAt;
     }
 
-    @Override
-    public String toString() {
-        return "VirtualSensor{" +
-                "virtualSensorId='" + virtualSensorId + '\'' +
-                ", gDevice='" + gDevice + '\'' +
-                '}';
+    public void setIncomedAt(Date incomedAt) {
+        this.incomedAt = incomedAt;
     }
 }

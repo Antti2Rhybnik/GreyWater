@@ -17,7 +17,6 @@ public class HandlerScheduler implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(new InserIntoVirtualSensor(), 0, 10, TimeUnit.SECONDS);
     }
 
     @Override
