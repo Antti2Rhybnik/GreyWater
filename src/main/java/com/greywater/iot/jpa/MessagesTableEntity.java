@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "MESSAGES_TABLE", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
-@NamedQuery(name = "getAll", query = "SELECT s from MessageTableEntity s")
+@NamedQuery(name = "getAll", query = "SELECT s from MessagesTableEntity s")
 @XmlRootElement
 public class MessagesTableEntity implements Serializable {
     private String gDevice;
@@ -20,7 +20,7 @@ public class MessagesTableEntity implements Serializable {
     private Double sensorValue;
 
 
-    public MessageTableEntity() {}
+    public MessagesTableEntity() {}
 
     @Basic
     @Column(name = "G_DEVICE")
