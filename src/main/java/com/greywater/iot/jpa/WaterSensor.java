@@ -19,10 +19,10 @@ public class WaterSensor extends VirtualSensor {
 
 
     @Override
-    public void addSensorValue(SensorsTableEntity sensorsTableEntity) {
-        this.setgCreated(sensorsTableEntity.getgCreated());
-        this.setSensorValue(sensorsTableEntity.getSensorValue());
-        this.setgDevice(sensorsTableEntity.getgDevice());
+    public void addSensorValue(MessageTableEntity messageTableEntity) {
+        this.setgCreated(messageTableEntity.getgCreated());
+        this.setSensorValue(messageTableEntity.getSensorValue());
+        this.setgDevice(messageTableEntity.getgDevice());
         computeVirtualSensorValue();
 
     }

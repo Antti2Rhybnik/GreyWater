@@ -2,7 +2,6 @@ package com.greywater.iot.jpa;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.ArrayList;
 
 /**
  * Created by alexander on 10/12/16.
@@ -25,18 +24,18 @@ public class WaterLightComboSensor extends VirtualSensor {
 
 
     @Override
-    public void addSensorValue(SensorsTableEntity sensorsTableEntity) {
-        switch (sensorsTableEntity.getSensorClass()){
+    public void addSensorValue(MessageTableEntity messageTableEntity) {
+        switch (messageTableEntity.getSensorClass()){
             case "WATER":{
-                this.setWaterSensor(sensorsTableEntity.getSensorValue());
+                this.setWaterSensor(messageTableEntity.getSensorValue());
             }
             break;
             case "LIGHT":{
-                this.setLightSensor(sensorsTableEntity.getSensorValue());
+                this.setLightSensor(messageTableEntity.getSensorValue());
             }
         }
-        this.setgCreated(sensorsTableEntity.getgCreated());
-        this.setgDevice(sensorsTableEntity.getgDevice());
+        this.setgCreated(messageTableEntity.getgCreated());
+        this.setgDevice(messageTableEntity.getgDevice());
         computeVirtualSensorValue();
     }
 

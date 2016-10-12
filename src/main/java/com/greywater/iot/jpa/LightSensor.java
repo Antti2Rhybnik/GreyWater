@@ -19,10 +19,10 @@ public class LightSensor extends VirtualSensor{
 
 
     @Override
-    public void addSensorValue(SensorsTableEntity sensorsTableEntity) {
-        this.setSensorValue(sensorsTableEntity.getSensorValue());
-        this.setgCreated(sensorsTableEntity.getgCreated());
-        this.setgDevice(sensorsTableEntity.getgDevice());
+    public void addSensorValue(MessageTableEntity messageTableEntity) {
+        this.setSensorValue(messageTableEntity.getSensorValue());
+        this.setgCreated(messageTableEntity.getgCreated());
+        this.setgDevice(messageTableEntity.getgDevice());
         computeVirtualSensorValue();
 
     }
