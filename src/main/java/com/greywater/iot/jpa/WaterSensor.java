@@ -1,15 +1,17 @@
 package com.greywater.iot.jpa;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Created by alexander on 10/12/16.
  */
 @Entity
-@Table(name="WATER_SENSOR")
+@Table(name="WATER_SENSOR", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L")
 @NamedQueries({
-        @NamedQuery(name="getAll",query = "SELECT ws from WaterSensor ws")
+        @NamedQuery(name="getAllWaterSensors",query = "SELECT ws from WaterSensor ws")
 })
+@XmlRootElement
 public class WaterSensor extends VirtualSensor {
 
     @Column(name="SENSOR_VALUE")
