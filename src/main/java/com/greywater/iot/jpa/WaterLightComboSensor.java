@@ -16,6 +16,8 @@ import java.util.ArrayList;
 @XmlRootElement
 public class WaterLightComboSensor extends VirtualSensor {
 
+    @Column(name="SENSOR_VALUE")
+    private Double sensorValue = null;
     @Column(name="WATER_SENSOR_VALUE")
     private Double waterSensor=null;
     @Column(name="LIGHT_SENSOR_VALUE")
@@ -41,14 +43,14 @@ public class WaterLightComboSensor extends VirtualSensor {
     @Override
     public void computeVirtualSensorValue() {
         EntityManager entityManager = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-        Query query = entityManager.createNativeQuery("select wlc FROM WaterLightComboSensor wlc ORDER by DESC ",WaterLightComboSensor.class);
-        ArrayList<WaterLightComboSensor> lastRecords= (ArrayList<WaterLightComboSensor>) query.getResultList();
-        if (!lastRecords.isEmpty()) {
-
+        if(waterSensor==null ||lightSensor==null ){
+            System.out.println("nulls");
         }
 
 
+
     }
+
 
     public Double getWaterSensor() {
         return waterSensor;
