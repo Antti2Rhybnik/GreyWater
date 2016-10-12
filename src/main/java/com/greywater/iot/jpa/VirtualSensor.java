@@ -15,18 +15,29 @@ public abstract class VirtualSensor implements VirtualSensorEvaluable {
     private String id = UUID.randomUUID().toString();
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "INCOME_DATE")
-    private Date camedAt = null;
+    @Column(name = "G_CREATED")
+    private Date gCreated = null;
+
+
+
+    @Column(name = "G_DEVICE")
+    private String gDevice;
+
 
     @PrePersist
     protected void generateInitialData(){
         final Date now = new Date();
-        camedAt = now;
+        gCreated = now;
     }
 
 
+    public String getgDevice() {
+        return gDevice;
+    }
 
-
+    public void setgDevice(String gDevice) {
+        this.gDevice = gDevice;
+    }
 
     public String getId() {
         return id;
@@ -36,11 +47,11 @@ public abstract class VirtualSensor implements VirtualSensorEvaluable {
         this.id = id;
     }
 
-    public Date getCamedAt() {
-        return camedAt;
+    public Date getgCreated() {
+        return gCreated;
     }
 
-    public void setCamedAt(Date camedAt) {
-        this.camedAt = camedAt;
+    public void setgCreated(Date gCreated) {
+        this.gCreated = gCreated;
     }
 }
