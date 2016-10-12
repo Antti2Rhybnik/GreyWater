@@ -15,10 +15,17 @@ public class Thing {
 
     @Id
     @Column(name = "ID")
-    private UUID id = UUID.randomUUID();
+    @GeneratedValue
+    private long id ;
 
     @OneToMany(mappedBy = "thingID")
     private List<Sensor> sensors;
 
+    public long getId() {
+        return id;
+    }
 
+    public void setId(long id) {
+        this.id = id;
+    }
 }

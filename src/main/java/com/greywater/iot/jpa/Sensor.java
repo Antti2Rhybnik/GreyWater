@@ -1,7 +1,6 @@
 package com.greywater.iot.jpa;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 /**
  * Created by alexander on 10/13/16.
@@ -12,14 +11,23 @@ public class Sensor {
 
     @Id
     @Column(name = "ID")
-    private String id= null;
+    @GeneratedValue
+    private long id;
 
     @Column(name = "TYPE")
     private String type = null;
 
     @ManyToOne()
     @JoinColumn(name="THING_ID")
-    private String thingID;
+    private long thingID;
+
+    public long getThingID() {
+        return thingID;
+    }
+
+    public void setThingID(long thingID) {
+        this.thingID = thingID;
+    }
 
     public String getType() {
         return type;
@@ -29,11 +37,11 @@ public class Sensor {
         this.type = type;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 }
