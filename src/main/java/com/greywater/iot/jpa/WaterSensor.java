@@ -21,12 +21,17 @@ public class WaterSensor extends VirtualSensor {
         this.setgCreated(sensorsTableEntity.getgCreated());
         this.setSensorValue(sensorsTableEntity.getSensorValue());
         this.setgDevice(sensorsTableEntity.getgDevice());
+        computeVirtualSensorValue();
 
     }
 
     @Override
     public void computeVirtualSensorValue() {
-
+        EntityManager entityManager = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
+        entityManager.getTransaction().begin();
+        entityManager.persist(this);
+        entityManager.getTransaction().commit();
+        entityManager.close();
     }
 
     public Double getSensorValue() {
