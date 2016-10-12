@@ -1,7 +1,6 @@
 package com.greywater.iot.jpa;
 
 import javax.persistence.*;
-import javax.xml.stream.StreamFilter;
 import java.util.Date;
 import java.util.UUID;
 
@@ -9,7 +8,7 @@ import java.util.UUID;
  * Created by alexander on 10/12/16.
  */
 @MappedSuperclass
-public abstract class VirtualSensor {
+public abstract class VirtualSensor implements VirtualSensorEvaluable {
 
     @Id
     @Column(name = "ID")
@@ -17,20 +16,16 @@ public abstract class VirtualSensor {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "INCOME_DATE")
-    private Date incomedAt = null;
+    private Date camedAt = null;
 
     @PrePersist
     protected void generateInitialData(){
         final Date now = new Date();
-        incomedAt = now;
+        camedAt = now;
     }
 
 
-    //Add sensor value to virtual sensor and then evaluate virtual sensor logic
-    protected void addSensorValue(SensorsTableEntity sensorsTableEntity){}
 
-    //evaluation method for virtual sensor
-    protected void computeVirtualSensorValue(){}
 
 
     public String getId() {
@@ -41,11 +36,11 @@ public abstract class VirtualSensor {
         this.id = id;
     }
 
-    public Date getIncomedAt() {
-        return incomedAt;
+    public Date getCamedAt() {
+        return camedAt;
     }
 
-    public void setIncomedAt(Date incomedAt) {
-        this.incomedAt = incomedAt;
+    public void setCamedAt(Date camedAt) {
+        this.camedAt = camedAt;
     }
 }
