@@ -1,9 +1,6 @@
 package com.greywater.iot.jpa;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.UUID;
 
 /**
@@ -19,6 +16,10 @@ public class Sensor {
 
     @Column(name = "TYPE")
     private String type = null;
+
+    @ManyToOne()
+    @JoinColumn(name="THING_ID")
+    private String thingID;
 
     public String getType() {
         return type;

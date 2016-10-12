@@ -1,9 +1,9 @@
 package com.greywater.iot.jpa;
 
-import javax.persistence.Entity;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by alexander on 10/13/16.
@@ -13,4 +13,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQuery(name = "getAll", query = "SELECT s from MessageTableEntity s")
 @XmlRootElement
 public class Thing {
+
+    @Id
+    @Column(name = "ID")
+    private String id = UUID.randomUUID().toString();
+
+    @OneToMany(mappedBy = "thingID")
+    private List<Sensor> sensors;
+
+
 }
