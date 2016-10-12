@@ -1,6 +1,6 @@
 package com.greywater.iot.rest;
 
-import com.greywater.iot.jpa.MessageTableEntity;
+import com.greywater.iot.jpa.MessagesTableEntity;
 
 import javax.inject.Singleton;
 import javax.naming.InitialContext;
@@ -41,16 +41,16 @@ public class RestApiProvider {
     @Produces(MediaType.APPLICATION_JSON)
     public String getSensor(@QueryParam("id") String id) {
 
-        MessageTableEntity s = em.find(MessageTableEntity.class, id);
+        MessagesTableEntity s = em.find(MessagesTableEntity.class, id);
         return s.toString();
     }
 
     @GET
     @Path("sensors")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<MessageTableEntity> getAllSensors() {
+    public List<MessagesTableEntity> getAllSensors() {
         em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-        List<MessageTableEntity> list = em.createNamedQuery("getAll", MessageTableEntity.class).getResultList();
+        List<MessagesTableEntity> list = em.createNamedQuery("getAll", MessagesTableEntity.class).getResultList();
         em.close();
         return list;
     }

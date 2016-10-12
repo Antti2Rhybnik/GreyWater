@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "THING_SENSOR_MAPPING", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
-@NamedQuery(name = "getAll", query = "SELECT s from MessageTableEntity s")
 @XmlRootElement
 public class ThingSensorMapping {
 

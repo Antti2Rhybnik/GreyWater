@@ -10,13 +10,12 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "THING", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
-@NamedQuery(name = "getAll", query = "SELECT s from MessageTableEntity s")
 @XmlRootElement
 public class Thing {
 
     @Id
     @Column(name = "ID")
-    private String id = UUID.randomUUID().toString();
+    private UUID id = UUID.randomUUID();
 
     @OneToMany(mappedBy = "thingID")
     private List<Sensor> sensors;
