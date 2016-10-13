@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.UUID;
 
 /**
  * Created by antti on 08.10.16.
@@ -20,9 +21,13 @@ public class MessagesTableEntity implements Serializable {
     private Double sensorValue;
 
 
+
+
+
+
     public MessagesTableEntity() {}
 
-    @Basic
+
     @Column(name = "G_DEVICE")
     public String getgDevice() {
         return gDevice;
@@ -32,7 +37,7 @@ public class MessagesTableEntity implements Serializable {
         this.gDevice = gDevice;
     }
 
-    @Basic
+    @Id
     @Column(name = "G_CREATED")
     public Timestamp getgCreated() {
         return gCreated;
@@ -42,7 +47,7 @@ public class MessagesTableEntity implements Serializable {
         this.gCreated = gCreated;
     }
 
-    @Id
+
     @Column(name = "SENSOR_ID", unique = true)
     public String getSensorId() {
         return sensorId;
@@ -52,7 +57,7 @@ public class MessagesTableEntity implements Serializable {
         this.sensorId = sensorId;
     }
 
-    @Basic
+
     @Column(name = "SENSOR_VALUE")
     public Double getSensorValue() {
         return sensorValue;
@@ -62,4 +67,14 @@ public class MessagesTableEntity implements Serializable {
         this.sensorValue = sensorValue;
     }
 
+
+    @Override
+    public String toString() {
+        return "MessagesTableEntity{" +
+                "gDevice='" + gDevice + '\'' +
+                ", gCreated=" + gCreated +
+                ", sensorId='" + sensorId + '\'' +
+                ", sensorValue=" + sensorValue +
+                '}';
+    }
 }
