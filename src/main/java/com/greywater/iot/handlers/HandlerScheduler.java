@@ -16,14 +16,25 @@ import java.util.concurrent.TimeUnit;
 public class HandlerScheduler implements ServletContextListener {
     public final int HANDLER_THREAD_POOL_SIZE = 30;
     private ScheduledExecutorService scheduler;
-    public static Executor handlerExecutor = Executors.newFixedThreadPool(30);
+
+
+
+    private static Executor handlerExecutor = Executors.newFixedThreadPool(30);
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.scheduleAtFixedRate(new Observer(), 5, 20, TimeUnit.SECONDS);
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         scheduler.shutdownNow();
+    }
+    public static Executor getHandlerExecutor() {
+        return handlerExecutor;
+    }
+
+    public static void setHandlerExecutor(Executor handlerExecutor) {
+        HandlerScheduler.handlerExecutor = handlerExecutor;
     }
 }
