@@ -17,6 +17,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -127,7 +129,13 @@ public class RestApiProvider {
         return "ok";
     }
 
-
+    @GET
+    @Path("timetest")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Message> timeTest(){
+        java.sql.Timestamp timestamp = new Timestamp(Calendar.getInstance().getTime().getTime());
+        return (new Message()).getLastMessages(timestamp);
+    }
 
 
     public RestApiProvider() {
