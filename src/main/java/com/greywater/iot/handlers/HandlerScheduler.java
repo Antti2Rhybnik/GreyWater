@@ -3,6 +3,8 @@ package com.greywater.iot.handlers;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import javax.xml.stream.StreamFilter;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -12,8 +14,9 @@ import java.util.concurrent.TimeUnit;
  */
 @WebListener
 public class HandlerScheduler implements ServletContextListener {
+    public final int HANDLER_THREAD_POOL_SIZE = 30;
     private ScheduledExecutorService scheduler;
-
+    public static Executor handlerExecutor = Executors.newFixedThreadPool(30);
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         scheduler = Executors.newSingleThreadScheduledExecutor();

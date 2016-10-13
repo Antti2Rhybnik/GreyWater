@@ -146,8 +146,10 @@ public class RestApiProvider {
     @Path("timetest")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Message> timeTest(){
-        java.sql.Timestamp timestamp = new Timestamp(Calendar.getInstance().getTime().getTime());
-        return (new Message()).getLastMessages(timestamp);
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        java.util.Date date = cal.getTime();
+        return (new Message()).getLastMessages(date);
     }
 
 
