@@ -9,16 +9,20 @@ import java.util.UUID;
  * Created by alexander on 10/13/16.
  */
 @Entity
-@Table(name = "THING", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
+@Table(name = "THINGS_TABLE", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
 @XmlRootElement
 public class Thing {
 
     @Id
     @Column(name = "ID")
     @GeneratedValue
-    private long id ;
+    private long id;
 
-    @OneToMany(mappedBy = "thingID")
+
+    @Column(name = "NAME")
+    private String name;
+
+    @OneToMany(mappedBy = "thing", cascade = CascadeType.ALL)
     private List<Sensor> sensors;
 
     public long getId() {
@@ -27,5 +31,21 @@ public class Thing {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Sensor> getSensors() {
+        return sensors;
+    }
+
+    public void setSensors(List<Sensor> sensors) {
+        this.sensors = sensors;
     }
 }

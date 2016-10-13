@@ -1,12 +1,13 @@
 package com.greywater.iot.jpa;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by alexander on 10/13/16.
  */
 @Entity
-@Table(name="SENSOR_TABLE")
+@Table(name="SENSORS_TABLE")
 public class Sensor {
 
     @Id
@@ -17,16 +18,16 @@ public class Sensor {
     @Column(name = "TYPE")
     private String type = null;
 
-    @ManyToOne()
-    @JoinColumn(name="THING_ID")
-    private long thingID;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "THING_ID")
+    private Thing thing;
 
-    public long getThingID() {
-        return thingID;
+    public Thing getThing() {
+        return thing;
     }
 
-    public void setThingID(long thingID) {
-        this.thingID = thingID;
+    public void setThing(Thing thing) {
+        this.thing = thing;
     }
 
     public String getType() {
