@@ -2,13 +2,9 @@ package com.greywater.iot.handlers;
 
 import com.greywater.iot.jpa.Message;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
-
-
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by alexander on 10/13/16.
@@ -27,14 +23,12 @@ public class Observer implements Runnable {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);
         System.out.println("I'm in observer");
-        ArrayList<Message> recentlyAddedMessages = (ArrayList<Message>) (new Message()).getLastMessages(recentlyActiveDate);
-       /* if (!recentlyAddedMessages.isEmpty()) {
+
+        List<Message> recentlyAddedMessages = Message.getLastMessages(recentlyActiveDate);
+        if (!recentlyAddedMessages.isEmpty()) {
             HandlerScheduler.getHandlerExecutor().execute(new BottleWaterHandler(recentlyAddedMessages,1));
         }
-        recentlyActiveDate = cal.getTime();*/
-
-
-
+        recentlyActiveDate = cal.getTime();
 
     }
 }
