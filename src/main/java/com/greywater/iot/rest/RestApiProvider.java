@@ -19,6 +19,8 @@ import javax.ws.rs.core.MediaType;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -47,12 +49,24 @@ public class RestApiProvider {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Message> getLastMessages(@QueryParam("date") String datestr) {
 
-        em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-        TypedQuery<Message> query = em.createNamedQuery("Message.getLast", Message.class);
-        query.setParameter("timestamp", Date.valueOf(datestr));
-        List<Message> list = query.getResultList();
-        em.close();
-        return list;
+        try {
+
+            Timestamp timestamp;
+            em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
+            TypedQuery<Message> query = em.createNamedQuery("Message.getLast", Message.class);
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-ddThh:mm:ss.SSS");
+            java.util.Date parsedDate = dateFormat.parse(datestr);
+            timestamp = new java.sql.Timestamp(parsedDate.getTime());
+            query.setParameter("timestamp", timestamp);
+            List<Message> list = query.getResultList();
+            em.close();
+            return list;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @GET
@@ -72,7 +86,7 @@ public class RestApiProvider {
 
         em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
 
-        Sensor s1 =em.find(Sensor.class,1L);
+        Sensor s1 = em.find(Sensor.class, 1L);
         Sensor s2 = em.find(Sensor.class, 2L);
         Sensor s3 = em.find(Sensor.class, 3L);
         Thing t1 = em.find(Thing.class, 1L);
@@ -101,7 +115,6 @@ public class RestApiProvider {
         s2.setType("LIGHT");
         s3.setId(3);
         s3.setType("WATER");
-
 
 
         t1.setId(1);
@@ -138,6 +151,7 @@ public class RestApiProvider {
     }
 
 
+
     public RestApiProvider() {
 
         if (ds == null || em == null) try {
@@ -146,15 +160,10 @@ public class RestApiProvider {
 //            em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
 
 
-
-
-
         } catch (NamingException e) {
             e.getMessage();
         }
     }
-
-
 
 
 }
