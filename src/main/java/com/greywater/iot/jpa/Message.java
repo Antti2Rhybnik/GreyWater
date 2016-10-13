@@ -4,7 +4,7 @@ import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.UUID;
+import java.util.Date;
 
 /**
  * Created by antti on 08.10.16.
@@ -12,20 +12,27 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "MESSAGES_TABLE", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
-@NamedQuery(name = "getAll", query = "SELECT s from MessagesTableEntity s")
+@NamedQuery(name = "getAll", query = "SELECT s from Message s")
 @XmlRootElement
-public class MessagesTableEntity implements Serializable {
+public class Message implements Serializable {
     private String gDevice;
-    private Timestamp gCreated;
+
+    @Id
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "G_CREATED")
+    private Date gCreated;
     private String sensorId;
     private Double sensorValue;
 
 
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "SENSOR_ID")
+    private Sensor sensor;
 
 
 
-    public MessagesTableEntity() {}
+    public Message() {}
 
 
     @Column(name = "G_DEVICE")
@@ -37,11 +44,8 @@ public class MessagesTableEntity implements Serializable {
         this.gDevice = gDevice;
     }
 
-    @Id
-    @Column(name = "G_CREATED")
-    public Timestamp getgCreated() {
-        return gCreated;
-    }
+
+
 
     public void setgCreated(Timestamp gCreated) {
         this.gCreated = gCreated;
@@ -67,14 +71,30 @@ public class MessagesTableEntity implements Serializable {
         this.sensorValue = sensorValue;
     }
 
+    public Sensor getSensor() {
+        return sensor;
+    }
+
+    public void setSensor(Sensor sensor) {
+        this.sensor = sensor;
+    }
+
+    public Date getgCreated() {
+        return gCreated;
+    }
+
+    public void setgCreated(Date gCreated) {
+        this.gCreated = gCreated;
+    }
 
     @Override
     public String toString() {
-        return "MessagesTableEntity{" +
+        return "Message{" +
                 "gDevice='" + gDevice + '\'' +
                 ", gCreated=" + gCreated +
                 ", sensorId='" + sensorId + '\'' +
                 ", sensorValue=" + sensorValue +
                 '}';
     }
+
 }

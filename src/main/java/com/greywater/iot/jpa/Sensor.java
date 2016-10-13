@@ -1,6 +1,7 @@
 package com.greywater.iot.jpa;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,6 +22,9 @@ public class Sensor {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "THING_ID")
     private Thing thing;
+
+    @OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL)
+    private List<Message> messages = new ArrayList<Message>();
 
     public Thing getThing() {
         return thing;
@@ -50,5 +54,13 @@ public class Sensor {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
     }
 }
