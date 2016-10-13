@@ -10,7 +10,7 @@ import java.util.UUID;
  * Created by alexander on 10/13/16.
  */
 @Entity
-@Table(name = "THINGS_TABLE", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
+@Table(name = "THINGS_TABLE", catalog = "")
 @XmlRootElement
 public class Thing {
 

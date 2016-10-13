@@ -17,13 +17,11 @@ public class HandlerScheduler implements ServletContextListener {
     public final int HANDLER_THREAD_POOL_SIZE = 30;
     private ScheduledExecutorService scheduler;
 
-
-
     private static Executor handlerExecutor = Executors.newFixedThreadPool(30);
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(new Observer(), 5, 20, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(new Observer(), 5, 5, TimeUnit.SECONDS);
     }
 
     @Override
