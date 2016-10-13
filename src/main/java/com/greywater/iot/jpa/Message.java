@@ -66,10 +66,10 @@ public class Message implements Serializable {
     }
 
 
-    public static List<Message> getLastMessages(Date d) {
+    public static List<Message> getLastMessages(Timestamp t) {
         EntityManager em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
         TypedQuery<Message> query = em.createNamedQuery("Message.getLast", Message.class);
-        query.setParameter("timestamp", d, TemporalType.TIMESTAMP);
+        query.setParameter("timestamp", t, TemporalType.TIMESTAMP);
         List<Message> list = query.getResultList();
         em.close();
         return list;

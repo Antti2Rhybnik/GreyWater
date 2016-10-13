@@ -53,7 +53,7 @@ public class RestApiProvider {
             em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
             TypedQuery<Message> query = em.createNamedQuery("Message.getLast", Message.class);
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-ddThh:mm:ss.SSS");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
             java.util.Date parsedDate = dateFormat.parse(datestr);
             timestamp = new java.sql.Timestamp(parsedDate.getTime());
             query.setParameter("timestamp", timestamp);
@@ -145,9 +145,9 @@ public class RestApiProvider {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Message> timeTest(){
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -1);
+//        cal.add(Calendar.DATE, -1);
         java.util.Date date = cal.getTime();
-        return Message.getLastMessages(date);
+        return Message.getLastMessages(new Timestamp(date.getTime()));
     }
 
 
