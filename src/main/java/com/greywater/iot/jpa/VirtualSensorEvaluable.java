@@ -5,7 +5,7 @@ package com.greywater.iot.jpa;
  */
 public interface VirtualSensorEvaluable {
     //Add sensor value to virtual sensor and then evaluate virtual sensor logic
-     void addSensorValue(MessagesTableEntity messageTableEntity);
+     void addSensorValue(Message messageTableEntity);
 
     //evaluation method for virtual sensor
     void computeVirtualSensorValue();

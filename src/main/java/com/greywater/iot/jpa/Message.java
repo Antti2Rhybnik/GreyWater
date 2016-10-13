@@ -4,7 +4,6 @@ import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.UUID;
 
 /**
  * Created by antti on 08.10.16.
@@ -12,20 +11,21 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "MESSAGES_TABLE", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
-@NamedQuery(name = "getAll", query = "SELECT s from MessagesTableEntity s")
+@NamedQuery(name = "getAll", query = "SELECT s from Message s")
 @XmlRootElement
-public class MessagesTableEntity implements Serializable {
+public class Message implements Serializable {
     private String gDevice;
     private Timestamp gCreated;
-    private String sensorId;
+    private Long sensorId;
     private Double sensorValue;
 
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "SENSOR_ID")
+    Sensor sensor;
 
 
-
-
-    public MessagesTableEntity() {}
+    public Message() {}
 
 
     @Column(name = "G_DEVICE")
@@ -48,12 +48,12 @@ public class MessagesTableEntity implements Serializable {
     }
 
 
-    @Column(name = "SENSOR_ID", unique = true)
-    public String getSensorId() {
+    @Column(name = "SENSOR_ID")
+    public Long getSensorId() {
         return sensorId;
     }
 
-    public void setSensorId(String sensorId) {
+    public void setSensorId(Long sensorId) {
         this.sensorId = sensorId;
     }
 
@@ -70,7 +70,7 @@ public class MessagesTableEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "MessagesTableEntity{" +
+        return "Message{" +
                 "gDevice='" + gDevice + '\'' +
                 ", gCreated=" + gCreated +
                 ", sensorId='" + sensorId + '\'' +

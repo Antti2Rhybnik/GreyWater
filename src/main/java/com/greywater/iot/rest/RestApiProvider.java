@@ -1,6 +1,6 @@
 package com.greywater.iot.rest;
 
-import com.greywater.iot.jpa.MessagesTableEntity;
+import com.greywater.iot.jpa.Message;
 import com.greywater.iot.jpa.Sensor;
 import com.greywater.iot.jpa.Thing;
 
@@ -15,7 +15,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,16 +43,16 @@ public class RestApiProvider {
     @Produces(MediaType.APPLICATION_JSON)
     public String getSensor(@QueryParam("id") String id) {
 
-        MessagesTableEntity s = em.find(MessagesTableEntity.class, id);
+        Message s = em.find(Message.class, id);
         return s.toString();
     }
 
     @GET
     @Path("sensors")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<MessagesTableEntity> getAllSensors() {
+    public List<Message> getAllSensors() {
         em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-        List<MessagesTableEntity> list = em.createNamedQuery("getAll", MessagesTableEntity.class).getResultList();
+        List<Message> list = em.createNamedQuery("getAll", Message.class).getResultList();
         em.close();
         return list;
     }

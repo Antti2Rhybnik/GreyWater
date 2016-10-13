@@ -22,11 +22,13 @@ public class Sensor {
     @JoinColumn(name = "THING_ID")
     private Thing thing;
 
+
+    @OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL)
+    private List<Message> messages;
+
     public Thing getThing() {
         return thing;
     }
-
-
 
     public void setThing(Thing thing)
     {
