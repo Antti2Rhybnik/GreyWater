@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by antti on 08.10.16.
@@ -12,7 +13,10 @@ import java.util.Date;
 
 @Entity
 @Table(name = "MESSAGES_TABLE", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
-@NamedQuery(name = "getAll", query = "SELECT s from Message s")
+@NamedQueries({
+        @NamedQuery(name = "Message.getAll", query = "SELECT s from Message s"),
+        @NamedQuery(name = "Message.getLast", query = "SELECT s from Message s where s.gCreated > :timestamp")
+})
 @XmlRootElement
 public class Message implements Serializable {
 
@@ -24,19 +28,13 @@ public class Message implements Serializable {
     @Column(name = "G_CREATED")
     private Date gCreated;
 
-    @Column(name = "SENSOR_ID", unique = true)
-    private String sensorId;
+    @Column(name = "SENSOR_ID")
+    private long sensorId;
 
     @Column(name = "SENSOR_VALUE")
     private Double sensorValue;
 
-
-
-
-
     public Message() {}
-
-
 
     public String getgDevice() {
         return gDevice;
@@ -47,23 +45,17 @@ public class Message implements Serializable {
     }
 
 
-
-
     public void setgCreated(Timestamp gCreated) {
         this.gCreated = gCreated;
     }
 
-
-
-    public String getSensorId() {
+    public long getSensorId() {
         return sensorId;
     }
 
-    public void setSensorId(String sensorId) {
+    public void setSensorId(long sensorId) {
         this.sensorId = sensorId;
     }
-
-
 
     public Double getSensorValue() {
         return sensorValue;
@@ -73,6 +65,15 @@ public class Message implements Serializable {
         this.sensorValue = sensorValue;
     }
 
+
+    List<Message> getLastMessages(Timestamp t) {
+        EntityManager em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
+        TypedQuery<Message> query = em.createNamedQuery("Message.getLast", Message.class);
+        query.setParameter("timestamp", t);
+        List<Message> list = query.getResultList();
+        em.close();
+        return list;
+    }
 
     public Date getgCreated() {
         return gCreated;

@@ -9,12 +9,14 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -39,20 +41,24 @@ public class RestApiProvider {
 
 
     @GET
-    @Path("sensor")
+    @Path("lastmsg")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getSensor(@QueryParam("id") String id) {
+    public List<Message> getLastMessages(@QueryParam("date") String datestr) {
 
-        Message s = em.find(Message.class, id);
-        return s.toString();
+        em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
+        TypedQuery<Message> query = em.createNamedQuery("Message.getLast", Message.class);
+        query.setParameter("timestamp", Date.valueOf(datestr));
+        List<Message> list = query.getResultList();
+        em.close();
+        return list;
     }
 
     @GET
-    @Path("sensors")
+    @Path("allmsg")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Message> getAllSensors() {
+    public List<Message> getAllMessages() {
         em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-        List<Message> list = em.createNamedQuery("getAll", Message.class).getResultList();
+        List<Message> list = em.createNamedQuery("Message.getAll", Message.class).getResultList();
         em.close();
         return list;
     }
