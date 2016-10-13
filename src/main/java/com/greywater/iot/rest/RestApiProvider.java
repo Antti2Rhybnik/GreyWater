@@ -16,11 +16,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.util.Calendar;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -149,7 +147,7 @@ public class RestApiProvider {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);
         java.util.Date date = cal.getTime();
-        return (new Message()).getLastMessages(date);
+        return Message.getLastMessages(date);
     }
 
 
