@@ -26,6 +26,6 @@ public class BottleWaterHandler implements Runnable {
                 n++;
             }
         });
-        System.out.println(sum / n);
+        System.out.println(sum );
     }
 }

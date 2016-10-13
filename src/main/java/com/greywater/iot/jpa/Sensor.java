@@ -9,6 +9,7 @@ import java.util.List;
  */
 @Entity
 @Table(name="SENSORS_TABLE")
+@NamedQuery(name = "Sensor.getAll", query = "SELECT s from Sensor s")
 public class Sensor {
 
     @Id
@@ -39,6 +40,12 @@ public class Sensor {
         }
     }
 
+    public static List<Sensor> getAllSensors(){
+        EntityManager entityManager = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
+        List<Sensor> sensors = entityManager.createNamedQuery("Sensor.getAll", Sensor.class).getResultList();
+        entityManager.close();
+        return sensors;
+    }
     public String getType() {
         return type;
     }
