@@ -9,4 +9,4 @@ public interface VirtualSensorEvaluable {
 
     //evaluation method for virtual sensor
     void computeVirtualSensorValue();
-}
+ }

@@ -65,11 +65,28 @@ public class RestApiProvider {
 
         em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
 
-        Sensor s1 = new Sensor();
-        Sensor s2 = new Sensor();
-        Sensor s3 = new Sensor();
-        Thing t1 = new Thing();
-        Thing t2 = new Thing();
+        Sensor s1 =em.find(Sensor.class,1L);
+        Sensor s2 = em.find(Sensor.class, 2L);
+        Sensor s3 = em.find(Sensor.class, 3L);
+        Thing t1 = em.find(Thing.class, 1L);
+        Thing t2 = em.find(Thing.class, 2L);
+
+        if (s1 == null) {
+            s1 = new Sensor();
+        }
+        if (s2 == null) {
+            s2 = new Sensor();
+        }
+        if (s3 == null) {
+            s3 = new Sensor();
+        }
+        if (t1 == null) {
+            t1 = new Thing();
+        }
+        if (t2 == null) {
+            t2 = new Thing();
+        }
+
 
         s1.setId(1);
         s1.setType("WATER");
@@ -78,26 +95,18 @@ public class RestApiProvider {
         s3.setId(3);
         s3.setType("WATER");
 
-        s1.setThing(t1);
-        s2.setThing(t1);
 
 
-        s3.setThing(t2);
-
-        List<Sensor> ss1 = new ArrayList<>();
-        ss1.add(s1);
-        ss1.add(s2);
-        List<Sensor> ss2 = new ArrayList<>();
-        ss2.add(s3);
-
-        t1.setSensors(ss1);
         t1.setId(1);
         t1.setName("Бутылка");
 
-        t2.setSensors(ss2);
+
         t2.setId(2);
         t2.setName("Труба");
 
+        t1.addSensor(s1);
+        t1.addSensor(s2);
+        t2.addSensor(s3);
         em.getTransaction().begin();
 
 //        em.persist(s1);

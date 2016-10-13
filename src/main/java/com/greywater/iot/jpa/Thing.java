@@ -2,6 +2,7 @@ package com.greywater.iot.jpa;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,7 +24,16 @@ public class Thing {
     private String name;
 
     @OneToMany(mappedBy = "thing", cascade = CascadeType.ALL)
-    private List<Sensor> sensors;
+    private List<Sensor> sensors = new ArrayList<Sensor>();
+
+    public void addSensor(Sensor sensor){
+
+        if(sensor.getThing()!=this){
+            this.sensors.add(sensor);
+            sensor.setThing(this);
+
+        }
+    }
 
     public long getId() {
         return id;

@@ -26,8 +26,14 @@ public class Sensor {
         return thing;
     }
 
-    public void setThing(Thing thing) {
+
+
+    public void setThing(Thing thing)
+    {
         this.thing = thing;
+        if(!thing.getSensors().contains(this)){
+            thing.getSensors().add(this);
+        }
     }
 
     public String getType() {
