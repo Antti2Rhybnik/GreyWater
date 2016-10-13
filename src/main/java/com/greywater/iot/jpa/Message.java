@@ -15,27 +15,29 @@ import java.util.Date;
 @NamedQuery(name = "getAll", query = "SELECT s from Message s")
 @XmlRootElement
 public class Message implements Serializable {
+
+    @Column(name = "G_DEVICE")
     private String gDevice;
 
     @Id
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "G_CREATED")
     private Date gCreated;
+
+    @Column(name = "SENSOR_ID", unique = true)
     private String sensorId;
+
+    @Column(name = "SENSOR_VALUE")
     private Double sensorValue;
 
 
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "SENSOR_ID")
-    private Sensor sensor;
 
 
 
     public Message() {}
 
 
-    @Column(name = "G_DEVICE")
+
     public String getgDevice() {
         return gDevice;
     }
@@ -52,7 +54,7 @@ public class Message implements Serializable {
     }
 
 
-    @Column(name = "SENSOR_ID", unique = true)
+
     public String getSensorId() {
         return sensorId;
     }
@@ -62,7 +64,7 @@ public class Message implements Serializable {
     }
 
 
-    @Column(name = "SENSOR_VALUE")
+
     public Double getSensorValue() {
         return sensorValue;
     }
@@ -71,13 +73,6 @@ public class Message implements Serializable {
         this.sensorValue = sensorValue;
     }
 
-    public Sensor getSensor() {
-        return sensor;
-    }
-
-    public void setSensor(Sensor sensor) {
-        this.sensor = sensor;
-    }
 
     public Date getgCreated() {
         return gCreated;
