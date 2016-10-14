@@ -1,8 +1,10 @@
 package com.greywater.iot.rest;
 
+import com.greywater.iot.handlers.Observer;
 import com.greywater.iot.jpa.Message;
 import com.greywater.iot.jpa.Sensor;
 import com.greywater.iot.jpa.Thing;
+import com.greywater.iot.utils.AwesomeHTMLBuilder;
 
 import javax.inject.Singleton;
 import javax.naming.InitialContext;
@@ -18,7 +20,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -143,13 +144,16 @@ public class RestApiProvider {
     @GET
     @Path("timetest")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Message> timeTest(){
-        Calendar cal = Calendar.getInstance();
-//        cal.add(Calendar.DATE, -1);
-        java.util.Date date = cal.getTime();
-        return Message.getLastMessages(new Timestamp(date.getTime()));
+    public List<Message> timeTest() {
+        return Message.getLastMessages(Observer.getFuckingCurrTimestamp());
     }
 
+    @GET
+    @Path("ok")
+    @Produces(MediaType.TEXT_HTML)
+    public String ok() {
+        return AwesomeHTMLBuilder.getAwesomeHtml("HUETA1", "HUETA2", "lime");
+    }
 
 
     public RestApiProvider() {
