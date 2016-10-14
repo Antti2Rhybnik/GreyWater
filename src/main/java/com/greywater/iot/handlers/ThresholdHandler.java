@@ -29,4 +29,12 @@ public class ThresholdHandler implements Runnable {
             }
         }
     }
+
+    public static boolean isShitHappened() {
+        return shitHappened;
+    }
+
+    public static void setShitHappened(boolean shitHappened) {
+        ThresholdHandler.shitHappened = shitHappened;
+    }
 }

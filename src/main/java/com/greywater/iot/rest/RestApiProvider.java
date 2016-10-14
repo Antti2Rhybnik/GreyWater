@@ -1,6 +1,7 @@
 package com.greywater.iot.rest;
 
 import com.greywater.iot.handlers.Observer;
+import com.greywater.iot.handlers.ThresholdHandler;
 import com.greywater.iot.jpa.Message;
 import com.greywater.iot.jpa.Sensor;
 import com.greywater.iot.jpa.Thing;
@@ -149,10 +150,13 @@ public class RestApiProvider {
     }
 
     @GET
-    @Path("ok")
+    @Path("thresholder")
     @Produces(MediaType.TEXT_HTML)
     public String ok() {
-        return AwesomeHTMLBuilder.getAwesomeHtml("HUETA1", "HUETA2", "lime");
+        if (ThresholdHandler.isShitHappened()) {
+            AwesomeHTMLBuilder.getAwesomeHtmlWithPhoto("In Threshold happened problems. Handler value - ", String.valueOf(ThresholdHandler.isShitHappened()), "http://www.ivetta.ua/wp-content/uploads/2015/07/tom-kruz-3.jpg");
+        }
+        return AwesomeHTMLBuilder.getAwesomeHtml("Everything is ok. Handler value", String.valueOf(ThresholdHandler.isShitHappened()), "\t#808080");
     }
 
 
