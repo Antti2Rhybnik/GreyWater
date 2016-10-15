@@ -19,7 +19,7 @@ public class Observer implements Runnable {
 
     public Observer() {
 
-        recentlyActiveDate = Observer.getFuckingCurrTimestamp();
+        recentlyActiveDate = Observer.getCurrentTimestamp();
 //        cal.add(Calendar.DATE, -1);
     }
 
@@ -38,11 +38,11 @@ public class Observer implements Runnable {
         }
 
 
-        recentlyActiveDate = Observer.getFuckingCurrTimestamp();
+        recentlyActiveDate = Observer.getCurrentTimestamp();
 //        recentlyActiveDate = cal.getTime();
     }
 
-    public static Timestamp getFuckingCurrTimestamp() {
+    public static Timestamp getCurrentTimestamp() {
         try {
             Date  parsedDate = dateFormat.parse(Instant.now().toString());
             return new Timestamp(parsedDate.getTime());

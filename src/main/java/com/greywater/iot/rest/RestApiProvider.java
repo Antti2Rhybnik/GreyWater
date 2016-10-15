@@ -8,83 +8,72 @@ import com.greywater.iot.jpa.Thing;
 import com.greywater.iot.utils.AwesomeHTMLBuilder;
 
 import javax.inject.Singleton;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
-import javax.sql.DataSource;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.List;
-
-/**
- * Created by antti on 09.10.16.
- */
-
 
 @Path("api")
 @Singleton
 public class RestApiProvider {
 
-    DataSource ds = null;
-    EntityManager em = null;
-
+    public static String tr = "-21";
 
     @GET
     @Path("test")
     @Produces(MediaType.TEXT_PLAIN)
     public String getTestString() {
-        return "it works";
+
+        return tr;
     }
 
 
     @GET
-    @Path("lastmsg")
+    @Path("lastN")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Message> getLastMessages(@QueryParam("date") String datestr) {
+    public List<Message> getLast30(@QueryParam("id") String id, @QueryParam("N") Integer N) {
 
-        try {
-
-            Timestamp timestamp;
-            em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-            TypedQuery<Message> query = em.createNamedQuery("Message.getLast", Message.class);
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-            java.util.Date parsedDate = dateFormat.parse(datestr);
-            timestamp = new java.sql.Timestamp(parsedDate.getTime());
-            query.setParameter("timestamp", timestamp);
-            List<Message> list = query.getResultList();
-            em.close();
-            return list;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        EntityManager em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
+        TypedQuery<Message> q = em.createNamedQuery("Message.lastN", Message.class);
+        q.setParameter("1", id);
+        q.setParameter("2", N);
+        List<Message> messages = q.getResultList();
+        em.close();
+        return messages;
     }
 
     @GET
     @Path("allmsg")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Message> getAllMessages() {
-        em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
+        EntityManager em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
         List<Message> list = em.createNamedQuery("Message.getAll", Message.class).getResultList();
         em.close();
         return list;
     }
 
     @GET
+    @Path("allsensors")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Sensor> getAllSensors() {
+        return Sensor.getAll();
+    }
+
+
+
+
+
+    @GET
     @Path("pers")
     @Produces(MediaType.APPLICATION_JSON)
     public String persist() {
 
-        em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
+        EntityManager em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
 
         Sensor s1 = em.find(Sensor.class, 1L);
         Sensor s2 = em.find(Sensor.class, 2L);
@@ -146,32 +135,21 @@ public class RestApiProvider {
     @Path("timetest")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Message> timeTest() {
-        return Message.getLastMessages(Observer.getFuckingCurrTimestamp());
+        return Message.getLastMessages(Observer.getCurrentTimestamp());
     }
 
     @GET
     @Path("thresholder")
     @Produces(MediaType.TEXT_HTML)
     public String ok() {
-        if (ThresholdHandler.isShitHappened()) {
-            AwesomeHTMLBuilder.getAwesomeHtmlWithPhoto("In Threshold happened problems. Handler value - ", String.valueOf(ThresholdHandler.isShitHappened()), "http://www.ivetta.ua/wp-content/uploads/2015/07/tom-kruz-3.jpg");
+        if (ThresholdHandler.isProblemDetected()) {
+         return    AwesomeHTMLBuilder.getAwesomeHtmlWithPhoto("In Threshold happened problems. Handler value - ", String.valueOf(ThresholdHandler.isProblemDetected()), "http://www.ivetta.ua/wp-content/uploads/2015/07/tom-kruz-3.jpg");
         }
-        return AwesomeHTMLBuilder.getAwesomeHtml("Everything is ok. Handler value", String.valueOf(ThresholdHandler.isShitHappened()), "\t#808080");
+        return AwesomeHTMLBuilder.getAwesomeHtml("Everything is ok. Handler value", String.valueOf(ThresholdHandler.isProblemDetected()), "\t#808080");
     }
 
 
-    public RestApiProvider() {
-
-        if (ds == null || em == null) try {
-            InitialContext ctx = new InitialContext();
-            ds = (DataSource) ctx.lookup("java:comp/env/jdbc/DefaultDB");
-//            em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-
-
-        } catch (NamingException e) {
-            e.getMessage();
-        }
-    }
+    public RestApiProvider() {}
 
 
 }

@@ -3,13 +3,26 @@
 
 
     <servlet>
-        <servlet-name>Predictive</servlet-name>
+        <servlet-name>GreyWater</servlet-name>
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <!-- Register resources and providers -->
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>com.greywater.iot.rest</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
     </servlet>
+
     <servlet-mapping>
-        <servlet-name>Predictive</servlet-name>
-        <url-pattern>/*</url-pattern>
+        <servlet-name>GreyWater</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+
 
     <resource-ref>
         <res-ref-name>jdbc/DefaultDB</res-ref-name>

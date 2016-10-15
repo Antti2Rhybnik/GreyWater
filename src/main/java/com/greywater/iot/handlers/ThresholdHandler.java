@@ -10,31 +10,30 @@ import java.util.List;
  */
 public class ThresholdHandler implements Runnable {
     ArrayList<Message> messages;
-    static boolean shitHappened;
+    static boolean problemDetected;
 
-    double low = 9;
-    double max = 11;
+    double low = 200;
+    double max = 1000;
 
     public ThresholdHandler(List<Message> messages) {
         this.messages = new ArrayList<>(messages);
-        this.shitHappened = false;
+        problemDetected = false;
     }
 
     @Override
     public void run() {
         for(Message message : messages) {
             if (message.getSensorValue() < low || message.getSensorValue() > max) {
-                shitHappened = true;
-                break;
+                problemDetected = true;
             }
         }
     }
 
-    public static boolean isShitHappened() {
-        return shitHappened;
+    public static boolean isProblemDetected() {
+        return problemDetected;
     }
 
-    public static void setShitHappened(boolean shitHappened) {
-        ThresholdHandler.shitHappened = shitHappened;
+    public static void setProblemDetected(boolean problemDetected) {
+        ThresholdHandler.problemDetected = problemDetected;
     }
 }

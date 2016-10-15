@@ -6,7 +6,6 @@ import javax.servlet.annotation.WebListener;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by alexander on 10/10/16.
@@ -20,7 +19,7 @@ public class HandlerScheduler implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(new Observer(), 1, 12, TimeUnit.SECONDS);
+//        scheduler.scheduleAtFixedRate(new Observer(), 1, 12, TimeUnit.SECONDS);
     }
 
     @Override
