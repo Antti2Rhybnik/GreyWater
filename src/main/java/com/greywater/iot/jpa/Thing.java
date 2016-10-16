@@ -4,7 +4,6 @@ import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by alexander on 10/13/16.
@@ -16,21 +15,19 @@ public class Thing {
 
     @Id
     @Column(name = "ID")
-    @GeneratedValue
     private long id;
-
 
     @Column(name = "NAME")
     private String name;
 
-    @OneToMany(mappedBy = "thing", cascade = CascadeType.ALL)
-    private List<Sensor> sensors = new ArrayList<Sensor>();
+    @OneToMany(mappedBy = "thing", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<SensorEntity> sensorEntityEntities = new ArrayList<>();
 
-    public void addSensor(Sensor sensor){
+    public void addSensor(SensorEntity sensorEntityEntity) {
 
-        if(sensor.getThing()!=this){
-            this.sensors.add(sensor);
-            sensor.setThing(this);
+        if (sensorEntityEntity.getThing() != this) {
+            this.sensorEntityEntities.add(sensorEntityEntity);
+            sensorEntityEntity.setThing(this);
 
         }
     }
@@ -51,11 +48,11 @@ public class Thing {
         this.name = name;
     }
 
-    public List<Sensor> getSensors() {
-        return sensors;
+    public List<SensorEntity> getSensorEntityEntities() {
+        return sensorEntityEntities;
     }
 
-    public void setSensors(List<Sensor> sensors) {
-        this.sensors = sensors;
+    public void setSensorEntityEntities(List<SensorEntity> sensorEntityEntities) {
+        this.sensorEntityEntities = sensorEntityEntities;
     }
 }

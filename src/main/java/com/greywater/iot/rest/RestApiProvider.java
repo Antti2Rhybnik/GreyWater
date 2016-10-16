@@ -1,11 +1,9 @@
 package com.greywater.iot.rest;
 
-import com.greywater.iot.handlers.Observer;
-import com.greywater.iot.handlers.ThresholdHandler;
-import com.greywater.iot.jpa.Message;
-import com.greywater.iot.jpa.Sensor;
+import com.greywater.iot.core.SensorHandler;
+import com.greywater.iot.jpa.MessageEntity;
+import com.greywater.iot.jpa.SensorEntity;
 import com.greywater.iot.jpa.Thing;
-import com.greywater.iot.utils.AwesomeHTMLBuilder;
 
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
@@ -29,30 +27,30 @@ public class RestApiProvider {
     @Produces(MediaType.TEXT_PLAIN)
     public String getTestString() {
 
-        return tr;
+        return SensorHandler.someThingEvent;
     }
 
 
     @GET
     @Path("lastN")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Message> getLast30(@QueryParam("id") String id, @QueryParam("N") Integer N) {
+    public List<MessageEntity> getLast30(@QueryParam("id") String id, @QueryParam("N") Integer N) {
 
         EntityManager em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-        TypedQuery<Message> q = em.createNamedQuery("Message.lastN", Message.class);
+        TypedQuery<MessageEntity> q = em.createNamedQuery("Message.lastN", MessageEntity.class);
         q.setParameter("1", id);
         q.setParameter("2", N);
-        List<Message> messages = q.getResultList();
+        List<MessageEntity> messageEntities = q.getResultList();
         em.close();
-        return messages;
+        return messageEntities;
     }
 
     @GET
     @Path("allmsg")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Message> getAllMessages() {
+    public List<MessageEntity> getAllMessages() {
         EntityManager em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-        List<Message> list = em.createNamedQuery("Message.getAll", Message.class).getResultList();
+        List<MessageEntity> list = em.createNamedQuery("Message.getAll", MessageEntity.class).getResultList();
         em.close();
         return list;
     }
@@ -60,8 +58,8 @@ public class RestApiProvider {
     @GET
     @Path("allsensors")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Sensor> getAllSensors() {
-        return Sensor.getAll();
+    public List<SensorEntity> getAllSensors() {
+        return SensorEntity.getAll();
     }
 
 
@@ -75,20 +73,20 @@ public class RestApiProvider {
 
         EntityManager em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
 
-        Sensor s1 = em.find(Sensor.class, 1L);
-        Sensor s2 = em.find(Sensor.class, 2L);
-        Sensor s3 = em.find(Sensor.class, 3L);
+        SensorEntity s1 = em.find(SensorEntity.class, 1L);
+        SensorEntity s2 = em.find(SensorEntity.class, 2L);
+        SensorEntity s3 = em.find(SensorEntity.class, 3L);
         Thing t1 = em.find(Thing.class, 1L);
         Thing t2 = em.find(Thing.class, 2L);
 
         if (s1 == null) {
-            s1 = new Sensor();
+            s1 = new SensorEntity();
         }
         if (s2 == null) {
-            s2 = new Sensor();
+            s2 = new SensorEntity();
         }
         if (s3 == null) {
-            s3 = new Sensor();
+            s3 = new SensorEntity();
         }
         if (t1 == null) {
             t1 = new Thing();
@@ -131,22 +129,8 @@ public class RestApiProvider {
         return "ok";
     }
 
-    @GET
-    @Path("timetest")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Message> timeTest() {
-        return Message.getLastMessages(Observer.getCurrentTimestamp());
-    }
 
-    @GET
-    @Path("thresholder")
-    @Produces(MediaType.TEXT_HTML)
-    public String ok() {
-        if (ThresholdHandler.isProblemDetected()) {
-         return    AwesomeHTMLBuilder.getAwesomeHtmlWithPhoto("In Threshold happened problems. Handler value - ", String.valueOf(ThresholdHandler.isProblemDetected()), "http://www.ivetta.ua/wp-content/uploads/2015/07/tom-kruz-3.jpg");
-        }
-        return AwesomeHTMLBuilder.getAwesomeHtml("Everything is ok. Handler value", String.valueOf(ThresholdHandler.isProblemDetected()), "\t#808080");
-    }
+
 
 
     public RestApiProvider() {}

@@ -5,10 +5,10 @@
 	<persistence-unit name="GreyWater" transaction-type="JTA">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<jta-data-source>java:comp/env/jdbc/DefaultDB</jta-data-source>
-		<class>com.greywater.iot.jpa.Message</class>
+		<class>com.greywater.iot.jpa.MessageEntity</class>
 		<class>com.greywater.iot.jpa.Thing</class>
-		<class>com.greywater.iot.jpa.Sensor</class>
-		<class>com.greywater.iot.jpa.Parameters</class>
+		<class>com.greywater.iot.jpa.SensorEntity</class>
+		<class>com.greywater.iot.jpa.PredicateEntity</class>
 		<properties>
 			<!--<property name="eclipselink.ddl-generation" value="create-tables"/>-->
 			<!--<property name="javax.persistence.schema-generation.create-source" value="metadata"/>-->
