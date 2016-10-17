@@ -1,7 +1,4 @@
-
-
 var counter = 0;
-
 
 
 function update() {
@@ -18,30 +15,37 @@ function update() {
             elem.removeChild(elem.firstChild);
         }
         var img = document.createElement("IMG");
-        img.src =thisImg;
+        img.src = thisImg;
         document.getElementById('imageDiv').appendChild(img);
     }
 
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = function () {
 
         if (xhr.readyState != 4) return;
 
         var recievedResponse = JSON.parse(xhr.responseText);
 
-        if(recievedResponse["state"]=="ALARM OUT OF RANGE"){
-            setImage("https://i.ytimg.com/vi/PeVgR4gM1kA/hqdefault.jpg")
-        }else{
-            setImage("http://www.opengaz.ru/sites/www.opengaz.ru/files/u353/yzaj8_9uiie.jpg")
+        var info = document.getElementById('info');
+        var body = document.getElementById('body');
+
+        if (recievedResponse["state"] == "ALARM OUT OF RANGE") {
+            setImage("https://i.ytimg.com/vi/PeVgR4gM1kA/hqdefault.jpg");
+            info.setAttribute("style", "color: red");
+            body.setAttribute("bgcolor", "#917D74");
+        } else {
+            setImage("http://www.opengaz.ru/sites/www.opengaz.ru/files/u353/yzaj8_9uiie.jpg");
+            info.setAttribute("style", "color: lawngreen");
+            body.setAttribute("bgcolor", "#8fbc8f");
         }
 
 
         counter++;
         var json = document.createTextNode(xhr.responseText + " - " + counter);
-        var elem = document.getElementById('info');
-        while (elem.firstChild) {
-            elem.removeChild(elem.firstChild);
+
+        while (info.firstChild) {
+            info.removeChild(info.firstChild);
         }
-        elem.appendChild(json);
+        info.appendChild(json);
 
     }
 
