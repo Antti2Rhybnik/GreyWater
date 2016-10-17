@@ -1,11 +1,13 @@
 package com.greywater.iot.rest;
 
+import com.google.gson.JsonObject;
 import com.greywater.iot.handlers.Observer;
 import com.greywater.iot.handlers.ThresholdHandler;
 import com.greywater.iot.jpa.Message;
 import com.greywater.iot.jpa.Sensor;
 import com.greywater.iot.jpa.Thing;
 import com.greywater.iot.utils.AwesomeHTMLBuilder;
+import org.json.simple.JSONObject;
 
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
@@ -147,6 +149,25 @@ public class RestApiProvider {
         }
         return AwesomeHTMLBuilder.getAwesomeHtml("Everything is ok. Handler value", String.valueOf(ThresholdHandler.isProblemDetected()), "\t#808080");
     }
+
+    @GET
+    @Path("thres")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String handlerResult(){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("low", String.valueOf(ThresholdHandler.getLow()));
+        jsonObject.put("max", String.valueOf(ThresholdHandler.getMax()));
+        jsonObject.put("result", String.valueOf(ThresholdHandler.isProblemDetected()));
+        return jsonObject.toJSONString();
+    }
+    @GET
+    @Path("failureClient")
+    @Produces(MediaType.TEXT_HTML)
+    public String filureClient(){
+        return AwesomeHTMLBuilder.getMyFailureInClient();
+    }
+
+
 
 
     public RestApiProvider() {}
