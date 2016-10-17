@@ -14,6 +14,10 @@ function update() {
     xhr.send();
 
     function setImage(thisImg) {
+        elem = document.getElementById('imageDiv');
+        while (elem.firstChild) {
+            elem.removeChild(elem.firstChild);
+        }
         var img = document.createElement("IMG");
         img.src =thisImg;
         document.getElementById('imageDiv').appendChild(img);
