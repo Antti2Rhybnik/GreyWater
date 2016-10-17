@@ -13,8 +13,20 @@ function update() {
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send();
 
+    function setImage(thisImg) {
+        var img = document.createElement("IMG");
+        img.src =thisImg;
+        document.getElementById('imageDiv').appendChild(img);
+    }
 
     xhr.onreadystatechange = function() {
+        var recievedResponse = JSON.parse(xhr.responseText);
+
+        if(recievedResponse["state"]=="ALARM OUT OF RANGE"){
+            setImage("https://i.ytimg.com/vi/PeVgR4gM1kA/hqdefault.jpg")
+        }else{
+            setImage("http://www.opengaz.ru/sites/www.opengaz.ru/files/u353/yzaj8_9uiie.jpg")
+        }
 
         if (xhr.readyState != 4) return;
 

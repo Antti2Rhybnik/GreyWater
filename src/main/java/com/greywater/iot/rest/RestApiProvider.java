@@ -153,7 +153,7 @@ public class RestApiProvider {
     @Produces(MediaType.APPLICATION_JSON)
     public Response handlerResult() {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("low", String.valueOf(ThresholdHandler.getLow()));
+        jsonObject.put("min", String.valueOf(ThresholdHandler.getLow()));
         jsonObject.put("max", String.valueOf(ThresholdHandler.getMax()));
         jsonObject.put("Is problem detected", String.valueOf(ThresholdHandler.isProblemDetected()));
         if (ThresholdHandler.getCurrentMessage() != null) {
