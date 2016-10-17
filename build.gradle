@@ -12,7 +12,7 @@ class Tomcat extends DefaultTask {
 
 task deployOnTomcat(dependsOn: build, type: Tomcat) {
 
-    tomcatDest = "${System.getenv('TOMCAT_HOME')}/webapps/sapiot"
+    tomcatDest = "${System.getenv('TOMCAT_HOME')}/webapps/GreyWater"
 
     doLast {
         copy {

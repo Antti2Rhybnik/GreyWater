@@ -1,6 +1,5 @@
 package com.greywater.iot.rest;
 
-import com.google.gson.JsonObject;
 import com.greywater.iot.handlers.Observer;
 import com.greywater.iot.handlers.ThresholdHandler;
 import com.greywater.iot.jpa.Message;
@@ -18,6 +17,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("api")
@@ -26,6 +26,9 @@ public class RestApiProvider {
 
     public static String tr = "-21";
 
+    public RestApiProvider() {
+    }
+
     @GET
     @Path("test")
     @Produces(MediaType.TEXT_PLAIN)
@@ -33,7 +36,6 @@ public class RestApiProvider {
 
         return tr;
     }
-
 
     @GET
     @Path("lastN")
@@ -65,10 +67,6 @@ public class RestApiProvider {
     public List<Sensor> getAllSensors() {
         return Sensor.getAll();
     }
-
-
-
-
 
     @GET
     @Path("pers")
@@ -145,7 +143,7 @@ public class RestApiProvider {
     @Produces(MediaType.TEXT_HTML)
     public String ok() {
         if (ThresholdHandler.isProblemDetected()) {
-         return    AwesomeHTMLBuilder.getAwesomeHtmlWithPhoto("In Threshold happened problems. Handler value - ", String.valueOf(ThresholdHandler.isProblemDetected()), "http://www.ivetta.ua/wp-content/uploads/2015/07/tom-kruz-3.jpg");
+            return AwesomeHTMLBuilder.getAwesomeHtmlWithPhoto("In Threshold happened problems. Handler value - ", String.valueOf(ThresholdHandler.isProblemDetected()), "http://www.ivetta.ua/wp-content/uploads/2015/07/tom-kruz-3.jpg");
         }
         return AwesomeHTMLBuilder.getAwesomeHtml("Everything is ok. Handler value", String.valueOf(ThresholdHandler.isProblemDetected()), "\t#808080");
     }
@@ -153,24 +151,31 @@ public class RestApiProvider {
     @GET
     @Path("thres")
     @Produces(MediaType.APPLICATION_JSON)
-    public String handlerResult(){
+    public Response handlerResult() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("low", String.valueOf(ThresholdHandler.getLow()));
         jsonObject.put("max", String.valueOf(ThresholdHandler.getMax()));
-        jsonObject.put("result", String.valueOf(ThresholdHandler.isProblemDetected()));
-        return jsonObject.toJSONString();
+        jsonObject.put("Is problem detected", String.valueOf(ThresholdHandler.isProblemDetected()));
+        if (ThresholdHandler.getCurrentMessage() != null) {
+            if (ThresholdHandler.isProblemDetected()) {
+                jsonObject.put("state", "ALARM OUT OF RANGE");
+            } else {
+                jsonObject.put("state", "normal value");
+            }
+
+            jsonObject.put("current value", String.valueOf(ThresholdHandler.getCurrentMessage().getSensorValue()));
+
+        }
+//        return jsonObject.toJSONString();
+        return Response.ok(jsonObject.toJSONString()).header("Access-Control-Allow-Credentials", "true").header("Access-Control-Allow-Origin", "*").build();
     }
+
     @GET
     @Path("failureClient")
     @Produces(MediaType.TEXT_HTML)
-    public String filureClient(){
+    public String filureClient() {
         return AwesomeHTMLBuilder.getMyFailureInClient();
     }
-
-
-
-
-    public RestApiProvider() {}
 
 
 }
