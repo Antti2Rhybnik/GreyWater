@@ -8,7 +8,6 @@ function update() {
 
     var xhr = new XMLHttpRequest();
 
-    var host = "https://greywaterp1942206778trial.hanatrial.ondemand.com/GreyWater";
     xhr.open('GET', '/GreyWater/rest/api/thres', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send();
@@ -24,6 +23,9 @@ function update() {
     }
 
     xhr.onreadystatechange = function() {
+
+        if (xhr.readyState != 4) return;
+
         var recievedResponse = JSON.parse(xhr.responseText);
 
         if(recievedResponse["state"]=="ALARM OUT OF RANGE"){
@@ -32,7 +34,6 @@ function update() {
             setImage("http://www.opengaz.ru/sites/www.opengaz.ru/files/u353/yzaj8_9uiie.jpg")
         }
 
-        if (xhr.readyState != 4) return;
 
         counter++;
         var json = document.createTextNode(xhr.responseText + " - " + counter);
@@ -41,8 +42,6 @@ function update() {
             elem.removeChild(elem.firstChild);
         }
         elem.appendChild(json);
-
-
 
     }
 
