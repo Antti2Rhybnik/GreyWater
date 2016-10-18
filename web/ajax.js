@@ -30,11 +30,11 @@ function update() {
 
         if (recievedResponse["state"] == "ALARM OUT OF RANGE") {
             setImage("https://i.ytimg.com/vi/PeVgR4gM1kA/hqdefault.jpg");
-            info.setAttribute("style", "color: red");
+            info.setAttribute("class", "bad");
             body.setAttribute("bgcolor", "#917D74");
         } else {
             setImage("http://www.opengaz.ru/sites/www.opengaz.ru/files/u353/yzaj8_9uiie.jpg");
-            info.setAttribute("style", "color: lawngreen");
+            info.setAttribute("class", "ok");
             body.setAttribute("bgcolor", "#8fbc8f");
         }
 
