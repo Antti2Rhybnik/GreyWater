@@ -7,8 +7,9 @@ import java.util.UUID;
 /**
  * Created by alexander on 10/12/16.
  */
+/*Таблица виртуальных сенсоров. Еще в разработке*/
 @MappedSuperclass
-public abstract class VirtualSensor implements VirtualSensorEvaluable {
+public abstract class VirtualSensor{
 
     @Id
     @Column(name = "ID")

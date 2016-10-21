@@ -19,7 +19,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
-
+/*Это основной инструмент общения с веб клиентом.
+* Но на данный момент это свалка. Мы используем это для вывода информации для системы
+* Можете не присматриваться к наполнению. Важно знать, что здесь мы можем наладить общение с веб клиентом.*/
 @Path("api")
 @Singleton
 public class RestApiProvider {

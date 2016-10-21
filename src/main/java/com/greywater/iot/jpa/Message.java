@@ -11,6 +11,10 @@ import java.util.List;
  * Created by antti on 08.10.16.
  */
 
+
+/*Класс сообщений из сервиса сообщений.
+* Выглядит сложно, так что чтобы разобраться как работает почитайте сначала о JPA
+* */
 @Entity
 @Table(name = "MESSAGES_TABLE", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
 @NamedQueries({
@@ -66,7 +70,7 @@ public class Message implements Serializable {
         this.sensorValue = sensorValue;
     }
 
-
+    //Возвращает лист сообщений пришедгих после Timestamp t
     public static List<Message> getLastMessages(Timestamp t) {
         EntityManager em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
         TypedQuery<Message> query = em.createNamedQuery("Message.getLast", Message.class);

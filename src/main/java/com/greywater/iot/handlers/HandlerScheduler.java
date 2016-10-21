@@ -11,6 +11,10 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by alexander on 10/10/16.
  */
+
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/*Основной инструмент запуска обработчиков. Все обработчики реализуют интерфейс
+* Runnable и запускаются строго через этот класс*/
 @WebListener
 public class HandlerScheduler implements ServletContextListener {
     public final int HANDLER_THREAD_POOL_SIZE = 30;

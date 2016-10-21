@@ -4,6 +4,8 @@ package com.greywater.iot.jpa;
 import javax.persistence.*;
 import java.util.UUID;
 
+/*Таблица конфигурации Sensor.
+* Как можно заметить здесь есть MIN, MAX, возможно будет что-то еще*/
 @Entity
 @Table(name="PARAMETERS_TABLE", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
 public class Parameters {

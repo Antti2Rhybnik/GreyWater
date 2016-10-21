@@ -8,6 +8,8 @@ import java.util.List;
 /**
  * Created by alexander on 10/13/16.
  */
+/*Обработчик граничных значений
+* Был необходим для презентации Антону и скорее всего будет убран*/
 public class ThresholdHandler implements Runnable {
     ArrayList<Message> messages;
     static boolean problemDetected;

@@ -13,6 +13,9 @@ import java.util.List;
 /**
  * Created by alexander on 10/13/16.
  */
+/*Наблюдатель за таблицей сообщений
+* С определенной периодичностью опрашивает таблицу сообщений
+* и если появились новые передает их в NavigatorHandler*/
 public class Observer implements Runnable {
     public static Timestamp recentlyActiveDate;
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
