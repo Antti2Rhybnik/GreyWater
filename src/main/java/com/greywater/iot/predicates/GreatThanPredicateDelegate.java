@@ -1,14 +1,14 @@
-package com.greywater.iot.core.predicates;
+package com.greywater.iot.predicates;
 
-import com.greywater.iot.core.Sensor;
+import sun.management.Sensor;
 
 /**
  * Created by antti on 16.10.16.
  */
-public class GreatThanPredicate extends Predicate {
+public class GreatThanPredicateDelegate extends PredicateDelegate {
 
 
-    public GreatThanPredicate(Sensor sensor, double param) {
+    public GreatThanPredicateDelegate(Sensor sensor, double param) {
         super(sensor, param);
     }
 

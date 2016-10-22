@@ -5,7 +5,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="PREDICATES_TABLE", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
-public class PredicateEntity {
+public class Predicate {
 
 
     @Id
@@ -22,7 +22,7 @@ public class PredicateEntity {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "SENSOR_ID")
-    private SensorEntity sensorEntity;
+    private Sensor sensor;
 
     public Integer getId() {
         return id;
@@ -48,11 +48,11 @@ public class PredicateEntity {
         this.value = value;
     }
 
-    public SensorEntity getSensorEntityEntity() {
-        return sensorEntity;
+    public Sensor getSensorEntityEntity() {
+        return sensor;
     }
 
-    public void setSensorEntityEntity(SensorEntity sensorEntity) {
-        this.sensorEntity = sensorEntity;
+    public void setSensorEntityEntity(Sensor sensor) {
+        this.sensor = sensor;
     }
 }

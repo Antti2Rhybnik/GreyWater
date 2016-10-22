@@ -9,11 +9,11 @@ import java.util.List;
 @Entity
 @Table(name="SENSORS_TABLE")
 @NamedQueries({
-        @NamedQuery(name = "Sensor.getAll", query = "SELECT s from SensorEntity s"),
-        @NamedQuery(name = "Sensor.getByID", query = "SELECT s from SensorEntity s where s.id = :id")
+        @NamedQuery(name = "Sensor.getAll", query = "SELECT s from Sensor s"),
+        @NamedQuery(name = "Sensor.getByID", query = "SELECT s from Sensor s where s.id = :id")
 })
 @XmlRootElement
-public class SensorEntity {
+public class Sensor {
 
     @Id
     @Column(name = "ID")
@@ -70,27 +70,27 @@ public class SensorEntity {
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public static List<SensorEntity> getAll(){
+    public static List<Sensor> getAll(){
         EntityManager entityManager = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-        List<SensorEntity> sensorEntityEntities = entityManager.createNamedQuery("Sensor.getAll", SensorEntity.class).getResultList();
+        List<Sensor> sensorEntities = entityManager.createNamedQuery("Sensor.getAll", Sensor.class).getResultList();
         entityManager.close();
-        return sensorEntityEntities;
+        return sensorEntities;
     }
 
-    public static SensorEntity getByID(Long id) {
+    public static Sensor getByID(Long id) {
         EntityManager entityManager = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-        TypedQuery<SensorEntity> query = entityManager.createNamedQuery("Sensor.getByID", SensorEntity.class);
-        SensorEntity sensorEntityEntity = query.getSingleResult();
+        TypedQuery<Sensor> query = entityManager.createNamedQuery("Sensor.getByID", Sensor.class);
+        Sensor sensorEntity = query.getSingleResult();
         entityManager.close();
-        return sensorEntityEntity;
+        return sensorEntity;
     }
 
-    public List<MessageEntity> getLast(int limit) {
+    public List<Message> getLast(int limit) {
         EntityManager em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-        TypedQuery<MessageEntity> q = em.createNamedQuery("Message.lastN", MessageEntity.class);
+        TypedQuery<Message> q = em.createNamedQuery("Message.lastN", Message.class);
         q.setParameter("1", id);
         q.setParameter("2", limit);
-        List<MessageEntity> list = q.getResultList();
+        List<Message> list = q.getResultList();
         em.close();
         return list;
     }
