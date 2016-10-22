@@ -1,9 +1,9 @@
 package com.greywater.iot.jpa;
 
-
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
+
 /*Таблица датчиков. Поля говорят сами за себя
 * Каждый датчик в системе будет иметь запись в таблице*/
 @Entity

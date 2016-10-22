@@ -10,9 +10,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by alexander on 10/13/16.
- */
 /*Наблюдатель за таблицей сообщений
 * С определенной периодичностью опрашивает таблицу сообщений
 * и если появились новые передает их в NavigatorHandler*/

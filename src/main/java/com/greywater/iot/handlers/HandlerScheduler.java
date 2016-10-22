@@ -8,10 +8,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by alexander on 10/10/16.
- */
-
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 /*Основной инструмент запуска обработчиков. Все обработчики реализуют интерфейс
 * Runnable и запускаются строго через этот класс*/

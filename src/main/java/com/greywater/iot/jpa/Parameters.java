@@ -1,6 +1,5 @@
 package com.greywater.iot.jpa;
 
-
 import javax.persistence.*;
 import java.util.UUID;
 

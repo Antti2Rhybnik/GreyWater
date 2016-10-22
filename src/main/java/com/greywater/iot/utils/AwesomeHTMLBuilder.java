@@ -1,8 +1,6 @@
 package com.greywater.iot.utils;
 
-/**
- * Created by antti on 14.10.16.
- */
+
 /*Это мастерский костыль имени Андрея. Да, именно так работают веб приложения*/
 public class AwesomeHTMLBuilder {
 

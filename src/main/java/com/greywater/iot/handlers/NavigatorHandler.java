@@ -5,10 +5,6 @@ import com.greywater.iot.jpa.Sensor;
 
 import java.util.List;
 
-/**
- * Created by alexander on 10/13/16.
- */
-
 /*Первый обработчик на который поступят сообщения
 * Распределяет сообщения по следующим обработчикам*/
 public class NavigatorHandler implements Runnable {

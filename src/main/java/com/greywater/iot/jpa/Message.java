@@ -7,11 +7,6 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by antti on 08.10.16.
- */
-
-
 /*Класс сообщений из сервиса сообщений.
 * Выглядит сложно, так что чтобы разобраться как работает почитайте сначала о JPA
 * */
