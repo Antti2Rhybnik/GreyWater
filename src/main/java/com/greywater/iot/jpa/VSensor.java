@@ -19,6 +19,8 @@ public class VSensor implements Serializable {
     @GeneratedValue
     private Integer id;
 
+    // говорит нам о том, какой это сенсор - сумма, симпл редирект
+    // нужно на этапе инициализации при запихивании делегатов
     @Column(name = "TYPE")
     private String type;
 
@@ -78,10 +80,10 @@ public class VSensor implements Serializable {
 
     // сам делегирующий метод
     public Double eval() {
-        return vSensorDelegate.eval();
+        return vSensorDelegate.eval(); // must be not null
     }
 
-
+    // TODO: fix this
     public static List<VSensor> getAll() {
         return new ArrayList<VSensor>();
     }

@@ -65,6 +65,6 @@ public class Predicate {
 
     // непосредственно делегирующий метод
     public boolean eval() {
-        return predicateDelegate.eval();
+        return predicateDelegate.eval(); // must be not null
     }
 }
