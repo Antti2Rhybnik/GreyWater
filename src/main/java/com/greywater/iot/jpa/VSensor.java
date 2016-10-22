@@ -11,10 +11,6 @@ import java.util.List;
 
 @Entity
 @Table(name="VSENSORS_TABLE")
-@NamedQueries({
-        @NamedQuery(name = "Sensor.getAll", query = "SELECT s from Sensor s"),
-        @NamedQuery(name = "Sensor.getByID", query = "SELECT s from Sensor s where s.id = :id")
-})
 @XmlRootElement
 public class VSensor implements Serializable {
 
