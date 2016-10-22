@@ -70,7 +70,7 @@ public class VSensor implements Serializable {
         this.sensors = sensors;
     }
 
-    // transient - не участвует в persistence операциях
+    // transient - не участвует в сериализации и не попадает в бд
     // делегат для вычисления значения виртуального сенсора
     transient VSensorDelegate vSensorDelegate;
 
