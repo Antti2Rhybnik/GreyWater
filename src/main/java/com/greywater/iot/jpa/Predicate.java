@@ -23,9 +23,10 @@ public class Predicate {
     @Column(name = "VALUE")
     private Double value;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    // виртуальный сенсор, для которого этот "предикат" предназначен
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "VIRTUAL_SENSOR_ID")
-    private List<VSensor> vsensors;
+    private VSensor vsensor;
 
     public Integer getId() {
         return id;
@@ -51,6 +52,7 @@ public class Predicate {
         this.value = value;
     }
 
+    // делегат предиката, делегируемый для вычисления предиката
     transient PredicateDelegate predicateDelegate;
 
     public PredicateDelegate getPredicateDelegate() {
@@ -61,7 +63,7 @@ public class Predicate {
         this.predicateDelegate = pd;
     }
 
-
+    // непосредственно делегирующий метод
     public boolean eval() {
         return predicateDelegate.eval();
     }

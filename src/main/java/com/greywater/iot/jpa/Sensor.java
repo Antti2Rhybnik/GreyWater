@@ -23,11 +23,12 @@ public class Sensor {
     @Column(name = "TYPE")
     private String type;
 
-
+    // TODO: возможно, штуку стоит перекинуть на виртуальные сенсоры
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "THING_ID")
     private Thing thing;
 
+    // список виртуальных сенсоров, в которых данный сенсор участвует
     @ManyToMany(mappedBy = "sensors", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<VSensor> vsensors = new ArrayList<>();
 

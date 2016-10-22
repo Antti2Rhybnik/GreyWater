@@ -26,10 +26,12 @@ public class VSensor implements Serializable {
     @Column(name = "TYPE")
     private String type;
 
-    @ManyToMany(mappedBy = "vsensors", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // список "предикатов", которые обрабатываются для этого виртуального сенсора
+    @OneToMany(mappedBy = "vsensor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Predicate> predicates = new ArrayList<>();
 
-    // TODO: пока непонятно, как это всё нормально соединить
+    // пока непонятно, как это всё нормально соединить
+    // список сырых сенсоров, которые участвуют в формировании значения на виртуальном сенсоре
     @ManyToMany(mappedBy = "vsensors", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "VSENS_SENS",
@@ -70,12 +72,15 @@ public class VSensor implements Serializable {
         this.sensors = sensors;
     }
 
+    // transient - не участвует в persistence операциях
+    // делегат для вычисления значения виртуального сенсора
     transient VSensorDelegate vSensorDelegate;
 
     public void setvSensorDelegate(VSensorDelegate vsd) {
         this.vSensorDelegate = vsd;
     }
 
+    // сам делегирующий метод
     public Double eval() {
         return vSensorDelegate.eval();
     }
