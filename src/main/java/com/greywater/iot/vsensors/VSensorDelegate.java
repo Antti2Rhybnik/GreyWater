@@ -1,7 +1,17 @@
 package com.greywater.iot.vsensors;
 
-/**
- * Created by antti on 22.10.16.
- */
-public class VSensorDelegate {
+import com.greywater.iot.jpa.Sensor;
+
+import java.util.List;
+
+public abstract class VSensorDelegate {
+
+    List<Sensor> sensors;
+
+    public VSensorDelegate(List<Sensor> sensors) {
+        this.sensors = sensors;
+    }
+
+    public abstract Double eval();
+
 }

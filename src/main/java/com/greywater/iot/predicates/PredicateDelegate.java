@@ -1,15 +1,16 @@
 package com.greywater.iot.predicates;
 
-import sun.management.Sensor;
+import com.greywater.iot.jpa.Predicate;
+import com.greywater.iot.jpa.VSensor;
 
 public abstract class PredicateDelegate {
 
-    Sensor sensor;
-    double param;
+    VSensor vsensor;
+    Predicate predicate;
 
-    PredicateDelegate(Sensor sensor, double param) {
-        this.sensor = sensor;
-        this.param = param;
+    PredicateDelegate(VSensor vsensor, Predicate predicate) {
+        this.vsensor = vsensor;
+        this.predicate = predicate;
     }
 
     public abstract boolean eval();

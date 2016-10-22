@@ -5,9 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by alexander on 10/13/16.
- */
+
 @Entity
 @Table(name = "THINGS_TABLE", catalog = "")
 @XmlRootElement
@@ -21,13 +19,13 @@ public class Thing {
     private String name;
 
     @OneToMany(mappedBy = "thing", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<SensorEntity> sensorEntityEntities = new ArrayList<>();
+    private List<Sensor> sensors = new ArrayList<>();
 
-    public void addSensor(SensorEntity sensorEntityEntity) {
+    public void addSensor(Sensor sensorEntity) {
 
-        if (sensorEntityEntity.getThing() != this) {
-            this.sensorEntityEntities.add(sensorEntityEntity);
-            sensorEntityEntity.setThing(this);
+        if (sensorEntity.getThing() != this) {
+            this.sensors.add(sensorEntity);
+            sensorEntity.setThing(this);
 
         }
     }
@@ -48,11 +46,11 @@ public class Thing {
         this.name = name;
     }
 
-    public List<SensorEntity> getSensorEntityEntities() {
-        return sensorEntityEntities;
+    public List<Sensor> getSensorEntities() {
+        return sensors;
     }
 
-    public void setSensorEntityEntities(List<SensorEntity> sensorEntityEntities) {
-        this.sensorEntityEntities = sensorEntityEntities;
+    public void setSensorEntities(List<Sensor> sensors) {
+        this.sensors = sensors;
     }
 }

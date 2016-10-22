@@ -1,8 +1,9 @@
 package com.greywater.iot.core;
 
-import com.greywater.iot.jpa.SensorEntity;
-import com.greywater.iot.core.predicates.GreatThanPredicate;
-import com.greywater.iot.core.predicates.LessThanPredicate;
+import com.greywater.iot.jpa.VSensor;
+import com.greywater.iot.predicates.GreatThanPredicateDelegate;
+import com.greywater.iot.predicates.LessThanPredicateDelegate;
+import com.greywater.iot.vsensors.SimpleRedirect;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -17,35 +18,34 @@ public class Core implements ServletContextListener {
 
     public static ExecutorService es;
 
-    // Классы ядра: список сенсоров - в каждом список соответствующих предикатов
-    public static List<Sensor> allSensors = new ArrayList<>();
+    // объекты ядра - как минимум в память должны быть подгружены
+    public static List<VSensor> virtualSensors = new ArrayList<>();
 
     public static void coreInit() {
 
         System.out.println("Core Initialization...");
-        // ИНИЦИАЛИЗАЦИЯ ЯДРА:
-        // мы получаем параметры с бд и инициализируем нужные классы
-        // TODO: код сумбурный и требует доработки
 
-        // получаем сенсоры из бд - TODO: переделал бы, но пока так
         try {
-            SensorEntity.getAll().forEach(se -> {
+            VSensor.getAll().forEach(vs -> {
 
-                System.out.println(se);
-                Sensor s = new Sensor(se.getId());
+                switch (vs.getType()) {
+                    case "SimpleRedirect":
+                        vs.setvSensorDelegate(new SimpleRedirect(vs.getSensors()));
+                        break;
+                }
 
-                se.getPredicateEntities().forEach(pe -> {
-                    switch (pe.getType()) {
+                vs.getPredicates().forEach(p -> {
+                    switch (p.getType()) {
                         case "GT":
-                            s.addPredicate(new GreatThanPredicate(s, pe.getValue()));
+                            p.setPredicateDelegate(new GreatThanPredicateDelegate(vs, p));
                             break;
                         case "LT":
-                            s.addPredicate(new LessThanPredicate(s, pe.getValue()));
+                            p.setPredicateDelegate(new LessThanPredicateDelegate(vs, p));
                             break;
                     }
                 });
 
-                allSensors.add(s);
+                virtualSensors.add(vs);
             });
 
         } catch (RuntimeException re) {

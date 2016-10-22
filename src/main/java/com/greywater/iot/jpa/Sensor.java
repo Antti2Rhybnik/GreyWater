@@ -16,19 +16,20 @@ import java.util.List;
 public class Sensor {
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "SENSOR_ID")
     @GeneratedValue
     private Integer id;
 
     @Column(name = "TYPE")
     private String type;
 
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "THING_ID")
     private Thing thing;
 
-    @OneToMany(mappedBy = "sensorEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<PredicateEntity> predicateEntities = new ArrayList<>();;
+    @ManyToMany(mappedBy = "sensors", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<VSensor> vsensors = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -54,20 +55,6 @@ public class Sensor {
         this.thing = thing;
     }
 
-    public List<PredicateEntity> getPredicateEntities() {
-        return predicateEntities;
-    }
-
-    public void setPredicateEntities(List<PredicateEntity> predicateEntities) {
-        this.predicateEntities = predicateEntities;
-    }
-
-    public void addPredicateEntity(PredicateEntity predicateEntity) {
-        if (predicateEntity.getSensorEntityEntity() != this) {
-            this.predicateEntities.add(predicateEntity);
-            predicateEntity.setSensorEntityEntity(this);
-        }
-    }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static List<Sensor> getAll(){
@@ -85,13 +72,15 @@ public class Sensor {
         return sensorEntity;
     }
 
-    public List<Message> getLast(int limit) {
-        EntityManager em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-        TypedQuery<Message> q = em.createNamedQuery("Message.lastN", Message.class);
-        q.setParameter("1", id);
-        q.setParameter("2", limit);
-        List<Message> list = q.getResultList();
-        em.close();
-        return list;
-    }
+
+    // TODO: fix this
+//    public List<Message> getLast(int limit) {
+//        EntityManager em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
+//        TypedQuery<Message> q = em.createNamedQuery("Message.lastN", Message.class);
+//        q.setParameter("1", id);
+//        q.setParameter("2", limit);
+//        List<Message> list = q.getResultList();
+//        em.close();
+//        return list;
+//    }
 }

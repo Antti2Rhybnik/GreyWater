@@ -1,13 +1,16 @@
 package com.greywater.iot.jpa;
 
 
+import com.greywater.iot.predicates.PredicateDelegate;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="PREDICATES_TABLE", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
 public class Predicate {
 
-
+    // TODO: fix ID
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pred_gen")
     @SequenceGenerator(name = "pred_gen", sequenceName = "pred_seq", initialValue = 100, allocationSize = 50)
@@ -20,9 +23,9 @@ public class Predicate {
     @Column(name = "VALUE")
     private Double value;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "SENSOR_ID")
-    private Sensor sensor;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "VIRTUAL_SENSOR_ID")
+    private List<VSensor> vsensors;
 
     public Integer getId() {
         return id;
@@ -48,11 +51,18 @@ public class Predicate {
         this.value = value;
     }
 
-    public Sensor getSensorEntityEntity() {
-        return sensor;
+    transient PredicateDelegate predicateDelegate;
+
+    public PredicateDelegate getPredicateDelegate() {
+        return predicateDelegate;
     }
 
-    public void setSensorEntityEntity(Sensor sensor) {
-        this.sensor = sensor;
+    public void setPredicateDelegate(PredicateDelegate pd) {
+        this.predicateDelegate = pd;
+    }
+
+
+    public boolean eval() {
+        return predicateDelegate.eval();
     }
 }

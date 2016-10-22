@@ -1,8 +1,8 @@
 package com.greywater.iot.rest;
 
 import com.greywater.iot.core.SensorHandler;
-import com.greywater.iot.jpa.MessageEntity;
-import com.greywater.iot.jpa.SensorEntity;
+import com.greywater.iot.jpa.Message;
+import com.greywater.iot.jpa.Sensor;
 import com.greywater.iot.jpa.Thing;
 
 import javax.inject.Singleton;
@@ -34,13 +34,13 @@ public class RestApiProvider {
     @GET
     @Path("lastN")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<MessageEntity> getLast30(@QueryParam("id") String id, @QueryParam("N") Integer N) {
+    public List<Message> getLast30(@QueryParam("id") String id, @QueryParam("N") Integer N) {
 
         EntityManager em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-        TypedQuery<MessageEntity> q = em.createNamedQuery("Message.lastN", MessageEntity.class);
+        TypedQuery<Message> q = em.createNamedQuery("Message.lastN", Message.class);
         q.setParameter("1", id);
         q.setParameter("2", N);
-        List<MessageEntity> messageEntities = q.getResultList();
+        List<Message> messageEntities = q.getResultList();
         em.close();
         return messageEntities;
     }
@@ -48,9 +48,9 @@ public class RestApiProvider {
     @GET
     @Path("allmsg")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<MessageEntity> getAllMessages() {
+    public List<Message> getAllMessages() {
         EntityManager em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-        List<MessageEntity> list = em.createNamedQuery("Message.getAll", MessageEntity.class).getResultList();
+        List<Message> list = em.createNamedQuery("Message.getAll", Message.class).getResultList();
         em.close();
         return list;
     }
@@ -58,8 +58,8 @@ public class RestApiProvider {
     @GET
     @Path("allsensors")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<SensorEntity> getAllSensors() {
-        return SensorEntity.getAll();
+    public List<Sensor> getAllSensors() {
+        return Sensor.getAll();
     }
 
 
@@ -73,20 +73,20 @@ public class RestApiProvider {
 
         EntityManager em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
 
-        SensorEntity s1 = em.find(SensorEntity.class, 1L);
-        SensorEntity s2 = em.find(SensorEntity.class, 2L);
-        SensorEntity s3 = em.find(SensorEntity.class, 3L);
+        Sensor s1 = em.find(Sensor.class, 1L);
+        Sensor s2 = em.find(Sensor.class, 2L);
+        Sensor s3 = em.find(Sensor.class, 3L);
         Thing t1 = em.find(Thing.class, 1L);
         Thing t2 = em.find(Thing.class, 2L);
 
         if (s1 == null) {
-            s1 = new SensorEntity();
+            s1 = new Sensor();
         }
         if (s2 == null) {
-            s2 = new SensorEntity();
+            s2 = new Sensor();
         }
         if (s3 == null) {
-            s3 = new SensorEntity();
+            s3 = new Sensor();
         }
         if (t1 == null) {
             t1 = new Thing();
