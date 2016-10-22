@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="VSENSORS_TABLE")
+@Table(name = "VSENSORS_TABLE")
 @XmlRootElement
 public class VSensor implements Serializable {
 

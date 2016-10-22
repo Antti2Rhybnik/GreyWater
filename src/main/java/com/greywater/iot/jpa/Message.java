@@ -14,13 +14,13 @@ import java.util.List;
 @Entity
 @Table(name = "MESSAGES_TABLE", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
 @NamedQueries({
-    @NamedQuery(name = "Message.getAll", query = "SELECT s from Message s"),
-    @NamedQuery(name = "Message.getLast", query = "SELECT s from Message s where s.gCreated > :timestamp"),
+        @NamedQuery(name = "Message.getAll", query = "SELECT s from Message s"),
+        @NamedQuery(name = "Message.getLast", query = "SELECT s from Message s where s.gCreated > :timestamp"),
 })
 @NamedNativeQueries({
 //    @NamedNativeQuery(name = "MessageEntity.lastActualValues", query = "SELECT SENSOR_VALUE FROM MESSAGES_TABLE WHERE SENSOR_ID = ? ORDER BY G_CREATED DESC LIMIT ?", resultClass = Double.class),
 //    @NamedNativeQuery(name = "MessageEntity.lastActualTimestamps", query = "SELECT G_CREATED FROM MESSAGES_TABLE WHERE SENSOR_ID = ? ORDER BY G_CREATED DESC LIMIT ?", resultClass = Date.class),
-    @NamedNativeQuery(name = "MessageEntity.lastActualMessages", query = "SELECT * FROM MESSAGES_TABLE WHERE SENSOR_ID = ? ORDER BY G_CREATED DESC LIMIT ?", resultClass = Message.class)
+        @NamedNativeQuery(name = "MessageEntity.lastActualMessages", query = "SELECT * FROM MESSAGES_TABLE WHERE SENSOR_ID = ? ORDER BY G_CREATED DESC LIMIT ?", resultClass = Message.class)
 })
 @XmlRootElement
 public class Message implements Serializable {
@@ -39,7 +39,8 @@ public class Message implements Serializable {
     @Column(name = "SENSOR_VALUE")
     private Double sensorValue;
 
-    public Message() {}
+    public Message() {
+    }
 
     public String getgDevice() {
         return gDevice;

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="SENSORS_TABLE")
+@Table(name = "SENSORS_TABLE")
 @NamedQueries({
         @NamedQuery(name = "Sensor.getAll", query = "SELECT s from Sensor s"),
         @NamedQuery(name = "Sensor.getByID", query = "SELECT s from Sensor s where s.id = :id")
@@ -58,7 +58,7 @@ public class Sensor {
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public static List<Sensor> getAll(){
+    public static List<Sensor> getAll() {
         EntityManager entityManager = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
         List<Sensor> sensorEntities = entityManager.createNamedQuery("Sensor.getAll", Sensor.class).getResultList();
         entityManager.close();
