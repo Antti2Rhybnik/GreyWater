@@ -1,6 +1,5 @@
 package com.greywater.iot.rest;
 
-import com.greywater.iot.core.SensorHandler;
 import com.greywater.iot.jpa.Message;
 import com.greywater.iot.jpa.Sensor;
 import com.greywater.iot.jpa.Thing;
@@ -8,11 +7,9 @@ import com.greywater.iot.jpa.Thing;
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -26,24 +23,10 @@ public class RestApiProvider {
     @Path("test")
     @Produces(MediaType.TEXT_PLAIN)
     public String getTestString() {
-
-        return SensorHandler.someThingEvent;
+        return "it works";
     }
 
 
-    @GET
-    @Path("lastN")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Message> getLast30(@QueryParam("id") String id, @QueryParam("N") Integer N) {
-
-        EntityManager em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-        TypedQuery<Message> q = em.createNamedQuery("Message.lastN", Message.class);
-        q.setParameter("1", id);
-        q.setParameter("2", N);
-        List<Message> messageEntities = q.getResultList();
-        em.close();
-        return messageEntities;
-    }
 
     @GET
     @Path("allmsg")
