@@ -23,7 +23,7 @@ public class MessageDistributor implements Runnable {
         for (Message m: messages) {
 
             Optional<Sensor> matchedSensor = GWContext.getAllSensors().stream()
-                    .filter(s -> { return s.getId() == m.getSensorId(); })
+                    .filter(s -> s.getId() == m.getSensorId())
                     .findFirst();
 
             if (matchedSensor.isPresent()) {

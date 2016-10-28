@@ -10,8 +10,9 @@ public class Multiplicator extends VirtualSensorAggregator {
     }
 
     @Override
-    public Double eval() {
+    public Double eval() throws SensorNullMessageException {
 
+        checkNullMessage();
         return vs.getSensors().stream()
                 .mapToDouble(s -> s.getActualMessage().getSensorValue())
                 .reduce(1, (a, b) -> a * b);

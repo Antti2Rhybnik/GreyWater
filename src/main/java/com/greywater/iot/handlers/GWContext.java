@@ -35,32 +35,35 @@ public class GWContext implements ServletContextListener {
 
 
     private static void init() {
-
-        // инициализация списка сенсоров
-        allSensors = Sensor.getAll();
-        allVirtualSensors = VirtualSensor.getAll();
-        for (VirtualSensor vs: allVirtualSensors) {
-            switch (vs.getAggregationType()) {
-                case "SIMPLE_REDIRECTOR":
-                    vs.setVirtualSensorAggregator(new SimpleRedirector(vs));
-                    break;
-                case "MULTIPLICATOR":
-                    vs.setVirtualSensorAggregator(new Multiplicator(vs));
-                    break;
-                default:
-                    System.err.println("Unsupported aggregation type");
+        try {
+            // инициализация списка сенсоров
+            allSensors = Sensor.getAll();
+            allVirtualSensors = VirtualSensor.getAll();
+            for (VirtualSensor vs : allVirtualSensors) {
+                switch (vs.getAggregationType()) {
+                    case "SIMPLE_REDIRECTOR":
+                        vs.setVirtualSensorAggregator(new SimpleRedirector(vs));
+                        break;
+                    case "MULTIPLICATOR":
+                        vs.setVirtualSensorAggregator(new Multiplicator(vs));
+                        break;
+                    default:
+                        System.err.println("Unsupported aggregation type");
+                }
             }
+
+            msgDistribExecutor = Executors.newSingleThreadExecutor();
+
+            // запуск обзёрвера
+            observerScheduler = Executors.newSingleThreadScheduledExecutor();
+            observerScheduler.scheduleAtFixedRate(new Observer(), 9, 2, TimeUnit.SECONDS);
+
+            // TODO: добавить инициализацию планировщика обработчиков (handlersScheduler) в зависимости от количества обработчиков
+            handlersScheduler = Executors.newScheduledThreadPool(0);
+            //handlersScheduler.scheduleAtFixedRate()
+        } catch (RuntimeException ex) {
+            ex.printStackTrace();
         }
-
-        msgDistribExecutor = Executors.newSingleThreadExecutor();
-
-        // запуск обзёрвера
-        observerScheduler = Executors.newSingleThreadScheduledExecutor();
-        observerScheduler.scheduleAtFixedRate(new Observer(), 9, 2, TimeUnit.SECONDS);
-
-        // TODO: добавить инициализацию планировщика обработчиков (handlersScheduler) в зависимости от количества обработчиков
-        handlersScheduler = Executors.newScheduledThreadPool(0);
-        //handlersScheduler.scheduleAtFixedRate()
     }
 
     static Executor getMsgDistribExecutor() {

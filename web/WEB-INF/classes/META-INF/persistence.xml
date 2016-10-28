@@ -9,6 +9,7 @@
 		<class>com.greywater.iot.jpa.Thing</class>
 		<class>com.greywater.iot.jpa.Sensor</class>
 		<class>com.greywater.iot.jpa.Parameters</class>
+		<class>com.greywater.iot.jpa.VirtualSensor</class>
 		<properties>
 			<!--<property name="eclipselink.ddl-generation" value="create-tables"/>-->
 			<!--<property name="javax.persistence.schema-generation.create-source" value="metadata"/>-->

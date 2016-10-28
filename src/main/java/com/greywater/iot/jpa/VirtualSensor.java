@@ -1,5 +1,6 @@
 package com.greywater.iot.jpa;
 
+import com.greywater.iot.vsensors.SensorNullMessageException;
 import com.greywater.iot.vsensors.VirtualSensorAggregator;
 
 import javax.persistence.*;
@@ -88,8 +89,12 @@ public class VirtualSensor {
     }
 
     public void eval() {
-        vsa.eval();
-        // TODO: and save to DB
+        try {
+            vsa.eval();
+            // TODO: and save to DB
+        } catch (SensorNullMessageException ex) {
+            ex.printStackTrace();
+        }
     };
 
     public static List<VirtualSensor> getAll() {

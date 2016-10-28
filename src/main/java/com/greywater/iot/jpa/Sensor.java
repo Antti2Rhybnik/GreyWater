@@ -7,7 +7,7 @@ import java.util.List;
 /*Таблица датчиков. Поля говорят сами за себя
 * Каждый датчик в системе будет иметь запись в таблице*/
 @Entity
-@Table(name = "RAW_SENSORS_TABLE")
+@Table(name = "SENSORS_TABLE")
 @NamedQueries({
         @NamedQuery(name = "Sensor.getAll", query = "SELECT s from Sensor s"),
         @NamedQuery(name = "Sensor.getByID", query = "SELECT s from Sensor s where s.id = :id")
@@ -43,20 +43,20 @@ public class Sensor {
         this.id = id;
     }
 
-    public Message getActualMessage() {
-        return actualMessage;
-    }
-    public void updateActualMessage(Message actualMessage) {
-        this.actualMessage = actualMessage;
-    }
-
     public List<VirtualSensor> getVirtualSensors() {
         return virtualSensors;
     }
 
 
     // === TRANSIENT === //
-    private transient Message actualMessage;
+    private transient Message actualMessage = null;
+
+    public Message getActualMessage() {
+        return actualMessage;
+    }
+    public void updateActualMessage(Message actualMessage) {
+        this.actualMessage = actualMessage;
+    }
 
     public static List<Sensor> getAll() {
         EntityManager entityManager = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();

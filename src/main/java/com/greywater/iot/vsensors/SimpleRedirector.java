@@ -11,7 +11,8 @@ public class SimpleRedirector extends VirtualSensorAggregator {
     }
 
     @Override
-    public Double eval() {
+    public Double eval() throws SensorNullMessageException {
+        checkNullMessage();
         return vs.getSensors().get(0).getActualMessage().getSensorValue();
     }
 }

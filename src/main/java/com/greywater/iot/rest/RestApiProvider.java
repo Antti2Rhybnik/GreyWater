@@ -115,9 +115,7 @@ public class RestApiProvider {
         t2.setId(2);
         t2.setName("Труба");
 
-        t1.addSensor(s1);
-        t1.addSensor(s2);
-        t2.addSensor(s3);
+
         em.getTransaction().begin();
 
 //        em.persist(s1);
@@ -133,44 +131,43 @@ public class RestApiProvider {
         return "ok";
     }
 
-    @GET
-    @Path("timetest")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Message> timeTest() {
-        return Message.getAfterTime(Observer.getCurrentTimestamp());
-    }
+//    @GET
+//    @Path("timetest")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public List<Message> timeTest() {
+//        return Message.getAfterTime(Observer.getCurrentTimestamp());
+//    }
 
-    @GET
-    @Path("thresholder")
-    @Produces(MediaType.TEXT_HTML)
-    public String ok() {
-        if (ThresholdHandler.isProblemDetected()) {
-            return AwesomeHTMLBuilder.getAwesomeHtmlWithPhoto("In Threshold happened problems. Handler value - ", String.valueOf(ThresholdHandler.isProblemDetected()), "http://www.ivetta.ua/wp-content/uploads/2015/07/tom-kruz-3.jpg");
-        }
-        return AwesomeHTMLBuilder.getAwesomeHtml("Everything is ok. Handler value", String.valueOf(ThresholdHandler.isProblemDetected()), "\t#808080");
-    }
+//    @GET
+//    @Path("thresholder")
+//    @Produces(MediaType.TEXT_HTML)
+//    public String ok() {
+//        if (ThresholdHandler.isProblemDetected()) {
+//            return AwesomeHTMLBuilder.getAwesomeHtmlWithPhoto("In Threshold happened problems. Handler value - ", String.valueOf(ThresholdHandler.isProblemDetected()), "http://www.ivetta.ua/wp-content/uploads/2015/07/tom-kruz-3.jpg");
+//        }
+//        return AwesomeHTMLBuilder.getAwesomeHtml("Everything is ok. Handler value", String.valueOf(ThresholdHandler.isProblemDetected()), "\t#808080");
+//    }
 
-    @GET
-    @Path("thres")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response handlerResult() {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("min", String.valueOf(ThresholdHandler.getLow()));
-        jsonObject.put("max", String.valueOf(ThresholdHandler.getMax()));
-        jsonObject.put("Is problem detected", String.valueOf(ThresholdHandler.isProblemDetected()));
-        if (ThresholdHandler.getCurrentMessage() != null) {
-            if (ThresholdHandler.isProblemDetected()) {
-                jsonObject.put("state", "ALARM OUT OF RANGE");
-            } else {
-                jsonObject.put("state", "normal value");
-            }
-
-            jsonObject.put("current value", String.valueOf(ThresholdHandler.getCurrentMessage().getSensorValue()));
-
-        }
-//        return jsonObject.toJSONString();
-        return Response.ok(jsonObject.toJSONString()).header("Access-Control-Allow-Credentials", "true").header("Access-Control-Allow-Origin", "*").build();
-    }
+//    @GET
+//    @Path("thres")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response handlerResult() {
+//        JSONObject jsonObject = new JSONObject();
+//        jsonObject.put("min", String.valueOf(ThresholdHandler.getLow()));
+//        jsonObject.put("max", String.valueOf(ThresholdHandler.getMax()));
+//        jsonObject.put("Is problem detected", String.valueOf(ThresholdHandler.isProblemDetected()));
+//        if (ThresholdHandler.getCurrentMessage() != null) {
+//            if (ThresholdHandler.isProblemDetected()) {
+//                jsonObject.put("state", "ALARM OUT OF RANGE");
+//            } else {
+//                jsonObject.put("state", "normal value");
+//            }
+//
+//            jsonObject.put("current value", String.valueOf(ThresholdHandler.getCurrentMessage().getSensorValue()));
+//
+//        }
+//        return Response.ok(jsonObject.toJSONString()).header("Access-Control-Allow-Credentials", "true").header("Access-Control-Allow-Origin", "*").build();
+//    }
 
     @GET
     @Path("failureClient")
