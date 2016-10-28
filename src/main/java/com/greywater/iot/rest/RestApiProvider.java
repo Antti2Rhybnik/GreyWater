@@ -1,7 +1,6 @@
 package com.greywater.iot.rest;
 
 import com.greywater.iot.handlers.Observer;
-import com.greywater.iot.handlers.ThresholdHandler;
 import com.greywater.iot.jpa.Message;
 import com.greywater.iot.jpa.Sensor;
 import com.greywater.iot.jpa.Thing;
@@ -138,7 +137,7 @@ public class RestApiProvider {
     @Path("timetest")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Message> timeTest() {
-        return Message.getLastMessages(Observer.getCurrentTimestamp());
+        return Message.getAfterTime(Observer.getCurrentTimestamp());
     }
 
     @GET

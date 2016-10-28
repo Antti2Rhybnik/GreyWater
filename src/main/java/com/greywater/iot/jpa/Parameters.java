@@ -1,7 +1,6 @@
 package com.greywater.iot.jpa;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 /*Таблица конфигурации Sensor.
 * Как можно заметить здесь есть MIN, MAX, возможно будет что-то еще*/
@@ -22,7 +21,7 @@ public class Parameters {
     private Double min;
 
     @OneToOne(mappedBy = "parameters")
-    private Sensor sensor;
+    private Sensor rawSensor;
 
     public Parameters() {}
 
@@ -50,11 +49,11 @@ public class Parameters {
         this.min = min;
     }
 
-    public Sensor getSensor() {
-        return sensor;
+    public Sensor getRawSensor() {
+        return rawSensor;
     }
 
-    public void setSensor(Sensor sensor) {
-        this.sensor = sensor;
+    public void setRawSensor(Sensor rawSensor) {
+        this.rawSensor = rawSensor;
     }
 }

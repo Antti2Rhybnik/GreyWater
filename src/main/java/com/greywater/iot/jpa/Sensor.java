@@ -7,7 +7,7 @@ import java.util.List;
 /*Таблица датчиков. Поля говорят сами за себя
 * Каждый датчик в системе будет иметь запись в таблице*/
 @Entity
-@Table(name="SENSORS_TABLE")
+@Table(name = "RAW_SENSORS_TABLE")
 @NamedQueries({
         @NamedQuery(name = "Sensor.getAll", query = "SELECT s from Sensor s"),
         @NamedQuery(name = "Sensor.getByID", query = "SELECT s from Sensor s where s.id = :id")
@@ -15,6 +15,7 @@ import java.util.List;
 @XmlRootElement
 public class Sensor {
 
+    // === FIELDS === //
     @Id
     @Column(name = "ID")
     @GeneratedValue
@@ -23,58 +24,14 @@ public class Sensor {
     @Column(name = "TYPE")
     private String type = null;
 
-    @ManyToOne( cascade = CascadeType.ALL)
-    @JoinColumn(name = "THING_ID")
-    private Thing thing;
-
-    @OneToOne
-    @JoinColumn(name = "PARAM_ID")
-    private Parameters parameters;
+    @ManyToMany(mappedBy = "sensors")
+    private List<VirtualSensor> virtualSensors;
 
 
-    public Thing getThing() {
-        return thing;
-    }
-
-
-
-    public void setThing(Thing thing)
-    {
-        this.thing = thing;
-        if(!thing.getSensors().contains(this)){
-            thing.getSensors().add(this);
-        }
-    }
-
-    public static List<Sensor> getAll(){
-        EntityManager entityManager = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-        List<Sensor> sensors = entityManager.createNamedQuery("Sensor.getAll", Sensor.class).getResultList();
-        entityManager.close();
-        return sensors;
-    }
-
-    public static Sensor getByID(Long id) {
-        EntityManager entityManager = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-        TypedQuery<Sensor> query = entityManager.createNamedQuery("Sensor.getByID", Sensor.class);
-        Sensor sensor = query.getSingleResult();
-        entityManager.close();
-        return sensor;
-    }
-
-    public List<Message> getLast(int limit) {
-        EntityManager em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-        TypedQuery<Message> q = em.createNamedQuery("Message.lastN", Message.class);
-        q.setParameter("1", id);
-        q.setParameter("2", limit);
-        List<Message> list = q.getResultList();
-        em.close();
-        return list;
-    }
-
+    // === GETTERS AND SETTERS === //
     public String getType() {
         return type;
     }
-
     public void setType(String type) {
         this.type = type;
     }
@@ -82,16 +39,30 @@ public class Sensor {
     public long getId() {
         return id;
     }
-
     public void setId(long id) {
         this.id = id;
     }
 
-    public Parameters getParameters() {
-        return parameters;
+    public Message getActualMessage() {
+        return actualMessage;
+    }
+    public void updateActualMessage(Message actualMessage) {
+        this.actualMessage = actualMessage;
     }
 
-    public void setParameters(Parameters parameters) {
-        this.parameters = parameters;
+    public List<VirtualSensor> getVirtualSensors() {
+        return virtualSensors;
     }
+
+
+    // === TRANSIENT === //
+    private transient Message actualMessage;
+
+    public static List<Sensor> getAll() {
+        EntityManager entityManager = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
+        List<Sensor> sensors = entityManager.createNamedQuery("Sensor.getAll", Sensor.class).getResultList();
+        entityManager.close();
+        return sensors;
+    }
+
 }

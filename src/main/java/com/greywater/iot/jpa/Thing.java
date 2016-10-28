@@ -2,9 +2,7 @@ package com.greywater.iot.jpa;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /*Самый интересный класс. Это штука. Ну как сказать...
   Сложно подобрать слово лучше. Мы пытались, честно.
@@ -15,27 +13,25 @@ import java.util.UUID;
 @XmlRootElement
 public class Thing {
 
+    // === FIELDS === //
     @Id
     @Column(name = "ID")
     @GeneratedValue
     private long id;
 
-
     @Column(name = "NAME")
     private String name;
 
-    @OneToMany(mappedBy = "thing", cascade = CascadeType.ALL)
-    private List<Sensor> sensors = new ArrayList<Sensor>();
+    @ManyToMany
+    @JoinTable(
+            name = "THING__VSENSOR",
+            joinColumns = @JoinColumn(name = "THING_ID", referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "VSENSOR_ID", referencedColumnName = "ID")
+    )
+    private List<VirtualSensor> virtualSensors;
 
-    public void addSensor(Sensor sensor){
 
-        if(sensor.getThing()!=this){
-            this.sensors.add(sensor);
-            sensor.setThing(this);
-
-        }
-    }
-
+    // === GETTERS AND SETTERS === //
     public long getId() {
         return id;
     }
@@ -52,11 +48,17 @@ public class Thing {
         this.name = name;
     }
 
-    public List<Sensor> getSensors() {
-        return sensors;
+    public List<VirtualSensor> getVirtualSensors() {
+        return virtualSensors;
     }
 
-    public void setSensors(List<Sensor> sensors) {
-        this.sensors = sensors;
+    public void setSensors(List<VirtualSensor> virtualSensors) {
+        this.virtualSensors = virtualSensors;
+    }
+
+    public void addVirtualSensor(VirtualSensor virtualSensor) {
+        if (!virtualSensors.contains(virtualSensor)) {
+            virtualSensors.add(virtualSensor);
+        }
     }
 }

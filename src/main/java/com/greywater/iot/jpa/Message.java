@@ -14,7 +14,7 @@ import java.util.List;
 @Table(name = "MESSAGES_TABLE", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
 @NamedQueries({
         @NamedQuery(name = "Message.getAll", query = "SELECT s from Message s"),
-        @NamedQuery(name = "Message.getLast", query = "SELECT s from Message s where s.gCreated > :timestamp"),
+        @NamedQuery(name = "Message.getAfterT", query = "SELECT s from Message s where s.gCreated > :timestamp"),
 })
 @NamedNativeQuery(name = "Message.lastN", query = "SELECT * FROM MESSAGES_TABLE WHERE SENSOR_ID = ? ORDER BY G_CREATED LIMIT ?", resultClass = Message.class)
 @XmlRootElement
@@ -66,9 +66,9 @@ public class Message implements Serializable {
     }
 
     //Возвращает лист сообщений пришедгих после Timestamp t
-    public static List<Message> getLastMessages(Timestamp t) {
+    public static List<Message> getAfterTime(Timestamp t) {
         EntityManager em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-        TypedQuery<Message> query = em.createNamedQuery("Message.getLast", Message.class);
+        TypedQuery<Message> query = em.createNamedQuery("Message.getAfterTime", Message.class);
         query.setParameter("timestamp", t, TemporalType.TIMESTAMP);
         List<Message> list = query.getResultList();
         em.close();
