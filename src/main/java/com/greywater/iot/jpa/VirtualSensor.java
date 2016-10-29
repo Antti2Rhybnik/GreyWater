@@ -38,6 +38,9 @@ public class VirtualSensor {
     @ManyToMany(mappedBy = "virtualSensors")
     private List<Thing> things = new ArrayList<>();
 
+    @OneToMany(mappedBy = "virtualSensor", fetch = FetchType.LAZY)
+    private List<VirtualMessage> virtualMessages;
+
     // === GETTERS AND SETTERS === //
     public String getId() {
         return id;
@@ -90,8 +93,11 @@ public class VirtualSensor {
 
     public void eval() {
         try {
-            vsa.eval();
+            Double val = vsa.eval();
             // TODO: and save to DB
+            EntityManager entityManager = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
+
+
         } catch (SensorNullMessageException ex) {
             ex.printStackTrace();
         }

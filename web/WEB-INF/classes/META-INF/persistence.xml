@@ -10,10 +10,12 @@
 		<class>com.greywater.iot.jpa.Sensor</class>
 		<class>com.greywater.iot.jpa.Parameters</class>
 		<class>com.greywater.iot.jpa.VirtualSensor</class>
+		<class>com.greywater.iot.jpa.VirtualMessage</class>
 		<properties>
 			<!--<property name="eclipselink.ddl-generation" value="create-tables"/>-->
 			<!--<property name="javax.persistence.schema-generation.create-source" value="metadata"/>-->
-            <property name="eclipselink.ddl-generation" value="create-or-extend-tables" />
+            <!--<property name="eclipselink.ddl-generation" value="create-or-extend-tables" />-->
+            <property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
 		</properties>
 
 	</persistence-unit>

@@ -1,6 +1,7 @@
 package com.greywater.iot.jpa;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 /*Таблица конфигурации Sensor.
 * Как можно заметить здесь есть MIN, MAX, возможно будет что-то еще*/
@@ -9,10 +10,8 @@ import javax.persistence.*;
 public class Parameters {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "param_gen")
-    @SequenceGenerator(name = "param_gen", sequenceName = "param_seq", initialValue = 100, allocationSize = 50)
     @Column(name = "ID")
-    private Long id;
+    private String id = UUID.randomUUID().toString();
 
     @Column(name = "MAX", nullable = true)
     private Double max;
@@ -20,16 +19,13 @@ public class Parameters {
     @Column(name = "MIN", nullable = true)
     private Double min;
 
-    @OneToOne(mappedBy = "parameters")
-    private Sensor rawSensor;
-
     public Parameters() {}
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -49,11 +45,4 @@ public class Parameters {
         this.min = min;
     }
 
-    public Sensor getRawSensor() {
-        return rawSensor;
-    }
-
-    public void setRawSensor(Sensor rawSensor) {
-        this.rawSensor = rawSensor;
-    }
 }

@@ -19,7 +19,7 @@ public class GWContext implements ServletContextListener {
 
     private static ScheduledExecutorService observerScheduler;
     private static ScheduledExecutorService handlersScheduler;
-    private static Executor msgDistribExecutor;
+    private static ExecutorService  msgDistribExecutor;
     private static List<Sensor> allSensors;
     private static List<VirtualSensor> allVirtualSensors;
 
@@ -56,17 +56,18 @@ public class GWContext implements ServletContextListener {
 
             // запуск обзёрвера
             observerScheduler = Executors.newSingleThreadScheduledExecutor();
-            observerScheduler.scheduleAtFixedRate(new Observer(), 9, 2, TimeUnit.SECONDS);
+            observerScheduler.scheduleAtFixedRate(new Observer(), 2, 2, TimeUnit.SECONDS);
+
 
             // TODO: добавить инициализацию планировщика обработчиков (handlersScheduler) в зависимости от количества обработчиков
-            handlersScheduler = Executors.newScheduledThreadPool(0);
+            //handlersScheduler = Executors.newScheduledThreadPool(0);
             //handlersScheduler.scheduleAtFixedRate()
         } catch (RuntimeException ex) {
             ex.printStackTrace();
         }
     }
 
-    static Executor getMsgDistribExecutor() {
+    static ExecutorService  getMsgDistribExecutor() {
         return msgDistribExecutor;
     }
 

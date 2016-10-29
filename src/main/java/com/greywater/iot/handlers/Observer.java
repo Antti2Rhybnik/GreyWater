@@ -5,6 +5,7 @@ import com.greywater.iot.jpa.Message;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
+import java.util.concurrent.Future;
 
 /*Наблюдатель за таблицей сообщений
 * С определенной периодичностью опрашивает таблицу сообщений
@@ -13,6 +14,7 @@ import java.util.List;
 public class Observer implements Runnable {
 
     private static Timestamp lastMsgTime;
+    private static Future future;
 
     Observer() {
         // TODO: неясно пока, что делать в случае, когда запуск не в первый раз
@@ -22,18 +24,23 @@ public class Observer implements Runnable {
     @Override
     public void run() {
 
-        System.out.println("I'm in observer - " + Instant.now());
+        try {
+            System.out.println("observer start - " + Instant.now());
 
-        List<Message> recentlyAddedMessages = Message.getAfterTime(lastMsgTime);
-        if (!recentlyAddedMessages.isEmpty()) {
+            List<Message> recentlyAddedMessages = Message.getAfterTime(lastMsgTime);
+            if (!recentlyAddedMessages.isEmpty()) {
 
-            System.out.println(recentlyAddedMessages.size());
-            GWContext.getMsgDistribExecutor().execute(new MessageDistributor(recentlyAddedMessages));
+                System.out.println(recentlyAddedMessages.size());
+                future = GWContext.getMsgDistribExecutor().submit(new MessageDistributor(recentlyAddedMessages));
 
-            int lastIndex = recentlyAddedMessages.size() - 1;
-            lastMsgTime = new Timestamp(recentlyAddedMessages.get(lastIndex).getgCreated().getTime());
+                int lastIndex = recentlyAddedMessages.size() - 1;
+                lastMsgTime = new Timestamp(recentlyAddedMessages.get(lastIndex).getgCreated().getTime());
+            }
+
+            System.out.println("observer end - " + Instant.now());
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-
     }
 
 }
