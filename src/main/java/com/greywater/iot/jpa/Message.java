@@ -1,37 +1,26 @@
 package com.greywater.iot.jpa;
 
-import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import java.io.Serializable;
+import java.sql.Connection;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import java.sql.*;
 
 /*Класс сообщений из сервиса сообщений.
 * Выглядит сложно, так что чтобы разобраться как работает почитайте сначала о JPA
 * */
-@Entity
-@Table(name = "MESSAGES_TABLE", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
-@NamedQueries({
-        @NamedQuery(name = "Message.getAll", query = "SELECT s from Message s"),
-        @NamedQuery(name = "Message.getAfterTime", query = "SELECT s from Message s where s.gCreated > :timestamp"),
-})
-@NamedNativeQuery(name = "Message.lastN", query = "SELECT * FROM MESSAGES_TABLE WHERE SENSOR_ID = ? ORDER BY G_CREATED LIMIT ?", resultClass = Message.class)
-@XmlRootElement
+
 public class Message implements Serializable {
 
-    @Column(name = "G_DEVICE")
     private String gDevice;
-
-    @Id
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "G_CREATED")
     private Date gCreated;
-
-    @Column(name = "SENSOR_ID")
     private long sensorId;
-
-    @Column(name = "SENSOR_VALUE")
     private Double sensorValue;
 
     public String getgDevice() {
@@ -63,13 +52,32 @@ public class Message implements Serializable {
     }
 
     //Возвращает лист сообщений пришедгих после Timestamp t
-    public static List<Message> getAfterTime(Timestamp t) {
-        EntityManager em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-        TypedQuery<Message> query = em.createNamedQuery("Message.getAfterTime", Message.class);
-        query.setParameter("timestamp", t, TemporalType.TIMESTAMP);
-        List<Message> list = query.getResultList();
-        em.close();
-        return list;
+    public static List<Message> getAfterTime(Timestamp t) throws SQLException, NamingException
+    {
+        List<Message> msg_list = new ArrayList<Message>();
+
+        String sqlQuery = "SELECT * FROM MESSAGES_TABLE WHERE G_CREATED > ?";
+
+        InitialContext ctx = new InitialContext();
+        DataSource dataSource = (DataSource) ctx.lookup("java:comp/env/jdbc/DefaultDB");
+        Connection connection = dataSource.getConnection();
+
+        PreparedStatement pstmt = connection.prepareStatement(sqlQuery);
+        pstmt.setTimestamp(1, t);
+        ResultSet resultSet = pstmt.executeQuery();
+
+       while (resultSet.next())
+        {
+            Message msg = new Message();
+            msg.setgDevice(resultSet.getString("G_DEVICE"));
+            msg.setgCreated(resultSet.getDate("G_CREATED"));
+            msg.setSensorId(resultSet.getLong("SENSOR_ID"));
+            msg.setSensorValue(resultSet.getDouble("SENSOR_VALUE"));
+
+            msg_list.add(msg);
+        }
+
+        return msg_list;
     }
 
     public Date getgCreated() {
@@ -80,7 +88,8 @@ public class Message implements Serializable {
         this.gCreated = gCreated;
     }
 
-    public Message() {}
+    public Message() throws NamingException, SQLException
+    {}
 
     @Override
     public String toString() {
