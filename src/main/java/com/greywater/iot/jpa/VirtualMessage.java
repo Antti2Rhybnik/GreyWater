@@ -14,7 +14,7 @@ public class VirtualMessage {
 
     // === FIELDS === //
     @Id
-    @Column(name = "ID")
+    @Column(name = "VMESSAGE_ID")
     private String id = UUID.randomUUID().toString();
 
     @Column(name = "VALUE")

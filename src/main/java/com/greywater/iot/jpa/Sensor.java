@@ -1,5 +1,7 @@
 package com.greywater.iot.jpa;
 
+import com.greywater.iot.persistence.PersistManager;
+
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
@@ -17,7 +19,7 @@ public class Sensor {
 
     // === FIELDS === //
     @Id
-    @Column(name = "ID")
+    @Column(name = "SENSOR_ID")
     @GeneratedValue
     private Long id;
 
@@ -59,7 +61,7 @@ public class Sensor {
     }
 
     public static List<Sensor> getAll() {
-        EntityManager entityManager = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
+        EntityManager entityManager = PersistManager.newEntityManager();
         List<Sensor> sensors = entityManager.createNamedQuery("Sensor.getAll", Sensor.class).getResultList();
         entityManager.close();
         return sensors;

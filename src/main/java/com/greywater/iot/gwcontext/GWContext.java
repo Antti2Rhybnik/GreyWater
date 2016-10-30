@@ -26,10 +26,6 @@ public class GWContext implements ServletContextListener {
     private static void init() {
         try {
 
-            ctx = new InitialContext();
-            dataSource = (DataSource) ctx.lookup("java:comp/env/jdbc/DefaultDB");
-            connection = dataSource.getConnection();
-
             // инициализация списка виртуальных сенсоров
             allVirtualSensors = VirtualSensor.getAll();
             allSensors = new ArrayList<>();
@@ -96,19 +92,13 @@ public class GWContext implements ServletContextListener {
         return allSensors;
     }
 
-    public static Connection getConnection() {
-        return connection;
-    }
-
 
     private static ScheduledExecutorService observerScheduler;
     private static ScheduledExecutorService handlersScheduler;
     private static ExecutorService msgDistribExecutor;
     private static List<Sensor> allSensors;
     private static List<VirtualSensor> allVirtualSensors;
-    private static InitialContext ctx;
-    private static DataSource dataSource;
-    private static Connection connection;
+
 
 
 }

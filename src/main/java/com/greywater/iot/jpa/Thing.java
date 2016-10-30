@@ -15,7 +15,7 @@ public class Thing {
 
     // === FIELDS === //
     @Id
-    @Column(name = "ID")
+    @Column(name = "THING_ID")
     @GeneratedValue
     private long id;
 
@@ -25,8 +25,8 @@ public class Thing {
     @ManyToMany
     @JoinTable(
             name = "THING__VSENSOR",
-            joinColumns = @JoinColumn(name = "THING_ID", referencedColumnName = "ID"),
-            inverseJoinColumns = @JoinColumn(name = "VSENSOR_ID", referencedColumnName = "ID")
+            joinColumns = @JoinColumn(name = "THING_ID", referencedColumnName = "THING_ID"),
+            inverseJoinColumns = @JoinColumn(name = "VSENSOR_ID", referencedColumnName = "VSENSOR_ID")
     )
     private List<VirtualSensor> virtualSensors;
 

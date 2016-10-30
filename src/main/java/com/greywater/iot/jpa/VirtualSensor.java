@@ -1,13 +1,16 @@
 package com.greywater.iot.jpa;
 
+import com.greywater.iot.persistence.PersistManager;
 import com.greywater.iot.vsensors.Multiplicator;
 import com.greywater.iot.vsensors.SensorNullMessageException;
 import com.greywater.iot.vsensors.SimpleRedirector;
 import com.greywater.iot.vsensors.VirtualSensorAggregator;
 
 import javax.persistence.*;
+import javax.transaction.Transaction;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -91,8 +94,13 @@ public class VirtualSensor {
         try {
             Double val = vsa.eval();
             // TODO: and save to DB
-            //EntityManager entityManager = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
+
             System.out.println("evaluated: " + val);
+
+            VirtualMessage vm = new VirtualMessage();
+
+
+
 
         } catch (SensorNullMessageException ex) {
             System.err.println(ex.getMessage());
@@ -100,7 +108,7 @@ public class VirtualSensor {
     };
 
     public static List<VirtualSensor> getAll() {
-        EntityManager entityManager = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
+        EntityManager entityManager = PersistManager.newEntityManager();
         List<VirtualSensor> vsensors = entityManager.createNamedQuery("VirtualSensor.getAll", VirtualSensor.class).getResultList();
         entityManager.close();
         return vsensors;
@@ -108,7 +116,7 @@ public class VirtualSensor {
 
     // === FIELDS === //
     @Id
-    @Column(name = "VS_ID")
+    @Column(name = "VSENSOR_ID")
     private String id = UUID.randomUUID().toString();
 
     @Column(name = "AGGREGATION_TYPE")
@@ -117,8 +125,8 @@ public class VirtualSensor {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "VSENSOR__SENSOR",
-            joinColumns = @JoinColumn(name = "VSENSOR_ID", referencedColumnName = "ID", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "SENSOR_ID", referencedColumnName = "ID", nullable = false)
+            joinColumns = @JoinColumn(name = "VSENSOR_ID", referencedColumnName = "VSENSOR_ID", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "SENSOR_ID", referencedColumnName = "SENSOR_ID", nullable = false)
     )
     private List<Sensor> sensors = new ArrayList<>();
 

@@ -1,8 +1,10 @@
 package com.greywater.iot.jpa;
 
 import com.greywater.iot.gwcontext.GWContext;
+import com.greywater.iot.persistence.PersistManager;
 
 import javax.naming.NamingException;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.sql.*;
  * Класс сообщений из сервиса сообщений.
  */
 
+@XmlRootElement
 public class Message implements Serializable {
 
     private String gDevice;
@@ -51,12 +54,12 @@ public class Message implements Serializable {
     }
 
     //Возвращает лист сообщений, пришедших после Timestamp t
-    public static List<Message> getAfterTime(Timestamp t) throws SQLException {
+    public static List<Message> getAfterTime(Timestamp t) throws SQLException, NamingException {
         List<Message> msg_list = new ArrayList<>();
 
         String sqlQuery = "SELECT * FROM MESSAGES_TABLE WHERE G_CREATED > ?";
 
-        PreparedStatement pstmt = GWContext.getConnection().prepareStatement(sqlQuery);
+        PreparedStatement pstmt = PersistManager.getConnection().prepareStatement(sqlQuery);
         pstmt.setTimestamp(1, t);
         ResultSet resultSet = pstmt.executeQuery();
 
@@ -82,7 +85,7 @@ public class Message implements Serializable {
 
             String sqlQuery = "SELECT G_CREATED FROM MESSAGES_TABLE ORDER BY G_CREATED DESC LIMIT 1";
 
-            PreparedStatement pstmt = GWContext.getConnection().prepareStatement(sqlQuery);
+            PreparedStatement pstmt = PersistManager.getConnection().prepareStatement(sqlQuery);
             ResultSet resultSet = pstmt.executeQuery();
 
             if (resultSet.next()) {
@@ -91,7 +94,7 @@ public class Message implements Serializable {
                 return new Timestamp(0);
             }
 
-        } catch (SQLException ex) {
+        } catch (SQLException | NamingException ex) {
 
             return new Timestamp(0);
         }

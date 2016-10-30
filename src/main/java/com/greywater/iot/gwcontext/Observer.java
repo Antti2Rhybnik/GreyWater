@@ -2,6 +2,7 @@ package com.greywater.iot.gwcontext;
 
 import com.greywater.iot.jpa.Message;
 
+import javax.naming.NamingException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
@@ -38,7 +39,7 @@ public class Observer implements Runnable {
 
             System.out.println("observer end - " + lastMsgTime);
 
-        } catch (SQLException ex) {
+        } catch (SQLException | NamingException ex) {
             ex.printStackTrace();
         }
     }

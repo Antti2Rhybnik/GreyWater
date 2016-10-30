@@ -3,6 +3,7 @@ package com.greywater.iot.rest;
 import com.greywater.iot.jpa.Message;
 import com.greywater.iot.jpa.Sensor;
 import com.greywater.iot.jpa.Thing;
+import com.greywater.iot.persistence.PersistManager;
 import com.greywater.iot.utils.AwesomeHTMLBuilder;
 
 import javax.inject.Singleton;
@@ -54,10 +55,7 @@ public class RestApiProvider {
     @Path("allmsg")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Message> getAllMessages() {
-        EntityManager em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-        List<Message> list = em.createNamedQuery("Message.getAll", Message.class).getResultList();
-        em.close();
-        return list;
+        return null;
     }
 
     @GET
@@ -72,7 +70,7 @@ public class RestApiProvider {
     @Produces(MediaType.APPLICATION_JSON)
     public String persist() {
 
-        EntityManager em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
+        EntityManager em = PersistManager.newEntityManager();
 
         Sensor s1 = em.find(Sensor.class, 1L);
         Sensor s2 = em.find(Sensor.class, 2L);
