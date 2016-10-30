@@ -10,7 +10,7 @@ import java.util.UUID;
 public class Parameters {
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "PARAMETERS_ID")
     private String id = UUID.randomUUID().toString();
 
     @Column(name = "MAX", nullable = true)
@@ -18,6 +18,9 @@ public class Parameters {
 
     @Column(name = "MIN", nullable = true)
     private Double min;
+
+    @OneToOne(fetch = FetchType.LAZY,mappedBy = "parameters")
+    private VirtualSensor virtualSensor;
 
     public Parameters() {}
 

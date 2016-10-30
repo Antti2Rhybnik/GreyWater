@@ -108,7 +108,7 @@ public class VirtualSensor {
 
     // === FIELDS === //
     @Id
-    @Column(name = "ID")
+    @Column(name = "VS_ID")
     private String id = UUID.randomUUID().toString();
 
     @Column(name = "AGGREGATION_TYPE")
@@ -127,6 +127,10 @@ public class VirtualSensor {
 
     @OneToMany(mappedBy = "virtualSensor")
     private List<VirtualMessage> virtualMessages;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PARAMETERS_ID")
+    private Parameters parameters;
 
 
 }
