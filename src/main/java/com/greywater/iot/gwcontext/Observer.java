@@ -1,9 +1,9 @@
-package com.greywater.iot.handlers;
+package com.greywater.iot.gwcontext;
 
 import com.greywater.iot.jpa.Message;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -13,7 +13,7 @@ import java.util.concurrent.Future;
 
 public class Observer implements Runnable {
 
-    private static Timestamp lastMsgTime = new Timestamp(0); // FIXME
+    private static Timestamp lastMsgTime = Message.getLastTime();
     private static Future future;
     private static int magicNumberCount = 0;
 
@@ -24,7 +24,7 @@ public class Observer implements Runnable {
 
         try {
 
-            System.out.println("observer start - " + magicNumberCount++);
+            System.out.println("observer start - " + lastMsgTime);
 
             List<Message> recentlyAddedMessages = Message.getAfterTime(lastMsgTime);
             if (!recentlyAddedMessages.isEmpty()) {
@@ -37,7 +37,8 @@ public class Observer implements Runnable {
             }
 
             System.out.println("observer end - " + lastMsgTime);
-        } catch (Exception ex) {
+
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }

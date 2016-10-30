@@ -1,11 +1,9 @@
 package com.greywater.iot.rest;
 
-import com.greywater.iot.handlers.Observer;
 import com.greywater.iot.jpa.Message;
 import com.greywater.iot.jpa.Sensor;
 import com.greywater.iot.jpa.Thing;
 import com.greywater.iot.utils.AwesomeHTMLBuilder;
-import org.json.simple.JSONObject;
 
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
@@ -16,7 +14,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.List;
 
 /*Это основной инструмент общения с веб клиентом.

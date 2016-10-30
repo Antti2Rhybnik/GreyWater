@@ -1,5 +1,6 @@
-package com.greywater.iot.handlers;
+package com.greywater.iot.gwcontext;
 
+import com.greywater.iot.gwcontext.GWContext;
 import com.greywater.iot.jpa.Message;
 import com.greywater.iot.jpa.Sensor;
 import com.greywater.iot.jpa.VirtualSensor;

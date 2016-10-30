@@ -1,9 +1,7 @@
-package com.greywater.iot.handlers;
+package com.greywater.iot.gwcontext;
 
 import com.greywater.iot.jpa.Sensor;
 import com.greywater.iot.jpa.VirtualSensor;
-import com.greywater.iot.vsensors.Multiplicator;
-import com.greywater.iot.vsensors.SimpleRedirector;
 
 import javax.naming.InitialContext;
 import javax.servlet.ServletContextEvent;
@@ -11,15 +9,16 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
-import java.util.stream.Collectors;
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-/*Основной инструмент запуска обработчиков. Все обработчики реализуют интерфейс
-* Runnable и запускаются строго через этот класс*/
+/**
+ * Тут содержатся инстансы классов, которые нужны для работы всего:
+ * пулы потоков, списки сенсоров, коннекшны к бд
+ */
+
 @WebListener
 public class GWContext implements ServletContextListener {
 

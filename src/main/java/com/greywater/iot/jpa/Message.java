@@ -1,12 +1,9 @@
 package com.greywater.iot.jpa;
 
-import com.greywater.iot.handlers.GWContext;
+import com.greywater.iot.gwcontext.GWContext;
 
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.sql.DataSource;
 import java.io.Serializable;
-import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,9 +11,9 @@ import java.util.List;
 
 import java.sql.*;
 
-/*Класс сообщений из сервиса сообщений.
-* Выглядит сложно, так что чтобы разобраться как работает почитайте сначала о JPA
-* */
+/**
+ * Класс сообщений из сервиса сообщений.
+ */
 
 public class Message implements Serializable {
 
@@ -54,18 +51,17 @@ public class Message implements Serializable {
     }
 
     //Возвращает лист сообщений, пришедших после Timestamp t
-    public static List<Message> getAfterTime(Timestamp t) throws Exception {
-        List<Message> msg_list = new ArrayList<Message>();
+    public static List<Message> getAfterTime(Timestamp t) throws SQLException {
+        List<Message> msg_list = new ArrayList<>();
 
         String sqlQuery = "SELECT * FROM MESSAGES_TABLE WHERE G_CREATED > ?";
-
 
         PreparedStatement pstmt = GWContext.getConnection().prepareStatement(sqlQuery);
         pstmt.setTimestamp(1, t);
         ResultSet resultSet = pstmt.executeQuery();
 
-       while (resultSet.next())
-        {
+        while (resultSet.next()) {
+
             Message msg = new Message();
             msg.setgDevice(resultSet.getString("G_DEVICE"));
             msg.setgCreated(resultSet.getDate("G_CREATED"));
@@ -75,9 +71,32 @@ public class Message implements Serializable {
             msg_list.add(msg);
         }
 
-
         return msg_list;
     }
+
+    public static Timestamp getLastTime() {
+
+        try {
+
+            System.out.println("getLastTime()");
+
+            String sqlQuery = "SELECT G_CREATED FROM MESSAGES_TABLE ORDER BY G_CREATED DESC LIMIT 1";
+
+            PreparedStatement pstmt = GWContext.getConnection().prepareStatement(sqlQuery);
+            ResultSet resultSet = pstmt.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getTimestamp("G_CREATED");
+            } else {
+                return new Timestamp(0);
+            }
+
+        } catch (SQLException ex) {
+
+            return new Timestamp(0);
+        }
+    }
+
 
     public Date getgCreated() {
         return gCreated;
@@ -87,8 +106,8 @@ public class Message implements Serializable {
         this.gCreated = gCreated;
     }
 
-    public Message() throws NamingException, SQLException
-    {}
+    public Message() {
+    }
 
     @Override
     public String toString() {
