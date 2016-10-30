@@ -13,7 +13,7 @@ import java.util.concurrent.Future;
 
 public class Observer implements Runnable {
 
-    private static Timestamp lastMsgTime = new Timestamp(0);
+    private static Timestamp lastMsgTime = new Timestamp(0); // FIXME
     private static Future future;
     private static int magicNumberCount = 0;
 
