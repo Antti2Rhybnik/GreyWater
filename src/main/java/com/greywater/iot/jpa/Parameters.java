@@ -19,7 +19,8 @@ public class Parameters {
     @Column(name = "MIN", nullable = true)
     private Double min;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "parameters")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "VSENSOR_ID")
     private VirtualSensor virtualSensor;
 
     public Parameters() {}

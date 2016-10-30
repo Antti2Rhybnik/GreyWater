@@ -133,11 +133,10 @@ public class VirtualSensor {
     @ManyToMany(mappedBy = "virtualSensors")
     private List<Thing> things = new ArrayList<>();
 
-    @OneToMany(mappedBy = "virtualSensor")
+    @OneToMany(mappedBy = "virtualSensor", fetch = FetchType.LAZY)
     private List<VirtualMessage> virtualMessages;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PARAMETERS_ID")
+    @OneToOne(mappedBy = "virtualSensor", fetch = FetchType.LAZY)
     private Parameters parameters;
 
 
