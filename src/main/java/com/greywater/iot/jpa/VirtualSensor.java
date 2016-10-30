@@ -71,6 +71,16 @@ public class VirtualSensor {
         }
     }
 
+    public List<VirtualMessage> getLastNMessages(int limit) {
+
+        return null;
+    }
+
+    public VirtualMessage getLastMessage() {
+        return getLastNMessages(1).get(0);
+    }
+
+
     public List<Thing> getThings() {
         return things;
     }
@@ -98,9 +108,9 @@ public class VirtualSensor {
             System.out.println("evaluated: " + val);
 
             VirtualMessage vm = new VirtualMessage();
-
-
-
+            vm.setCreated(new Date());
+            vm.setValue(val);
+            vm.setVirtualSensor(this);
 
         } catch (SensorNullMessageException ex) {
             System.err.println(ex.getMessage());
