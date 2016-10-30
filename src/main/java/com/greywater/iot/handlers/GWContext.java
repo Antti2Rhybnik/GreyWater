@@ -5,11 +5,16 @@ import com.greywater.iot.jpa.VirtualSensor;
 import com.greywater.iot.vsensors.Multiplicator;
 import com.greywater.iot.vsensors.SimpleRedirector;
 
+import javax.naming.InitialContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 /*Основной инструмент запуска обработчиков. Все обработчики реализуют интерфейс
@@ -17,11 +22,6 @@ import java.util.concurrent.*;
 @WebListener
 public class GWContext implements ServletContextListener {
 
-    private static ScheduledExecutorService observerScheduler;
-    private static ScheduledExecutorService handlersScheduler;
-    private static ExecutorService  msgDistribExecutor;
-    private static List<Sensor> allSensors;
-    private static List<VirtualSensor> allVirtualSensors;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -30,40 +30,57 @@ public class GWContext implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        observerScheduler.shutdownNow();
+
+        observerScheduler.shutdown();
+        msgDistribExecutor.shutdown();
     }
 
 
     private static void init() {
         try {
-            // инициализация списка сенсоров
-            allSensors = Sensor.getAll();
-            allVirtualSensors = VirtualSensor.getAll();
-            for (VirtualSensor vs : allVirtualSensors) {
-                switch (vs.getAggregationType()) {
-                    case "SIMPLE_REDIRECTOR":
-                        vs.setVirtualSensorAggregator(new SimpleRedirector(vs));
-                        break;
-                    case "MULTIPLICATOR":
-                        vs.setVirtualSensorAggregator(new Multiplicator(vs));
-                        break;
-                    default:
-                        System.err.println("Unsupported aggregation type");
-                }
-            }
 
-            msgDistribExecutor = Executors.newSingleThreadExecutor();
+            ctx = new InitialContext();
+            dataSource = (DataSource) ctx.lookup("java:comp/env/jdbc/DefaultDB");
+            connection= dataSource.getConnection();
+
+            // инициализация списка виртуальных сенсоров
+            allVirtualSensors = VirtualSensor.getAll();
+            allSensors = new ArrayList<>();
+
+            // создание списка сырых сенсоров
+            allVirtualSensors.forEach(vs -> {
+                vs.getSensors().forEach(s-> {
+                    if (!allSensors.contains(s))
+                        allSensors.add(s);
+                });
+            });
+
+            // вывод списка виртуальных сенсоров и сырых, которые в них аггрегируются
+            allVirtualSensors.forEach(vs -> {
+                System.out.println(vs);
+                vs.getSensors().forEach(s -> {
+                    System.out.println(" --> " + s);
+                });
+            });
+            // вывод списка сырых сенсоров и виртуальных, в которых они участвуют
+            allSensors.forEach(s -> {
+                System.out.println(s);
+                s.getVirtualSensors().forEach(vs -> {
+                    System.out.println(" --> " + vs);
+                });
+            });
+
 
             // запуск обзёрвера
-            observerScheduler = Executors.newSingleThreadScheduledExecutor();
-            observerScheduler.scheduleAtFixedRate(new Observer(), 2, 2, TimeUnit.SECONDS);
+            observerScheduler.scheduleAtFixedRate(new Observer(), 0, 1, TimeUnit.SECONDS);
 
 
             // TODO: добавить инициализацию планировщика обработчиков (handlersScheduler) в зависимости от количества обработчиков
-            //handlersScheduler = Executors.newScheduledThreadPool(0);
             //handlersScheduler.scheduleAtFixedRate()
-        } catch (RuntimeException ex) {
+
+        } catch (Exception ex) {
             ex.printStackTrace();
+            System.exit(-1);
         }
     }
 
@@ -74,5 +91,21 @@ public class GWContext implements ServletContextListener {
     static List<Sensor> getAllSensors() {
         return allSensors;
     }
+
+    public static Connection getConnection() {
+        return connection;
+    }
+
+
+    private static final ScheduledExecutorService observerScheduler = Executors.newSingleThreadScheduledExecutor();
+    private static final ScheduledExecutorService handlersScheduler = Executors.newScheduledThreadPool(0);
+    private static final ExecutorService  msgDistribExecutor = Executors.newSingleThreadExecutor();
+    private static List<Sensor> allSensors;
+    private static List<VirtualSensor> allVirtualSensors;
+    private static InitialContext ctx;
+    private static DataSource dataSource;
+    private static Connection connection;
+
+
 
 }

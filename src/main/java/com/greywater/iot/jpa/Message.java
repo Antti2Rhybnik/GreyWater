@@ -1,5 +1,7 @@
 package com.greywater.iot.jpa;
 
+import com.greywater.iot.handlers.GWContext;
+
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
@@ -51,18 +53,14 @@ public class Message implements Serializable {
         this.sensorValue = sensorValue;
     }
 
-    //Возвращает лист сообщений пришедгих после Timestamp t
-    public static List<Message> getAfterTime(Timestamp t) throws SQLException, NamingException
-    {
+    //Возвращает лист сообщений, пришедших после Timestamp t
+    public static List<Message> getAfterTime(Timestamp t) throws Exception {
         List<Message> msg_list = new ArrayList<Message>();
 
         String sqlQuery = "SELECT * FROM MESSAGES_TABLE WHERE G_CREATED > ?";
 
-        InitialContext ctx = new InitialContext();
-        DataSource dataSource = (DataSource) ctx.lookup("java:comp/env/jdbc/DefaultDB");
-        Connection connection = dataSource.getConnection();
 
-        PreparedStatement pstmt = connection.prepareStatement(sqlQuery);
+        PreparedStatement pstmt = GWContext.getConnection().prepareStatement(sqlQuery);
         pstmt.setTimestamp(1, t);
         ResultSet resultSet = pstmt.executeQuery();
 
@@ -76,6 +74,7 @@ public class Message implements Serializable {
 
             msg_list.add(msg);
         }
+
 
         return msg_list;
     }

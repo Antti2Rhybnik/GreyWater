@@ -1,6 +1,8 @@
 package com.greywater.iot.jpa;
 
+import com.greywater.iot.vsensors.Multiplicator;
 import com.greywater.iot.vsensors.SensorNullMessageException;
+import com.greywater.iot.vsensors.SimpleRedirector;
 import com.greywater.iot.vsensors.VirtualSensorAggregator;
 
 import javax.persistence.*;
@@ -19,27 +21,21 @@ import java.util.UUID;
 @XmlRootElement
 public class VirtualSensor {
 
-    // === FIELDS === //
-    @Id
-    @Column(name = "ID")
-    private String id = UUID.randomUUID().toString();
+    public VirtualSensor() {}
 
-    @Column(name = "AGGREGATION_TYPE")
-    private String aggregationType;
-
-    @ManyToMany
-    @JoinTable(
-            name = "VSENSOR__SENSOR",
-            joinColumns = @JoinColumn(name = "VSENSOR_ID", referencedColumnName = "ID"),
-            inverseJoinColumns = @JoinColumn(name = "SENSOR_ID", referencedColumnName = "ID")
-    )
-    private List<Sensor> sensors = new ArrayList<>();
-
-    @ManyToMany(mappedBy = "virtualSensors")
-    private List<Thing> things = new ArrayList<>();
-
-    @OneToMany(mappedBy = "virtualSensor", fetch = FetchType.LAZY)
-    private List<VirtualMessage> virtualMessages;
+    @PostLoad
+    void postLoad() {
+        switch (this.getAggregationType()) {
+            case "SIMPLE_REDIRECTOR":
+                this.setVirtualSensorAggregator(new SimpleRedirector(this));
+                break;
+            case "MULTIPLICATOR":
+                this.setVirtualSensorAggregator(new Multiplicator(this));
+                break;
+            default:
+                System.err.println("Unsupported aggregation type");
+        }
+    }
 
     // === GETTERS AND SETTERS === //
     public String getId() {
@@ -95,11 +91,11 @@ public class VirtualSensor {
         try {
             Double val = vsa.eval();
             // TODO: and save to DB
-            EntityManager entityManager = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
-
+            //EntityManager entityManager = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
+            System.out.println("evaluated: " + val);
 
         } catch (SensorNullMessageException ex) {
-            ex.printStackTrace();
+            System.err.println(ex.getMessage());
         }
     };
 
@@ -109,4 +105,28 @@ public class VirtualSensor {
         entityManager.close();
         return vsensors;
     }
+
+    // === FIELDS === //
+    @Id
+    @Column(name = "ID")
+    private String id = UUID.randomUUID().toString();
+
+    @Column(name = "AGGREGATION_TYPE")
+    private String aggregationType;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "VSENSOR__SENSOR",
+            joinColumns = @JoinColumn(name = "VSENSOR_ID", referencedColumnName = "ID", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "SENSOR_ID", referencedColumnName = "ID", nullable = false)
+    )
+    private List<Sensor> sensors = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "virtualSensors")
+    private List<Thing> things = new ArrayList<>();
+
+    @OneToMany(mappedBy = "virtualSensor")
+    private List<VirtualMessage> virtualMessages;
+
+
 }

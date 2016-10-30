@@ -20,20 +20,29 @@ public class MessageDistributor implements Runnable {
     @Override
     public void run() {
 
+        System.out.println("message distributor is running");
         for (Message m: messages) {
 
-            Optional<Sensor> matchedSensor = GWContext.getAllSensors().stream()
-                    .filter(s -> s.getId() == m.getSensorId())
-                    .findFirst();
+            Optional<Sensor> matchedSensor = Optional.empty();
+
+            for (Sensor s : GWContext.getAllSensors()) {
+                if (s.getId() == m.getSensorId()) {
+                    System.out.println("sensor matched");
+                    matchedSensor = Optional.of(s);
+                    break;
+                }
+            }
 
             if (matchedSensor.isPresent()) {
 
+                System.out.println("sensor present");
                 matchedSensor.get().updateActualMessage(m);
                 matchedSensor.get().getVirtualSensors().forEach(VirtualSensor::eval);
 
             }
 
         };
+        System.out.println("message distributor is off");
 
     }
 }

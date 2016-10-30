@@ -13,19 +13,18 @@ import java.util.concurrent.Future;
 
 public class Observer implements Runnable {
 
-    private static Timestamp lastMsgTime;
+    private static Timestamp lastMsgTime = new Timestamp(0);
     private static Future future;
+    private static int magicNumberCount = 0;
 
-    Observer() {
-        // TODO: неясно пока, что делать в случае, когда запуск не в первый раз
-        lastMsgTime = new Timestamp(0);
-    }
+    Observer() {}
 
     @Override
     public void run() {
 
         try {
-            System.out.println("observer start - " + Instant.now());
+
+            System.out.println("observer start - " + magicNumberCount++);
 
             List<Message> recentlyAddedMessages = Message.getAfterTime(lastMsgTime);
             if (!recentlyAddedMessages.isEmpty()) {
@@ -37,7 +36,7 @@ public class Observer implements Runnable {
                 lastMsgTime = new Timestamp(recentlyAddedMessages.get(lastIndex).getgCreated().getTime());
             }
 
-            System.out.println("observer end - " + Instant.now());
+            System.out.println("observer end - " + lastMsgTime);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

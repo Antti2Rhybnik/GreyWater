@@ -24,7 +24,7 @@ public class Sensor {
     @Column(name = "TYPE")
     private String type = null;
 
-    @ManyToMany(mappedBy = "sensors")
+    @ManyToMany(mappedBy = "sensors", fetch = FetchType.EAGER)
     private List<VirtualSensor> virtualSensors;
 
 
