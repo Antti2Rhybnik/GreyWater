@@ -4,6 +4,7 @@ import com.greywater.iot.persistence.PersistManager;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +28,7 @@ public class Sensor {
     private String type = null;
 
     @ManyToMany(mappedBy = "sensors", fetch = FetchType.EAGER)
-    private List<VirtualSensor> virtualSensors;
+    private List<VirtualSensor> virtualSensors = new ArrayList<>();
 
 
     // === GETTERS AND SETTERS === //
@@ -48,7 +49,11 @@ public class Sensor {
     public List<VirtualSensor> getVirtualSensors() {
         return virtualSensors;
     }
-
+    public void addVirtualSensor(VirtualSensor vs) {
+        if (!virtualSensors.contains(vs)) {
+            virtualSensors.add(vs);
+        }
+    }
 
     // === TRANSIENT === //
     private transient Message actualMessage = null;

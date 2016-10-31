@@ -116,6 +116,11 @@ public class GWContext implements ServletContextListener {
         vs3.addSensor(s1);
         vs3.addSensor(s2);
 
+        s1.addVirtualSensor(vs1);
+        s1.addVirtualSensor(vs3);
+        s2.addVirtualSensor(vs2);
+        s2.addVirtualSensor(vs3);
+
         s1.setId("1");
         s2.setId("2");
 
