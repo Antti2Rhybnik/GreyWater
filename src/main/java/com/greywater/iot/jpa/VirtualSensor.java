@@ -23,6 +23,35 @@ import java.util.UUID;
 })
 @XmlRootElement
 public class VirtualSensor {
+    // === FIELDS === //
+    @Id
+    @Column(name = "VSENSOR_ID")
+    private String id = UUID.randomUUID().toString();
+
+    @Column(name = "AGGREGATION_TYPE")
+    private String aggregationType;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "VSENSOR__SENSOR",
+            joinColumns = @JoinColumn(name = "VSENSOR_ID", referencedColumnName = "VSENSOR_ID", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "SENSOR_ID", referencedColumnName = "SENSOR_ID", nullable = false)
+    )
+    private List<Sensor> sensors = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "virtualSensors")
+    private List<Thing> things = new ArrayList<>();
+
+    @OneToMany(mappedBy = "virtualSensor", fetch = FetchType.LAZY)
+    private List<VirtualMessage> virtualMessages;
+
+    @OneToMany(mappedBy = "virtualSensor")
+    private List<Event> events;
+
+    @OneToOne(mappedBy = "virtualSensor", fetch = FetchType.LAZY)
+    private Parameters parameters;
+
+
 
     public VirtualSensor() {}
 
@@ -131,30 +160,11 @@ public class VirtualSensor {
         return vsensors;
     }
 
-    // === FIELDS === //
-    @Id
-    @Column(name = "VSENSOR_ID")
-    private String id = UUID.randomUUID().toString();
+    public Parameters getParameters() {
+        return parameters;
+    }
 
-    @Column(name = "AGGREGATION_TYPE")
-    private String aggregationType;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "VSENSOR__SENSOR",
-            joinColumns = @JoinColumn(name = "VSENSOR_ID", referencedColumnName = "VSENSOR_ID", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "SENSOR_ID", referencedColumnName = "SENSOR_ID", nullable = false)
-    )
-    private List<Sensor> sensors = new ArrayList<>();
-
-    @ManyToMany(mappedBy = "virtualSensors")
-    private List<Thing> things = new ArrayList<>();
-
-    @OneToMany(mappedBy = "virtualSensor", fetch = FetchType.LAZY)
-    private List<VirtualMessage> virtualMessages;
-
-    @OneToOne(mappedBy = "virtualSensor", fetch = FetchType.LAZY)
-    private Parameters parameters;
-
-
+    public void setParameters(Parameters parameters) {
+        this.parameters = parameters;
+    }
 }
