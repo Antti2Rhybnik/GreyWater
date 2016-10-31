@@ -12,9 +12,9 @@
 		<class>com.greywater.iot.jpa.VirtualMessage</class>
 		<class>com.greywater.iot.jpa.Event</class>
 		<properties>
-			<!--<property name="eclipselink.ddl-generation" value="create-tables"/>-->
+			<property name="eclipselink.ddl-generation" value="create-tables"/>
 			<!--<property name="javax.persistence.schema-generation.create-source" value="metadata"/>-->
-            <property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
+            <!--<property name="eclipselink.ddl-generation" value="drop-and-create-tables" />-->
             <!--<property name="eclipselink.ddl-generation" value="drop-and-create-tables" />-->
 			<!--<property name="eclipselink.logging.level" value="FINEST" />-->
 			<property name="eclipselink.logging.level.sql" value="FINEST" />

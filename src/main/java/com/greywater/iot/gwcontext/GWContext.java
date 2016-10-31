@@ -3,7 +3,11 @@ package com.greywater.iot.gwcontext;
 import com.greywater.iot.handlers.ThresholdHandler;
 import com.greywater.iot.jpa.Sensor;
 import com.greywater.iot.jpa.VirtualSensor;
+import com.greywater.iot.persistence.PersistManager;
 
+import javax.ejb.EJBMetaData;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
@@ -28,6 +32,7 @@ public class GWContext implements ServletContextListener {
     private static void init() {
         try {
 
+            initConfig();
             // инициализация списка виртуальных сенсоров
             allVirtualSensors = VirtualSensor.getAll();
             allSensors = new ArrayList<>();
@@ -94,5 +99,47 @@ public class GWContext implements ServletContextListener {
 
     public static List<Sensor> getAllSensors() {
         return allSensors;
+    }
+
+    // добавляет в таблицу два сырых сенсора, три виртуальных и параметры
+    private static void initConfig() {
+
+        VirtualSensor vs1 = new VirtualSensor();
+        VirtualSensor vs2 = new VirtualSensor();
+        VirtualSensor vs3 = new VirtualSensor();
+
+        Sensor s1 = new Sensor();
+        Sensor s2 = new Sensor();
+
+        vs1.addSensor(s1);
+        vs2.addSensor(s2);
+        vs3.addSensor(s1);
+        vs3.addSensor(s2);
+
+        s1.setId("1");
+        s2.setId("2");
+
+        vs1.setId("1");
+        vs2.setId("2");
+        vs3.setId("3");
+
+        s1.setType("LUMINOSITY");
+        s2.setType("HUMIDITY");
+
+        vs1.setAggregationType("redirect");
+        vs2.setAggregationType("redirect");
+        vs3.setAggregationType("multiply");
+
+        EntityManager em = PersistManager.newEntityManager();
+        EntityTransaction tr = em.getTransaction();
+
+        tr.begin();
+        em.merge(vs1);
+        em.merge(vs2);
+        em.merge(vs3);
+        tr.commit();
+
+        em.close();
+
     }
 }

@@ -5,6 +5,7 @@ import com.greywater.iot.persistence.PersistManager;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
+import java.util.UUID;
 
 /*Таблица датчиков. Поля говорят сами за себя
 * Каждый датчик в системе будет иметь запись в таблице*/
@@ -20,8 +21,7 @@ public class Sensor {
     // === FIELDS === //
     @Id
     @Column(name = "SENSOR_ID")
-    @GeneratedValue
-    private Long id;
+    private String id = UUID.randomUUID().toString();
 
     @Column(name = "TYPE")
     private String type = null;
@@ -38,10 +38,10 @@ public class Sensor {
         this.type = type;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -21,7 +21,7 @@ public class Message implements Serializable {
 
     private String gDevice;
     private Date gCreated;
-    private long sensorId;
+    private String sensorId;
     private Double sensorValue;
 
     public String getgDevice() {
@@ -36,11 +36,11 @@ public class Message implements Serializable {
         this.gCreated = gCreated;
     }
 
-    public long getSensorId() {
+    public String getSensorId() {
         return sensorId;
     }
 
-    public void setSensorId(long sensorId) {
+    public void setSensorId(String sensorId) {
         this.sensorId = sensorId;
     }
 
@@ -68,7 +68,7 @@ public class Message implements Serializable {
             Message msg = new Message();
             msg.setgDevice(resultSet.getString("G_DEVICE"));
             msg.setgCreated(resultSet.getDate("G_CREATED"));
-            msg.setSensorId(resultSet.getLong("SENSOR_ID"));
+            msg.setSensorId(resultSet.getString("SENSOR_ID"));
             msg.setSensorValue(resultSet.getDouble("SENSOR_VALUE"));
 
             msgList.add(msg);

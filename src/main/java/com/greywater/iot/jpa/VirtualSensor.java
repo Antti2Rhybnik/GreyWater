@@ -16,7 +16,7 @@ import java.util.UUID;
 /*Таблица виртуальных сенсоров. Еще в разработке*/
 
 @Entity
-@Table(name = "VIRTUAL_SENSORS_TABLE")
+@Table(name = "VIRTUAL_SENSORS_TABLE", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
 @NamedQueries({
         @NamedQuery(name = "VirtualSensor.getAll", query = "SELECT s from VirtualSensor s")
 })
@@ -57,10 +57,10 @@ public class VirtualSensor {
     @PostLoad
     void postLoad() {
         switch (this.getAggregationType()) {
-            case "SIMPLE_REDIRECTOR":
+            case "redirect":
                 this.setVirtualSensorAggregator(new SimpleRedirector(this));
                 break;
-            case "MULTIPLICATOR":
+            case "multiply":
                 this.setVirtualSensorAggregator(new Multiplicator(this));
                 break;
             default:

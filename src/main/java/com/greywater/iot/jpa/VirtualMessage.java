@@ -11,9 +11,9 @@ import java.util.UUID;
 
 
 @Entity
-@Table(name = "VIRTUAL_MESSAGES_TABLE")
+@Table(name = "VIRTUAL_MESSAGES_TABLE", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
 @NamedNativeQueries({
-        @NamedNativeQuery(name = "VirtualMessage.getLastNMessages", query = "SELECT * FROM VIRTUAL_MESSAGES_TABLE WHERE VSENSOR_ID = ? ORDER BY CREATED DESC LIMIT ?", resultClass = VirtualMessage.class)
+        @NamedNativeQuery(name = "VirtualMessage.getLastNMessages", query = "SELECT * FROM NEO_77I8IO0F4PQ8TZ67A28RD0L2L.VIRTUAL_MESSAGES_TABLE WHERE VSENSOR_ID = ? ORDER BY CREATED DESC LIMIT ?", resultClass = VirtualMessage.class)
 })
 @XmlRootElement
 public class VirtualMessage {
@@ -26,7 +26,7 @@ public class VirtualMessage {
     @Column(name = "VALUE")
     private Double value;
 
-    @Column(name = "TIMESTAMP")
+    @Column(name = "CREATED")
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
 

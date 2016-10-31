@@ -9,7 +9,7 @@ import java.util.List;
 * Этот класс абстрагируют реальные физические штуки, такие как емкость с водой.
 * Возможно нагреватель или еще какую то вещь за которой нам следует наблюдать.*/
 @Entity
-@Table(name = "THINGS_TABLE", catalog = "")
+@Table(name = "THINGS_TABLE", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
 @XmlRootElement
 public class Thing {
 
