@@ -8,11 +8,12 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.concurrent.Future;
 
-/*Наблюдатель за таблицей сообщений
-* С определенной периодичностью опрашивает таблицу сообщений
-* и если появились новые передает их в MessageDistributor*/
+/** Наблюдатель за таблицей сообщений
+ * С определенной периодичностью опрашивает таблицу сообщений
+ * и если появились новые передает их в MessageDistributor
+ */
 
-public class Observer implements Runnable {
+class Observer implements Runnable {
 
     private static Timestamp lastMsgTime = Message.getLastTime();
     private static Future future;

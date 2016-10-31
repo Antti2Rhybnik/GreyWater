@@ -8,8 +8,7 @@ import com.greywater.iot.jpa.VirtualSensor;
 import java.util.List;
 import java.util.Optional;
 
-/*Первый обработчик на который поступят сообщения
-* Распределяет сообщения по следующим обработчикам*/
+
 public class MessageDistributor implements Runnable {
 
     List<Message> messages;
@@ -28,18 +27,14 @@ public class MessageDistributor implements Runnable {
 
             for (Sensor s : GWContext.getAllSensors()) {
                 if (s.getId() == m.getSensorId()) {
-                    System.out.println("sensor matched");
                     matchedSensor = Optional.of(s);
                     break;
                 }
             }
 
             if (matchedSensor.isPresent()) {
-
-                System.out.println("sensor present");
                 matchedSensor.get().updateActualMessage(m);
                 matchedSensor.get().getVirtualSensors().forEach(VirtualSensor::eval);
-
             }
 
         };
