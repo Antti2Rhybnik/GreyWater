@@ -132,7 +132,6 @@ public class VirtualSensor {
     public void eval() {
         try {
             Double val = vsa.eval();
-            // TODO: and save to DB
 
             System.out.println("evaluated: " + val);
 

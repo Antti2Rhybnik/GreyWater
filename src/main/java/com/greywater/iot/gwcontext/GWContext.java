@@ -66,10 +66,6 @@ public class GWContext implements ServletContextListener {
             //Запуск всех обработчиков
             scheduler.scheduleAtFixedRate(new ThresholdHandler(), 5, 20, TimeUnit.SECONDS);
 
-            // TODO: добавить инициализацию планировщика обработчиков (handlersScheduler) в зависимости от количества обработчиков
-            handlersScheduler = Executors.newScheduledThreadPool(0);
-            //handlersScheduler.scheduleAtFixedRate()
-
         } catch (Exception ex) {
             ex.printStackTrace();
             System.exit(-1);
