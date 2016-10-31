@@ -26,7 +26,7 @@ public class PersistManager {
         return emf.createEntityManager();
     }
 
-    public static Connection getConnection() throws SQLException, NamingException {
+    public static Connection newConnection() throws SQLException, NamingException {
 
         if (dataSource == null || ctx == null) {
             ctx = new InitialContext();

@@ -26,9 +26,9 @@ public class VirtualMessage {
     @Column(name = "VALUE")
     private Double value;
 
-    @Column(name = "CREATED")
+    @Column(name = "TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date created;
+    private Date timestamp;
 
     @ManyToOne
     @JoinColumn(name = "VSENSOR_ID")
@@ -64,12 +64,12 @@ public class VirtualMessage {
         this.value = value;
     }
 
-    public Date getCreated() {
-        return created;
+    public Date getTimestamp() {
+        return timestamp;
     }
 
-    public void setCreated(Date created) {
-        this.created = created;
+    public void setTimestamp(Date created) {
+        this.timestamp = created;
     }
 
     public VirtualSensor getVirtualSensor() {

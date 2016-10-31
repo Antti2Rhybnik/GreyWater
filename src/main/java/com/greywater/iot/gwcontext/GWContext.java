@@ -60,8 +60,7 @@ public class GWContext implements ServletContextListener {
             msgDistribExecutor = Executors.newSingleThreadExecutor();
 
             // запуск обзёрвера
-            scheduler.scheduleAtFixedRate(new Observer(), 0, 1, TimeUnit.SECONDS);
-
+            scheduler.scheduleAtFixedRate(new Observer(), 0, 2, TimeUnit.SECONDS);
 
             //Запуск всех обработчиков
             scheduler.scheduleAtFixedRate(new ThresholdHandler(), 5, 20, TimeUnit.SECONDS);

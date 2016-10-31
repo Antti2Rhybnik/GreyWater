@@ -43,6 +43,7 @@ public class Event {
     @JoinColumn(name = "VSENSOR_ID")
     private VirtualSensor virtualSensor;
 
+    public Event() {}
 
     public Event(Date created, String importanceRank, String eventType, double difference, VirtualSensor virtualSensor) {
         this.created = created;

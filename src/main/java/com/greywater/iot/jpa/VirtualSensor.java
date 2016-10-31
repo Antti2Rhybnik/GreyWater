@@ -7,7 +7,6 @@ import com.greywater.iot.vsensors.SimpleRedirector;
 import com.greywater.iot.vsensors.VirtualSensorAggregator;
 
 import javax.persistence.*;
-import javax.transaction.Transaction;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.Date;
@@ -136,7 +135,7 @@ public class VirtualSensor {
             System.out.println("evaluated: " + val);
 
             VirtualMessage vm = new VirtualMessage();
-            vm.setCreated(new Date());
+            vm.setTimestamp(new Date());
             vm.setValue(val);
             vm.setVirtualSensor(this);
 

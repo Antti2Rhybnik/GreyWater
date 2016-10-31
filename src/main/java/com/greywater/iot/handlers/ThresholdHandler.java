@@ -38,5 +38,6 @@ public class ThresholdHandler extends BaseHandler {
         em.getTransaction().begin();
         em.persist(event);
         em.getTransaction().commit();
+        em.close();
     }
 }
