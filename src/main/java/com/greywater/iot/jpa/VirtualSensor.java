@@ -73,11 +73,11 @@ public class VirtualSensor {
 
     public List<VirtualMessage> getLastNMessages(int limit) {
 
-        return null;
+        return VirtualMessage.getLastNMessages(id, limit);
     }
 
     public VirtualMessage getLastMessage() {
-        return getLastNMessages(1).get(0);
+        return VirtualMessage.getLastNMessages(id, 1).get(0);
     }
 
 
@@ -111,6 +111,13 @@ public class VirtualSensor {
             vm.setCreated(new Date());
             vm.setValue(val);
             vm.setVirtualSensor(this);
+
+            EntityManager em = PersistManager.newEntityManager();
+            em.getTransaction().begin();
+            em.merge(vm);
+            em.getTransaction().commit();
+
+            em.close();
 
         } catch (SensorNullMessageException ex) {
             System.err.println(ex.getMessage());
