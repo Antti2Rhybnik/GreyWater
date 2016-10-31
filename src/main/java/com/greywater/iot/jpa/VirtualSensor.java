@@ -132,8 +132,6 @@ public class VirtualSensor {
         try {
             Double val = vsa.eval();
 
-            System.out.println("evaluated: " + val);
-
             VirtualMessage vm = new VirtualMessage();
             vm.setTimestamp(new Date());
             vm.setValue(val);
@@ -145,6 +143,8 @@ public class VirtualSensor {
             em.getTransaction().commit();
 
             em.close();
+
+            System.out.println("stored: " + val);
 
         } catch (SensorNullMessageException ex) {
             System.err.println(ex.getMessage());

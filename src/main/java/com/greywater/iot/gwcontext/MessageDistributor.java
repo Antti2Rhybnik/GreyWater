@@ -26,7 +26,7 @@ public class MessageDistributor implements Runnable {
             Optional<Sensor> matchedSensor = Optional.empty();
 
             for (Sensor s : GWContext.getAllSensors()) {
-                if (s.getId() == m.getSensorId()) {
+                if (s.getId().equals(m.getSensorId())) {
                     matchedSensor = Optional.of(s);
                     break;
                 }
