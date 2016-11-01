@@ -1,5 +1,6 @@
 package com.greywater.iot.rest;
 
+import com.greywater.iot.gwcontext.GWContext;
 import com.greywater.iot.jpa.Message;
 import com.greywater.iot.jpa.Sensor;
 import com.greywater.iot.jpa.Thing;
@@ -66,12 +67,26 @@ public class RestApiProvider {
     }
 
     @GET
-    @Path("pers")
+    @Path("stop")
     @Produces(MediaType.APPLICATION_JSON)
-    public String persist() {
+    public String stop() {
 
+        GWContext.stop();
+        System.out.println("STOPPED!!!");
         return "ok";
     }
+
+    @GET
+    @Path("start")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String start() {
+
+        GWContext.init();
+        System.out.println("STARTED!!!");
+        return "ok";
+    }
+
+
 
 //    @GET
 //    @Path("timetest")

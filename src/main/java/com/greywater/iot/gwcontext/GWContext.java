@@ -29,7 +29,7 @@ public class GWContext implements ServletContextListener {
     private static List<Sensor> allSensors;
     private static List<VirtualSensor> allVirtualSensors;
 
-    private static void init() {
+    public static void init() {
         try {
 
             initConfig();
@@ -61,7 +61,7 @@ public class GWContext implements ServletContextListener {
             });
 
 
-            scheduler = Executors.newSingleThreadScheduledExecutor();
+            scheduler = Executors.newScheduledThreadPool(2);
             msgDistribExecutor = Executors.newSingleThreadExecutor();
 
             // запуск обзёрвера
@@ -78,7 +78,7 @@ public class GWContext implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        init();
+
     }
 
     @Override
@@ -88,6 +88,15 @@ public class GWContext implements ServletContextListener {
         msgDistribExecutor.shutdown();
     }
 
+
+    public static void stop() {
+        if(!scheduler.isShutdown()) {
+            scheduler.shutdown();
+        }
+        if (!msgDistribExecutor.isShutdown()) {
+            msgDistribExecutor.shutdown();
+        }
+    }
 
     public static List<VirtualSensor> getAllVirtualSensors() {
         return allVirtualSensors;
