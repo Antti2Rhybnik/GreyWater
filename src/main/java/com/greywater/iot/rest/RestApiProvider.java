@@ -4,17 +4,14 @@ import com.greywater.iot.gwcontext.GWContext;
 import com.greywater.iot.jpa.Message;
 import com.greywater.iot.jpa.Sensor;
 import com.greywater.iot.jpa.Thing;
+import com.greywater.iot.jpa.VirtualSensor;
 import com.greywater.iot.persistence.PersistManager;
 import com.greywater.iot.utils.AwesomeHTMLBuilder;
 
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -30,6 +27,24 @@ public class RestApiProvider {
     public RestApiProvider() {
     }
 
+    @POST
+    @Path("setSensors")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String setSensor(List<VirtualSensor> virtualSensorList) {
+
+        EntityManager em = PersistManager.newEntityManager();
+        em.getTransaction().begin();
+
+        for (int count = 0; count < virtualSensorList.size(); ++count){
+            em.merge(virtualSensorList.get(count));
+        }
+
+        em.close();
+
+        return "Successfully request";
+    }
+
     @GET
     @Path("test")
     @Produces(MediaType.TEXT_PLAIN)
@@ -43,12 +58,13 @@ public class RestApiProvider {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Message> getLast30(@QueryParam("id") String id, @QueryParam("N") Integer N) {
 
-        EntityManager em = Persistence.createEntityManagerFactory("GreyWater").createEntityManager();
+        EntityManager em = PersistManager.newEntityManager();
         TypedQuery<Message> q = em.createNamedQuery("Message.lastN", Message.class);
         q.setParameter("1", id);
         q.setParameter("2", N);
         List<Message> messages = q.getResultList();
         em.close();
+
         return messages;
     }
 
@@ -73,6 +89,7 @@ public class RestApiProvider {
 
         GWContext.stop();
         System.out.println("STOPPED!!!");
+
         return "ok";
     }
 
@@ -83,6 +100,7 @@ public class RestApiProvider {
 
         GWContext.init();
         System.out.println("STARTED!!!");
+
         return "ok";
     }
 
@@ -132,6 +150,5 @@ public class RestApiProvider {
     public String filureClient() {
         return AwesomeHTMLBuilder.getMyFailureInClient();
     }
-
 
 }
