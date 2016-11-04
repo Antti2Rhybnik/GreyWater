@@ -9,11 +9,10 @@ import com.greywater.iot.persistence.PersistManager;
 import com.greywater.iot.utils.AwesomeHTMLBuilder;
 
 import javax.inject.Singleton;
-import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.List;
 
 /*Это основной инструмент общения с веб клиентом.
@@ -36,14 +35,26 @@ public class RestApiProvider {
 
         System.out.println("setSensor begin");
 
-        EntityManager em = PersistManager.newEntityManager();
+        try {
+            EntityManager em = PersistManager.newEntityManager();
 
-        for (VirtualSensor vs : virtualSensorList) {
-            em.getTransaction().begin();
-            em.merge(vs);
-            em.getTransaction().commit();
+            for (VirtualSensor vs : virtualSensorList) {
+                em.getTransaction().begin();
+                em.merge(vs);
+                em.getTransaction().commit();
+            }
+            em.close();
+        } catch (IllegalArgumentException e) {
+            return "IllegalArgumentException";
+        } catch (IllegalStateException e) {
+            return "IllegalStateException";
+        } catch (TransactionRequiredException e) {
+            return "TransactionRequiredException";
+        } catch (RuntimeException e) {
+            return "RuntimeException";
+        } catch (Exception e) {
+            return "Exception";
         }
-        em.close();
 
         System.out.println("setSensor end");
         return "Successfully request";
@@ -62,12 +73,34 @@ public class RestApiProvider {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Message> getLast30(@QueryParam("id") String id, @QueryParam("N") Integer N) {
 
-        EntityManager em = PersistManager.newEntityManager();
-        TypedQuery<Message> q = em.createNamedQuery("Message.lastN", Message.class);
-        q.setParameter("1", id);
-        q.setParameter("2", N);
-        List<Message> messages = q.getResultList();
-        em.close();
+        List<Message> messages = new ArrayList<>();
+
+        try {
+            EntityManager em = PersistManager.newEntityManager();
+            TypedQuery<Message> q = em.createNamedQuery("Message.lastN", Message.class);
+            q.setParameter("1", id);
+            q.setParameter("2", N);
+            messages = q.getResultList();
+            em.close();
+        } catch (IllegalArgumentException e) {
+            System.err.println("IllegalArgumentException");
+        } catch (IllegalStateException e) {
+            System.err.println("IllegalStateException");
+        } catch (QueryTimeoutException e) {
+            System.err.println("QueryTimeoutException");
+        } catch (TransactionRequiredException e) {
+            System.err.println("TransactionRequiredException");
+        } catch (PessimisticLockException e) {
+            System.err.println("PessimisticLockException");
+        } catch (LockTimeoutException e) {
+            System.err.println("LockTimeoutException");
+        } catch (PersistenceException e) {
+            System.err.println("PersistenceException");
+        } catch (RuntimeException e) {
+            System.err.println("RunTimeException");
+        } catch (Exception e) {
+            System.err.println("Exception");
+        }
 
         return messages;
     }
