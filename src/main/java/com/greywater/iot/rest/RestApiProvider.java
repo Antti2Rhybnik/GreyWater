@@ -118,7 +118,7 @@ public class RestApiProvider {
     }
 
 
-    @POST+
+    @POST
     @Path("json")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
