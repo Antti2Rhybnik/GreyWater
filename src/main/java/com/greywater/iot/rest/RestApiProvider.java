@@ -31,7 +31,7 @@ public class RestApiProvider {
     @Path("setSensors")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
-    public String setSensor(List<VirtualSensor> virtualSensorList) {
+    public String setConfigSensors(List<VirtualSensor> virtualSensorList) {
 
         System.out.println("setSensor begin");
 
@@ -44,14 +44,6 @@ public class RestApiProvider {
                 em.getTransaction().commit();
             }
             em.close();
-        } catch (IllegalArgumentException e) {
-            return "IllegalArgumentException";
-        } catch (IllegalStateException e) {
-            return "IllegalStateException";
-        } catch (TransactionRequiredException e) {
-            return "TransactionRequiredException";
-        } catch (RuntimeException e) {
-            return "RuntimeException";
         } catch (Exception e) {
             return "Exception";
         }
@@ -82,22 +74,6 @@ public class RestApiProvider {
             q.setParameter("2", N);
             messages = q.getResultList();
             em.close();
-        } catch (IllegalArgumentException e) {
-            System.err.println("IllegalArgumentException");
-        } catch (IllegalStateException e) {
-            System.err.println("IllegalStateException");
-        } catch (QueryTimeoutException e) {
-            System.err.println("QueryTimeoutException");
-        } catch (TransactionRequiredException e) {
-            System.err.println("TransactionRequiredException");
-        } catch (PessimisticLockException e) {
-            System.err.println("PessimisticLockException");
-        } catch (LockTimeoutException e) {
-            System.err.println("LockTimeoutException");
-        } catch (PersistenceException e) {
-            System.err.println("PersistenceException");
-        } catch (RuntimeException e) {
-            System.err.println("RunTimeException");
         } catch (Exception e) {
             System.err.println("Exception");
         }
@@ -142,7 +118,7 @@ public class RestApiProvider {
     }
 
 
-    @POST
+    @POST+
     @Path("json")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
