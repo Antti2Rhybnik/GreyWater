@@ -4,6 +4,7 @@ import com.greywater.iot.gwcontext.GWContext;
 import com.greywater.iot.jpa.*;
 import com.greywater.iot.persistence.PersistManager;
 import com.greywater.iot.utils.AwesomeHTMLBuilder;
+import com.greywater.iot.vsensors.Aggregator;
 
 import javax.inject.Singleton;
 import javax.persistence.*;
@@ -117,6 +118,37 @@ public class RestApiProvider {
         return Response.ok(messages).build();
     }
 
+    @GET
+    @Path("sensorEvents")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSensorEvents(@QueryParam("id") String id, @QueryParam("limit") Integer limit) {
+
+        List<Event> messages = new ArrayList<>();
+
+        try {
+
+            EntityManager em = PersistManager.newEntityManager();
+            TypedQuery<Event> query = em.createNamedQuery("Event.getLastNEvents", Event.class);
+            query.setParameter("1", id);
+            query.setParameter("2", limit);
+            messages = query.getResultList();
+            em.close();
+
+        } catch (Exception e) {
+            System.err.println("Exception");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+
+        return Response.ok(messages).build();
+    }
+
+    @GET
+    @Path("aggregationTypes")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getAggregationTypes() {
+
+        return "[{\"aggregation\" : \"redirect\"}, {\"aggregation\": \"multiply\"}]";
+    }
 
     @GET
     @Path("rawsensors")
@@ -147,7 +179,6 @@ public class RestApiProvider {
         return Response.ok("started").build();
     }
 
-
     @POST
     @Path("json")
     @Produces(MediaType.TEXT_PLAIN)
@@ -156,8 +187,5 @@ public class RestApiProvider {
 
         System.out.println(vsensors);
     }
-
-
-
 
 }
