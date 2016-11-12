@@ -4,7 +4,6 @@ import com.greywater.iot.gwcontext.GWContext;
 import com.greywater.iot.jpa.*;
 import com.greywater.iot.persistence.PersistManager;
 import com.greywater.iot.utils.AwesomeHTMLBuilder;
-import com.greywater.iot.vsensors.Aggregator;
 
 import javax.inject.Singleton;
 import javax.persistence.*;
