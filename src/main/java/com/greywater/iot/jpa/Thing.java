@@ -17,7 +17,7 @@ public class Thing {
     @Id
     @Column(name = "THING_ID")
     @GeneratedValue
-    private long id;
+    private String id;
 
     @Column(name = "NAME")
     private String name;
@@ -32,11 +32,11 @@ public class Thing {
 
 
     // === GETTERS AND SETTERS === //
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -60,5 +60,14 @@ public class Thing {
         if (!virtualSensors.contains(virtualSensor)) {
             virtualSensors.add(virtualSensor);
         }
+    }
+
+
+    @Override
+    public String toString() {
+        return "Thing{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

@@ -171,6 +171,9 @@ public class VirtualSensor {
         return "VirtualSensor{" +
                 "id='" + id + '\'' +
                 ", aggregationType='" + aggregationType + '\'' +
+                ", sensors=" + sensors +
+                ", things=" + things +
+                ", parameters=" + parameters +
                 '}';
     }
 }

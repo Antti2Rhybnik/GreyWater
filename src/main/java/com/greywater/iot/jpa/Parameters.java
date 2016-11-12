@@ -49,4 +49,12 @@ public class Parameters {
         this.min = min;
     }
 
+    @Override
+    public String toString() {
+        return "Parameters{" +
+                "id='" + id + '\'' +
+                ", max=" + max +
+                ", min=" + min +
+                '}';
+    }
 }

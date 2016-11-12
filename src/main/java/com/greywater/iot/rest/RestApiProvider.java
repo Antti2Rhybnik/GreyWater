@@ -1,10 +1,7 @@
 package com.greywater.iot.rest;
 
 import com.greywater.iot.gwcontext.GWContext;
-import com.greywater.iot.jpa.Message;
-import com.greywater.iot.jpa.Sensor;
-import com.greywater.iot.jpa.Thing;
-import com.greywater.iot.jpa.VirtualSensor;
+import com.greywater.iot.jpa.*;
 import com.greywater.iot.persistence.PersistManager;
 import com.greywater.iot.utils.AwesomeHTMLBuilder;
 
@@ -12,6 +9,7 @@ import javax.inject.Singleton;
 import javax.persistence.*;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,18 +20,53 @@ import java.util.List;
 @Singleton
 public class RestApiProvider {
 
-    public static String tr = "-21";
-
     public RestApiProvider() {
     }
 
+
+    /**
+     * На вход поступает примерно следующий джейсон:
+     *
+     * [{
+     *   "id" : "1",
+     *   "aggregationType": "redirect",
+     *   "sensors": [{
+     *        "id":"1",
+     *        "type": "humidity"
+     *   }],
+     *   "things": [{
+     *        "id": "1",
+     *        "name": "tank"
+     *   }],
+     *   "parameters": {
+     *        "min": 12,
+     *        "max": 22
+     *   }
+     * }]
+     *
+     * Это преобразуется в:
+     *
+     * [VirtualSensor{
+     *  id = '1',
+     *  aggregationType = 'redirect',
+     *  sensors = [ Sensor{ id = '1', type = 'humidity' } ],
+     *  things = [ Thing{ id = '1', name = 'tank' } ],
+     *  parameters = Parameters{ id = '7b5055ef-8d2b-4624-a8fb-2b19b2f08fc6', max = 22.0, min = 12.0 }
+     * }]
+     */
+
     @POST
-    @Path("setSensors")
+    @Path("setConfig")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
-    public String setConfigSensors(List<VirtualSensor> virtualSensorList) {
+    public Response setConfig(List<VirtualSensor> virtualSensorList) {
 
-        System.out.println("setSensor begin");
+        // TODO: добавить проверку на корректность ссылок в пришёдших сущностях
+        // TODO: добавить проверку нет ли сущностей в БД, повторяющих пришедшие
+        // TODO: добавить корректный persist или merge, сделав референсы на другие объекты
+
+
+        System.out.println("setConfig begin");
 
         try {
             EntityManager em = PersistManager.newEntityManager();
@@ -45,11 +78,11 @@ public class RestApiProvider {
             }
             em.close();
         } catch (Exception e) {
-            return "Exception";
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
 
-        System.out.println("setSensor end");
-        return "Successfully request";
+        System.out.println("setConfig end");
+        return Response.ok("configured").build();
     }
 
     @GET
@@ -57,64 +90,61 @@ public class RestApiProvider {
     @Produces(MediaType.TEXT_PLAIN)
     public String getTestString() {
 
-        return tr;
+        return "-21";
     }
 
     @GET
-    @Path("lastN")
+    @Path("sensorValues")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Message> getLast30(@QueryParam("id") String id, @QueryParam("N") Integer N) {
+    public Response getSensorValues(@QueryParam("id") String id, @QueryParam("limit") Integer limit) {
 
-        List<Message> messages = new ArrayList<>();
+        List<VirtualMessage> messages = new ArrayList<>();
 
         try {
+
             EntityManager em = PersistManager.newEntityManager();
-            TypedQuery<Message> q = em.createNamedQuery("Message.lastN", Message.class);
+            TypedQuery<VirtualMessage> q = em.createNamedQuery("VirtualMessage.getLastNMessages", VirtualMessage.class);
             q.setParameter("1", id);
-            q.setParameter("2", N);
+            q.setParameter("2", limit);
             messages = q.getResultList();
             em.close();
+
         } catch (Exception e) {
             System.err.println("Exception");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
 
-        return messages;
+        return Response.ok(messages).build();
     }
 
-    @GET
-    @Path("allmsg")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Message> getAllMessages() {
-        return null;
-    }
 
     @GET
-    @Path("allsensors")
+    @Path("rawsensors")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Sensor> getAllSensors() {
+    public List<Sensor> getRawSensors() {
         return Sensor.getAll();
     }
 
     @GET
     @Path("stop")
     @Produces(MediaType.APPLICATION_JSON)
-    public String stop() {
+    public Response stop() {
 
         GWContext.stop();
         System.out.println("STOPPED!!!");
 
-        return "ok";
+        return Response.ok("stopped").build();
     }
 
     @GET
     @Path("start")
     @Produces(MediaType.APPLICATION_JSON)
-    public String start() {
+    public Response start() {
 
         GWContext.init();
         System.out.println("STARTED!!!");
 
-        return "ok";
+        return Response.ok("started").build();
     }
 
 
@@ -124,54 +154,10 @@ public class RestApiProvider {
     @Consumes(MediaType.APPLICATION_JSON)
     public void json(List<VirtualSensor> vsensors) {
 
-        System.out.println(vsensors.get(0));
+        System.out.println(vsensors);
     }
 
 
-//    @GET
-//    @Path("timetest")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public List<Message> timeTest() {
-//        return Message.getAfterTime(Observer.getCurrentTimestamp());
-//    }
-
-//    @GET
-//    @Path("thresholder")
-//    @Produces(MediaType.TEXT_HTML)
-//    public String ok() {
-//        if (ThresholdHandler.isProblemDetected()) {
-//            return AwesomeHTMLBuilder.getAwesomeHtmlWithPhoto("In Threshold happened problems. Handler value - ", String.valueOf(ThresholdHandler.isProblemDetected()), "http://www.ivetta.ua/wp-content/uploads/2015/07/tom-kruz-3.jpg");
-//        }
-//        return AwesomeHTMLBuilder.getAwesomeHtml("Everything is ok. Handler value", String.valueOf(ThresholdHandler.isProblemDetected()), "\t#808080");
-//    }
-
-//    @GET
-//    @Path("thres")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response handlerResult() {
-//        JSONObject jsonObject = new JSONObject();
-//        jsonObject.put("min", String.valueOf(ThresholdHandler.getLow()));
-//        jsonObject.put("max", String.valueOf(ThresholdHandler.getMax()));
-//        jsonObject.put("Is problem detected", String.valueOf(ThresholdHandler.isProblemDetected()));
-//        if (ThresholdHandler.getCurrentMessage() != null) {
-//            if (ThresholdHandler.isProblemDetected()) {
-//                jsonObject.put("state", "ALARM OUT OF RANGE");
-//            } else {
-//                jsonObject.put("state", "normal value");
-//            }
-//
-//            jsonObject.put("current value", String.valueOf(ThresholdHandler.getCurrentMessage().getSensorValue()));
-//
-//        }
-//        return Response.ok(jsonObject.toJSONString()).header("Access-Control-Allow-Credentials", "true").header("Access-Control-Allow-Origin", "*").build();
-//    }
-
-    @GET
-    @Path("failureClient")
-    @Produces(MediaType.TEXT_HTML)
-    public String filureClient() {
-        return AwesomeHTMLBuilder.getMyFailureInClient();
-    }
 
 
 }

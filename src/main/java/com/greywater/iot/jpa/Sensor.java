@@ -72,4 +72,12 @@ public class Sensor {
         return sensors;
     }
 
+
+    @Override
+    public String toString() {
+        return "Sensor{" +
+                "id='" + id + '\'' +
+                ", type='" + type + '\'' +
+                '}';
+    }
 }
