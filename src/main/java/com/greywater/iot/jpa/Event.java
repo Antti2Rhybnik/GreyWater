@@ -1,8 +1,11 @@
 package com.greywater.iot.jpa;
 
+import com.greywater.iot.persistence.PersistManager;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -10,6 +13,9 @@ import java.util.UUID;
  */
 @Entity
 @Table(name="EVENTS_TABLE", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
+@NamedNativeQueries({
+        @NamedNativeQuery(name = "Event.getLastNEvents", query = "SELECT * FROM NEO_77I8IO0F4PQ8TZ67A28RD0L2L.EVENTS_TABLE WHERE VSENSOR_ID = ? ORDER BY CREATED DESC LIMIT ?", resultClass = Event.class)
+})
 public class Event implements Serializable {
     public static final String LOW_RANK = "LOW";
     public static final String MEDIUM_RANK = "MEDIUM";
@@ -52,6 +58,16 @@ public class Event implements Serializable {
         this.eventType = eventType;
         this.difference = difference;
         this.virtualSensor = virtualSensor;
+    }
+
+    public static List<Event> getLastNEvents (String vsensorID, int limit) {
+        EntityManager em = PersistManager.newEntityManager();
+        TypedQuery<Event> query = em.createNamedQuery("Event.getLastNEvents", Event.class);
+        query.setParameter("1", vsensorID);
+        query.setParameter("2", limit);
+        List<Event> list = query.getResultList();
+        em.close();
+        return list;
     }
 
     public String getId() {
