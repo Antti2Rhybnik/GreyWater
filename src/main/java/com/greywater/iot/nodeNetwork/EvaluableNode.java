@@ -20,7 +20,7 @@ class EvaluableNode<T> extends Node<T> {
 
         try {
 
-            cs = Main.engine.compile(script);
+            cs = NodeMaster.engine.compile(script);
 
         } catch(ScriptException scrEx)  {
             scrEx.printStackTrace();
