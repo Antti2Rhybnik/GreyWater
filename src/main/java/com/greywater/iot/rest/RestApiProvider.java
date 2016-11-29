@@ -7,10 +7,6 @@ import com.greywater.iot.utils.AwesomeHTMLBuilder;
 
 import javax.inject.Singleton;
 import javax.persistence.*;
-import javax.script.Compilable;
-import javax.script.CompiledScript;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -59,6 +55,55 @@ public class RestApiProvider {
      * }]
      */
 
+
+    @POST
+    @Path("save_nodes_config")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response saveNodesConfig(String config) {
+        System.out.println("saveNodeConfig begin");
+
+        try {
+            NodeMaster.saveNodesConfig(config);
+        } catch (IOException | SQLException | NamingException e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+
+        System.out.println("saveNodeConfig end");
+        return Response.ok("saved").build();
+    }
+
+
+    @POST
+    @Path("setConfig")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response setConfig(List<VirtualSensor> virtualSensorList) {
+
+        // TODO: добавить проверку на корректность ссылок в пришёдших сущностях
+        // TODO: добавить проверку нет ли сущностей в БД, повторяющих пришедшие
+        // TODO: добавить корректный persist или merge, сделав референсы на другие объекты
+
+
+        System.out.println("setConfig begin");
+
+        try {
+            EntityManager em = PersistManager.newEntityManager();
+
+            for (VirtualSensor vs : virtualSensorList) {
+                em.getTransaction().begin();
+                em.merge(vs);
+                em.getTransaction().commit();
+            }
+            em.close();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+
+        System.out.println("setConfig end");
+        return Response.ok("configured").build();
+    }
 
     @GET
     @Path("test")

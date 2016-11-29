@@ -8,7 +8,6 @@ import java.util.List;
  */
 class EvaluableNode<T> extends Node<T> {
 
-    public static Compilable engine = (Compilable) new ScriptEngineManager().getEngineByName("javascript");
     private CompiledScript cs;
 
     EvaluableNode() {
