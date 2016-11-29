@@ -2,14 +2,22 @@ package com.greywater.iot.rest;
 
 import com.greywater.iot.gwcontext.GWContext;
 import com.greywater.iot.jpa.*;
+import com.greywater.iot.nodeNetwork.NodeMaster;
 import com.greywater.iot.persistence.PersistManager;
 import com.greywater.iot.utils.AwesomeHTMLBuilder;
 
 import javax.inject.Singleton;
+import javax.naming.NamingException;
 import javax.persistence.*;
+import javax.script.Compilable;
+import javax.script.CompiledScript;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,35 +83,6 @@ public class RestApiProvider {
     }
 
 
-    @POST
-    @Path("setConfig")
-    @Produces(MediaType.TEXT_PLAIN)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response setConfig(List<VirtualSensor> virtualSensorList) {
-
-        // TODO: добавить проверку на корректность ссылок в пришёдших сущностях
-        // TODO: добавить проверку нет ли сущностей в БД, повторяющих пришедшие
-        // TODO: добавить корректный persist или merge, сделав референсы на другие объекты
-
-
-        System.out.println("setConfig begin");
-
-        try {
-            EntityManager em = PersistManager.newEntityManager();
-
-            for (VirtualSensor vs : virtualSensorList) {
-                em.getTransaction().begin();
-                em.merge(vs);
-                em.getTransaction().commit();
-            }
-            em.close();
-        } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-        }
-
-        System.out.println("setConfig end");
-        return Response.ok("configured").build();
-    }
 
     @GET
     @Path("test")
