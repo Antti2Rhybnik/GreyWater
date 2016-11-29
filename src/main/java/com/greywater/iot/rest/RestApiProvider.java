@@ -7,6 +7,10 @@ import com.greywater.iot.utils.AwesomeHTMLBuilder;
 
 import javax.inject.Singleton;
 import javax.persistence.*;
+import javax.script.Compilable;
+import javax.script.CompiledScript;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -84,13 +88,14 @@ public class RestApiProvider {
         System.out.println("setConfig end");
         return Response.ok("configured").build();
     }
-
     @GET
     @Path("test")
     @Produces(MediaType.TEXT_PLAIN)
-    public String getTestString() {
+    public String getTestString() throws ScriptException {
+        Compilable enigine = (Compilable) new ScriptEngineManager().getEngineByName("javascript");
+        CompiledScript compiledScript = enigine.compile("greetings from javascript");
 
-        return "-21";
+        return compiledScript.eval().toString();
     }
 
     @GET
