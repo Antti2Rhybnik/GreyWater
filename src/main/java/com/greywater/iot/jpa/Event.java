@@ -14,13 +14,12 @@ import java.util.UUID;
 @Entity
 @Table(name="EVENTS_TABLE", schema = "NEO_77I8IO0F4PQ8TZ67A28RD0L2L", catalog = "")
 @NamedNativeQueries({
-        @NamedNativeQuery(name = "Event.getLastNEvents", query = "SELECT * FROM NEO_77I8IO0F4PQ8TZ67A28RD0L2L.EVENTS_TABLE WHERE VSENSOR_ID = ? ORDER BY CREATED DESC LIMIT ?", resultClass = Event.class)
+        @NamedNativeQuery(name = "Event.getLastNEvents", query = "SELECT * FROM NEO_77I8IO0F4PQ8TZ67A28RD0L2L.EVENTS_TABLE  ORDER BY CREATED DESC LIMIT ?", resultClass = Event.class)
 })
 public class Event implements Serializable {
     public static final String LOW_RANK = "LOW";
     public static final String MEDIUM_RANK = "MEDIUM";
     public static final String HIGH_RANK = "HIGH";
-
     public static final String THRESHOLD_TYPE = "THRESHOLD";
 
     @Id
@@ -46,25 +45,21 @@ public class Event implements Serializable {
     @Column(name="DIFF")
     private double difference;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "VSENSOR_ID")
-    private VirtualSensor virtualSensor;
+
 
     public Event() {}
 
-    public Event(Date created, String importanceRank, String eventType, double difference, VirtualSensor virtualSensor) {
+    public Event(Date created, String importanceRank, String eventType, double difference) {
         this.created = created;
         this.importanceRank = importanceRank;
         this.eventType = eventType;
         this.difference = difference;
-        this.virtualSensor = virtualSensor;
     }
 
     public static List<Event> getLastNEvents (String vsensorID, int limit) {
         EntityManager em = PersistManager.newEntityManager();
         TypedQuery<Event> query = em.createNamedQuery("Event.getLastNEvents", Event.class);
-        query.setParameter("1", vsensorID);
-        query.setParameter("2", limit);
+        query.setParameter("1", limit);
         List<Event> list = query.getResultList();
         em.close();
         return list;
@@ -74,13 +69,7 @@ public class Event implements Serializable {
         return id;
     }
 
-    public VirtualSensor getVirtualSensor() {
-        return virtualSensor;
-    }
 
-    public void setVirtualSensor(VirtualSensor virtualSensor) {
-        this.virtualSensor = virtualSensor;
-    }
 
     public Date getCreated() {
 

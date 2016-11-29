@@ -59,35 +59,7 @@ public class RestApiProvider {
      * }]
      */
 
-    @POST
-    @Path("setConfig")
-    @Produces(MediaType.TEXT_PLAIN)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response setConfig(List<VirtualSensor> virtualSensorList) {
 
-        // TODO: добавить проверку на корректность ссылок в пришёдших сущностях
-        // TODO: добавить проверку нет ли сущностей в БД, повторяющих пришедшие
-        // TODO: добавить корректный persist или merge, сделав референсы на другие объекты
-
-
-        System.out.println("setConfig begin");
-
-        try {
-            EntityManager em = PersistManager.newEntityManager();
-
-            for (VirtualSensor vs : virtualSensorList) {
-                em.getTransaction().begin();
-                em.merge(vs);
-                em.getTransaction().commit();
-            }
-            em.close();
-        } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-        }
-
-        System.out.println("setConfig end");
-        return Response.ok("configured").build();
-    }
     @GET
     @Path("test")
     @Produces(MediaType.TEXT_PLAIN)
@@ -98,29 +70,6 @@ public class RestApiProvider {
         return compiledScript.eval().toString();
     }
 
-    @GET
-    @Path("sensorValues")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getSensorValues(@QueryParam("id") String id, @QueryParam("limit") Integer limit) {
-
-        List<VirtualMessage> messages = new ArrayList<>();
-
-        try {
-
-            EntityManager em = PersistManager.newEntityManager();
-            TypedQuery<VirtualMessage> q = em.createNamedQuery("VirtualMessage.getLastNMessages", VirtualMessage.class);
-            q.setParameter("1", id);
-            q.setParameter("2", limit);
-            messages = q.getResultList();
-            em.close();
-
-        } catch (Exception e) {
-            System.err.println("Exception");
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-        }
-
-        return Response.ok(messages).build();
-    }
 
     @GET
     @Path("sensorEvents")
@@ -154,12 +103,6 @@ public class RestApiProvider {
         return "[{\"aggregation\" : \"redirect\"}, {\"aggregation\": \"multiply\"}]";
     }
 
-    @GET
-    @Path("rawsensors")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Sensor> getRawSensors() {
-        return Sensor.getAll();
-    }
 
     @GET
     @Path("stop")
@@ -183,13 +126,5 @@ public class RestApiProvider {
         return Response.ok("started").build();
     }
 
-    @POST
-    @Path("json")
-    @Produces(MediaType.TEXT_PLAIN)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void json(List<VirtualSensor> vsensors) {
-
-        System.out.println(vsensors);
-    }
 
 }

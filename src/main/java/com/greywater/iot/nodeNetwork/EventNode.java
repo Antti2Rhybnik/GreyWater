@@ -7,6 +7,7 @@ import java.util.List;
  */
 class EventNode extends Node<String> {
 
+
     EventNode(List<Node> inputs) {
         super(inputs);
     }
