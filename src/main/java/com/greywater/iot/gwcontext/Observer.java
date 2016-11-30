@@ -30,7 +30,7 @@ class Observer implements Runnable {
 
 
 
-            List<Message> recentlyAddedMessages = Message.getAfterTime(lastMsgTime);
+            List<Message> recentlyAddedMessages = Message.updateLastMessages(lastMsgTime);
             if (!recentlyAddedMessages.isEmpty()) {
 
                 System.out.println(recentlyAddedMessages.size());

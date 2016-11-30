@@ -1,8 +1,6 @@
 package com.greywater.iot.nodeNetwork;
 
-/**
- * Created by alexander on 28.11.16.
- */
+
 import com.greywater.iot.persistence.PersistManager;
 
 import javax.naming.NamingException;
@@ -19,7 +17,7 @@ import java.util.List;
 
 public class Node<T> {
 
-    private String id;
+    String id;
     List<Node> inputs;
     T state;
     String type;
@@ -37,9 +35,11 @@ public class Node<T> {
             inputs.add(n);
         }
     }
+    
     public static String getTypeFromDb(String id){
+        
         String sqlQuery = "SELECT NODE_TYPE FROM NODES WHERE NODE_ID = ?";
-        try(Connection conn = PersistManager.newConnection()){
+        try(Connection conn = PersistManager.newConnection()) {
             PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
             pstmt.setString(1, id);
             ResultSet resultSet = pstmt.executeQuery();
@@ -47,9 +47,7 @@ public class Node<T> {
                 pstmt.close();
                 return resultSet.getString(0);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (NamingException e) {
+        } catch (SQLException | NamingException e) {
             e.printStackTrace();
         }
         return null;
@@ -70,5 +68,5 @@ public class Node<T> {
 
     public String getType() { return type; }
 
-
+    void eval() {};
 }

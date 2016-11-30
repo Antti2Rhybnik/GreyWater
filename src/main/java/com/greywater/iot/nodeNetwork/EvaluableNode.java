@@ -3,10 +3,8 @@ package com.greywater.iot.nodeNetwork;
 import javax.script.*;
 import java.util.List;
 
-/**
- * Created by alexander on 28.11.16.
- */
-class EvaluableNode<T> extends Node<T> {
+
+public class EvaluableNode<T> extends Node<T> {
 
     private CompiledScript cs;
 

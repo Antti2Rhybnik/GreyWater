@@ -1,10 +1,9 @@
 package com.greywater.iot.rest;
 
+import com.greywater.iot.config.ConfigManager;
 import com.greywater.iot.gwcontext.GWContext;
 import com.greywater.iot.jpa.*;
-import com.greywater.iot.nodeNetwork.NodeMaster;
 import com.greywater.iot.persistence.PersistManager;
-import com.greywater.iot.utils.AwesomeHTMLBuilder;
 
 import javax.inject.Singleton;
 import javax.naming.NamingException;
@@ -72,7 +71,7 @@ public class RestApiProvider {
         System.out.println("saveNodeConfig begin");
 
         try {
-            NodeMaster.saveNodesConfig(config);
+            ConfigManager.saveConfig(config);
         } catch (IOException | SQLException | NamingException e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
