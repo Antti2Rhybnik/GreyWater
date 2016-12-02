@@ -2,18 +2,21 @@ package com.greywater.iot.config;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.greywater.iot.nodeNetwork.ArithmeticalNode;
-import com.greywater.iot.nodeNetwork.LogicalNode;
-import com.greywater.iot.nodeNetwork.NodeMaster;
+import com.greywater.iot.nodeNetwork.*;
 import com.greywater.iot.persistence.PersistManager;
 
 import javax.naming.NamingException;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.greywater.iot.nodeNetwork.NodeMaster.allNodes;
+import static com.greywater.iot.nodeNetwork.NodeMaster.sensorNodes;
+import static com.greywater.iot.nodeNetwork.NodeMaster.arithmeticalNodes;
+import static com.greywater.iot.nodeNetwork.NodeMaster.logicalNodes;
+import static com.greywater.iot.nodeNetwork.NodeMaster.eventNodes;
+
 
 public class ConfigManager {
 
@@ -210,35 +213,84 @@ public class ConfigManager {
     }
 
 
-//    public static void createObjectsFromConfig() {
-//
-//
-//        for (Pair<String, String> list : listFromDB) {
-//            switch (list.getKey()) {
-//                case "SENSOR_NODE":
-//                    SensorNode sn = new SensorNode();
-//                    // get parameters from database for this node
-//                    // ... get id, get type
-//                    // set parameters for base class and child class
-//                    // ... set id, set type
-//                    // add to Sensor Stack
-//                    sensorNodes.add(sn);
-//                    // add to all nodes
-//                    allNodes.add(sn);
-//                    break;
-//                case "ARITHMETICAL_NODE":
-//                    ArithmeticalNode an = new ArithmeticalNode();
-//                    // get parameters from database for this node
-//                    // ... get id, get type
-//                    // set parameters for base class and child class
-//                    // ... set id, set type
-//                    // add to Arithmetical Stack
-//                    arithmeticalNodes.add(an);
-//                    // add to all nodes
-//                    allNodes.add(an);
-//                default:
-//                    break;
-//            }
-//        }
-//    }
+    public static List<Node> getNodes() {
+        // тут, допустим, есть код...
+        return null;
+    }
+
+    private static Object getParameters(String nodeId, Class clazz) {
+
+        try (Connection conn = PersistManager.newConnection()) {
+
+            if (clazz == SensorNode.class) {
+                String sqlQuery = "select * from NEO_77I8IO0F4PQ8TZ67A28RD0L2L.SENSOR_NODES where SN_ID = ?";
+
+                PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
+
+                pstmt.setString(1, nodeId);
+
+                ResultSet resultSet = pstmt.executeQuery();
+
+                if (resultSet.next()) {
+
+                    SensorNode sn = new SensorNode();
+                    sn.setSensorId(resultSet.getLong("SENSOR_ID"));
+
+                    return sn;
+
+                } else {
+                    return new Timestamp(0);
+                }
+
+            }
+
+
+        } catch (SQLException | NamingException e) {
+
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+    public static void createObjectsFromConfig() {
+
+        // тут без магии никак
+
+        List<Node> fromDB = getNodes();
+
+        for (Node node : fromDB) {
+
+            switch (node.getType()) {
+                case "sensor_node":
+                    SensorNode sn = new SensorNode();
+                    sn.setId(node.getId());
+                    sn.setType(node.getType());
+
+                    SensorNode params = (SensorNode) getParameters(sn.getId(), SensorNode.class);
+
+                    sn.setSensorId(params.getSensorId());
+                    // add to Sensor Stack
+
+
+                    sensorNodes.add(sn);
+                    // add to all nodes
+                    allNodes.add(sn);
+                    break;
+                case "arithmetical_node":
+                    ArithmeticalNode an = new ArithmeticalNode();
+                    // get parameters from database for this node
+                    // ... get id, get type
+                    // set parameters for base class and child class
+                    // ... set id, set type
+                    // add to Arithmetical Stack
+                    arithmeticalNodes.add(an);
+                    // add to all nodes
+
+                default:
+                    break;
+            }
+        }
+    }
 }

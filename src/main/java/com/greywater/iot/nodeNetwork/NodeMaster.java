@@ -13,11 +13,11 @@ public class NodeMaster {
 
     public static Compilable engine = (Compilable) new ScriptEngineManager().getEngineByName("javascript");
 
-    static List<Node> allNodes = new ArrayList<>();
-    static List<SensorNode> sensorNodes = new ArrayList<>();
-    static List<ArithmeticalNode> arithmeticalNodes = new ArrayList<>();
-    static List<LogicalNode> logicalNodes = new ArrayList<>();
-    static List<EventNode> eventNodes = new ArrayList<>();
+    public static List<Node> allNodes = new ArrayList<>();
+    public static List<SensorNode> sensorNodes = new ArrayList<>();
+    public static List<ArithmeticalNode> arithmeticalNodes = new ArrayList<>();
+    public static List<LogicalNode> logicalNodes = new ArrayList<>();
+    public static List<EventNode> eventNodes = new ArrayList<>();
 
 
     public static void process() {

@@ -54,19 +54,29 @@ public class Node<T> {
     }
 
 
-    void setInputs(List<Node> inputs) {
+    public void setInputs(List<Node> inputs) {
         this.inputs = inputs;
     }
 
-    T getState() {
+    public T getState() {
         return state;
     }
+    public void setState(T state) {
+        this.state = state;
+    }
 
-    String getId() {
+
+    public String getId() {
         return id;
+    }
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getType() { return type; }
+    public void setType(String type) {
+        this.type = type;
+    }
 
     void eval() {};
 }

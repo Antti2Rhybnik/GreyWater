@@ -6,9 +6,12 @@ import java.util.List;
 
 public class SensorNode extends Node<Double> {
 
-    SensorNode() {
+    Long sensorId;
+
+    public SensorNode() {
         super();
     }
+
 
     SensorNode(List<Node> inputs) {
         super(inputs);
@@ -17,12 +20,21 @@ public class SensorNode extends Node<Double> {
     void eval() {
 
         for (Message m : Message.lastMessages) {
-            if (m.getSensorId().equals(id)) {
+            if (m.getSensorId().equals(sensorId)) {
                 state = m.getSensorValue();
                 break;
             }
         }
 
+    }
+
+
+    public Long getSensorId() {
+        return sensorId;
+    }
+
+    public void setSensorId(Long sensorId) {
+        this.sensorId = sensorId;
     }
 
 }

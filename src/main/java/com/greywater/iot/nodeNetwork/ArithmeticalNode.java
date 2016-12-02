@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ArithmeticalNode extends EvaluableNode<Double> {
 
-    ArithmeticalNode() {
+    public ArithmeticalNode() {
         super();
     }
 
