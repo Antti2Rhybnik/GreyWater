@@ -8,8 +8,11 @@ import com.greywater.iot.persistence.PersistManager;
 import javax.naming.NamingException;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.greywater.iot.nodeNetwork.NodeMaster.allNodes;
 import static com.greywater.iot.nodeNetwork.NodeMaster.sensorNodes;
@@ -213,84 +216,56 @@ public class ConfigManager {
     }
 
 
-    public static List<Node> getNodes() {
+    public static List<SensorNode> getSensorNodes() {
         // тут, допустим, есть код...
         return null;
     }
 
-    private static Object getParameters(String nodeId, Class clazz) {
-
-        try (Connection conn = PersistManager.newConnection()) {
-
-            if (clazz == SensorNode.class) {
-                String sqlQuery = "select * from NEO_77I8IO0F4PQ8TZ67A28RD0L2L.SENSOR_NODES where SN_ID = ?";
-
-                PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
-
-                pstmt.setString(1, nodeId);
-
-                ResultSet resultSet = pstmt.executeQuery();
-
-                if (resultSet.next()) {
-
-                    SensorNode sn = new SensorNode();
-                    sn.setSensorId(resultSet.getLong("SENSOR_ID"));
-
-                    return sn;
-
-                } else {
-                    return new Timestamp(0);
-                }
-
-            }
-
-
-        } catch (SQLException | NamingException e) {
-
-            e.printStackTrace();
-        }
-
+    public static List<ArithmeticalNode> getArithmeticalNodes() {
+        // тут, допустим, есть код...
         return null;
     }
 
 
-    public static void createObjectsFromConfig() {
+    public static List<LogicalNode> getLogicalNodes() {
+        // тут, допустим, есть код...
+        return null;
+    }
 
-        // тут без магии никак
+    private static List<String> getPatentsForNode(String nodeId) {
 
-        List<Node> fromDB = getNodes();
+        return null;
+    }
 
-        for (Node node : fromDB) {
+    private static void constructObjects() {
 
-            switch (node.getType()) {
-                case "sensor_node":
-                    SensorNode sn = new SensorNode();
-                    sn.setId(node.getId());
-                    sn.setType(node.getType());
+        sensorNodes = getSensorNodes();
+        arithmeticalNodes = getArithmeticalNodes();
+        logicalNodes = getLogicalNodes();
 
-                    SensorNode params = (SensorNode) getParameters(sn.getId(), SensorNode.class);
+        List<Node> allNodes = new ArrayList<>();
 
-                    sn.setSensorId(params.getSensorId());
-                    // add to Sensor Stack
+        allNodes.addAll(sensorNodes);
+        allNodes.addAll(arithmeticalNodes);
+        allNodes.addAll(logicalNodes);
 
 
-                    sensorNodes.add(sn);
-                    // add to all nodes
-                    allNodes.add(sn);
-                    break;
-                case "arithmetical_node":
-                    ArithmeticalNode an = new ArithmeticalNode();
-                    // get parameters from database for this node
-                    // ... get id, get type
-                    // set parameters for base class and child class
-                    // ... set id, set type
-                    // add to Arithmetical Stack
-                    arithmeticalNodes.add(an);
-                    // add to all nodes
+        for (Node node: allNodes) {
 
-                default:
-                    break;
+            List<String> parentsIDs = getPatentsForNode(node.getId());
+
+            for (String parentId : parentsIDs) {
+
+                Node nn = allNodes
+                        .stream()
+                        .filter((n -> parentId.equals(n.getId())))
+                        .findFirst()
+                        .get();
+
+                node.addInput(nn);
             }
         }
+
     }
+
 }
