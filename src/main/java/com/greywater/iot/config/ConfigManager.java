@@ -232,7 +232,7 @@ public class ConfigManager {
         return null;
     }
 
-    private static List<String> getPatentsForNode(String nodeId) {
+    private static List<String> getParentsForNode(String nodeId) {
 
         return null;
     }
@@ -252,7 +252,7 @@ public class ConfigManager {
 
         for (Node node: allNodes) {
 
-            List<String> parentsIDs = getPatentsForNode(node.getId());
+            List<String> parentsIDs = getParentsForNode(node.getId());
 
             for (String parentId : parentsIDs) {
 
