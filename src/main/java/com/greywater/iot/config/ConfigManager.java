@@ -208,4 +208,37 @@ public class ConfigManager {
 
         conn.close();
     }
+
+
+//    public static void createObjectsFromConfig() {
+//
+//
+//        for (Pair<String, String> list : listFromDB) {
+//            switch (list.getKey()) {
+//                case "SENSOR_NODE":
+//                    SensorNode sn = new SensorNode();
+//                    // get parameters from database for this node
+//                    // ... get id, get type
+//                    // set parameters for base class and child class
+//                    // ... set id, set type
+//                    // add to Sensor Stack
+//                    sensorNodes.add(sn);
+//                    // add to all nodes
+//                    allNodes.add(sn);
+//                    break;
+//                case "ARITHMETICAL_NODE":
+//                    ArithmeticalNode an = new ArithmeticalNode();
+//                    // get parameters from database for this node
+//                    // ... get id, get type
+//                    // set parameters for base class and child class
+//                    // ... set id, set type
+//                    // add to Arithmetical Stack
+//                    arithmeticalNodes.add(an);
+//                    // add to all nodes
+//                    allNodes.add(an);
+//                default:
+//                    break;
+//            }
+//        }
+//    }
 }
