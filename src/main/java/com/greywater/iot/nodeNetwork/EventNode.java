@@ -27,6 +27,22 @@ public class EventNode extends Node<String> {
         this.inputs = inputs;
     }
 
+    void setImportance(String importance) {
+        this.importance = importance;
+    }
+
+    void setMessage(String message) {
+        this.message = message;
+    }
+
+    String getImportance() {
+        return importance;
+    }
+
+    String getMessage() {
+        return message;
+    }
+
     public void writeEvent(String nodeID, Connection conn) throws SQLException, NamingException {
 
         String sqlQuery = "insert into NEO_77I8IO0F4PQ8TZ67A28RD0L2L.EVENTS_TABLE(ID, EVENT_TIME, EVENT_MESSAGE, EVENT_IMPORTANCE, NODE_ID) values(?,?,?,?,?)";
@@ -45,14 +61,14 @@ public class EventNode extends Node<String> {
         pstmt.setString(3, message);
         pstmt.setString(4, importance);
         pstmt.setString(5, nodeID);
-        
+
         pstmt.executeQuery();
     }
 
     @Override
     void eval() {
         inputs.forEach(node -> {
-            if ((Boolean)node.getState()) {
+            if ((Boolean) node.getState()) {
                 Connection conn = null;
                 try {
                     conn = PersistManager.newConnection();
@@ -60,14 +76,10 @@ public class EventNode extends Node<String> {
                     conn.close();
                 } catch (NamingException e) {
                     e.printStackTrace();
-                }
-                catch (SQLException e) {
+                } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
         });
     }
 }
-
-
-
