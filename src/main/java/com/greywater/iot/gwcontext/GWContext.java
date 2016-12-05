@@ -13,7 +13,7 @@ import java.util.concurrent.*;
  * пулы потоков, списки сенсоров, коннекшны к бд
  */
 
-@WebListener
+
 public class GWContext implements ServletContextListener {
     private static ScheduledExecutorService scheduler;
     private static ScheduledExecutorService handlersScheduler;

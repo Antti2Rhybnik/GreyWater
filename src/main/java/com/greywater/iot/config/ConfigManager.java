@@ -14,11 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.greywater.iot.nodeNetwork.NodeMaster.allNodes;
-import static com.greywater.iot.nodeNetwork.NodeMaster.sensorNodes;
-import static com.greywater.iot.nodeNetwork.NodeMaster.arithmeticalNodes;
-import static com.greywater.iot.nodeNetwork.NodeMaster.logicalNodes;
-import static com.greywater.iot.nodeNetwork.NodeMaster.eventNodes;
+
 
 
 public class ConfigManager {
@@ -227,17 +223,17 @@ public class ConfigManager {
 
             while (resultSet.next()) {
 
-                SensorNode sn = new SensorNode();
+                SensorNode node = new SensorNode();
                 // for Node
-                sn.setId(resultSet.getString("SN_ID"));
-                sn.setType("SENSOR_NODE");
+                node.setId(resultSet.getString("SN_ID"));
+                node.setType("SENSOR_NODE");
 
                 // for SensorNode
-                sn.setSensorType(resultSet.getString("SENSOR_TYPE"));
-                sn.setSensorId(resultSet.getLong("SENSOR_ID"));
+                node.setSensorType(resultSet.getString("SENSOR_TYPE"));
+                node.setSensorId(resultSet.getLong("SENSOR_ID"));
 
 
-                sensorNodes.add(sn);
+                sensorNodes.add(node);
             }
 
         }  catch (SQLException | NamingException e) {
@@ -259,16 +255,16 @@ public class ConfigManager {
 
             while (resultSet.next()) {
 
-                ArithmeticalNode an = new ArithmeticalNode();
+                ArithmeticalNode node = new ArithmeticalNode();
                 // for Node
-                an.setId(resultSet.getString("AN_ID"));
-                an.setType("ARITHMETICAL_NODE");
+                node.setId(resultSet.getString("AN_ID"));
+                node.setType("ARITHMETICAL_NODE");
 
                 // for ArithmeticalNode
-                an.setIntegrable(resultSet.getString("INTEGRABLE").equalsIgnoreCase("true"));
-                an.setExpr(resultSet.getString("EXPR"));
+                node.setIntegrable(resultSet.getString("INTEGRABLE").equalsIgnoreCase("true"));
+                node.setExpr(resultSet.getString("EXPR"));
 
-                arithmeticalNodes.add(an);
+                arithmeticalNodes.add(node);
             }
 
         }  catch (SQLException | NamingException e) {
@@ -276,7 +272,6 @@ public class ConfigManager {
         }
         return arithmeticalNodes;
     }
-
 
     public static List<LogicalNode> getLogicalNodes() {
 
@@ -291,16 +286,16 @@ public class ConfigManager {
 
             while (resultSet.next()) {
 
-                LogicalNode an = new LogicalNode();
+                LogicalNode node = new LogicalNode();
                 // for Node
-                an.setId(resultSet.getString("LN_ID"));
-                an.setType("ARITHMETICAL_NODE");
+                node.setId(resultSet.getString("LN_ID"));
+                node.setType("ARITHMETICAL_NODE");
 
                 // for LogicalNode
-                an.setExpr(resultSet.getString("EXPR"));
+                node.setExpr(resultSet.getString("EXPR"));
 
 
-                logicalNodes.add(an);
+                logicalNodes.add(node);
             }
 
         }  catch (SQLException | NamingException e) {
@@ -309,7 +304,38 @@ public class ConfigManager {
         return logicalNodes;
     }
 
-    private static List<String> getParentsForNode(String nodeId) {
+    public static List<EventNode> getEventNodes() {
+
+        List<EventNode> eventNodes = new ArrayList<>();
+
+        String sqlQuery = "SELECT * FROM EVENT_NODES";
+
+        try (Connection conn = PersistManager.newConnection()) {
+
+            PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
+            ResultSet resultSet = pstmt.executeQuery();
+
+            while (resultSet.next()) {
+
+                EventNode node = new EventNode();
+                // for Node
+                node.setId(resultSet.getString("EN_ID"));
+                node.setType("EVENT_NODE");
+
+                // for EventNode
+                node.setImportance(resultSet.getString("IMPORTANCE"));
+                node.setMessage(resultSet.getString("MESSAGE"));
+
+                eventNodes.add(node);
+            }
+
+        }  catch (SQLException | NamingException e) {
+            e.printStackTrace();
+        }
+        return eventNodes;
+    }
+
+    public static List<String> getParentsForNode(String nodeId) {
 
         List<String> parents = new ArrayList<>();
 
@@ -330,37 +356,6 @@ public class ConfigManager {
             e.printStackTrace();
         }
         return parents;
-    }
-
-    private static void constructObjects() {
-
-        sensorNodes = getSensorNodes();
-        arithmeticalNodes = getArithmeticalNodes();
-        logicalNodes = getLogicalNodes();
-
-        List<Node> allNodes = new ArrayList<>();
-
-        allNodes.addAll(sensorNodes);
-        allNodes.addAll(arithmeticalNodes);
-        allNodes.addAll(logicalNodes);
-
-
-        for (Node node: allNodes) {
-
-            List<String> parentsIDs = getParentsForNode(node.getId());
-
-            for (String parentId : parentsIDs) {
-
-                Node nn = allNodes
-                        .stream()
-                        .filter((n -> parentId.equals(n.getId())))
-                        .findFirst()
-                        .get();
-
-                node.addInput(nn);
-            }
-        }
-
     }
 
 }

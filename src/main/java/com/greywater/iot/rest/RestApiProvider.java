@@ -3,6 +3,7 @@ package com.greywater.iot.rest;
 import com.greywater.iot.config.ConfigManager;
 import com.greywater.iot.gwcontext.GWContext;
 import com.greywater.iot.jpa.*;
+import com.greywater.iot.nodeNetwork.NodeMaster;
 import com.greywater.iot.persistence.PersistManager;
 
 import javax.inject.Singleton;
@@ -143,7 +144,7 @@ public class RestApiProvider {
     @Produces(MediaType.APPLICATION_JSON)
     public Response start() {
 
-        GWContext.init();
+        NodeMaster.init();
         System.out.println("STARTED!!!");
 
         return Response.ok("started").build();

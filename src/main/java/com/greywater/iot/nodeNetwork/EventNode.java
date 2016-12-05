@@ -17,29 +17,24 @@ public class EventNode extends Node<String> {
     private String importance;
     private String message;
 
-    EventNode(List<Node> inputs) {
-        super(inputs);
+    public EventNode() {
+        super();
     }
 
-    EventNode(List<Node> inputs, String importance, String message) {
-        this.importance = importance;
-        this.message = message;
-        this.inputs = inputs;
-    }
 
-    void setImportance(String importance) {
+    public void setImportance(String importance) {
         this.importance = importance;
     }
 
-    void setMessage(String message) {
+    public void setMessage(String message) {
         this.message = message;
     }
 
-    String getImportance() {
+    public String getImportance() {
         return importance;
     }
 
-    String getMessage() {
+    public String getMessage() {
         return message;
     }
 
@@ -65,7 +60,6 @@ public class EventNode extends Node<String> {
         pstmt.executeQuery();
     }
 
-    @Override
     void eval() {
         inputs.forEach(node -> {
             if ((Boolean) node.getState()) {
