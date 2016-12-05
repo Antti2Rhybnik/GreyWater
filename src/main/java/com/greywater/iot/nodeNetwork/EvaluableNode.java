@@ -45,7 +45,9 @@ public class EvaluableNode<T> extends Node<T> {
         return res;
     }
 
-    void eval() {}
+    void eval() {
+
+    }
 
 
 }

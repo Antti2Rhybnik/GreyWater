@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -16,7 +17,7 @@ import com.greywater.iot.jpa.Message;
 
 public class NodeMaster {
 
-    private static ScheduledExecutorService scheduler;
+    private static ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private static List<Node> allNodes = new ArrayList<>();
     private static List<SensorNode> sensorNodes = new ArrayList<>();
     private static List<ArithmeticalNode> arithmeticalNodes = new ArrayList<>();
