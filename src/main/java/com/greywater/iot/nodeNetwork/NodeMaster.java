@@ -11,7 +11,7 @@ import com.greywater.iot.jpa.Message;
 
 public class NodeMaster {
 
-    public static Compilable engine = (Compilable) new ScriptEngineManager().getEngineByName("javascript");
+
 
     public static List<Node> allNodes = new ArrayList<>();
     public static List<SensorNode> sensorNodes = new ArrayList<>();
@@ -23,10 +23,10 @@ public class NodeMaster {
     public static void process() {
 
         Message.updateLastMessages();
-        sensorNodes.forEach(sn -> sn.eval());
-        arithmeticalNodes.forEach(an -> an.eval());
-        logicalNodes.forEach(ln -> ln.eval());
-        eventNodes.forEach(en -> en.eval());
+        sensorNodes.forEach(SensorNode::eval);
+        arithmeticalNodes.forEach(ArithmeticalNode::eval);
+        logicalNodes.forEach(LogicalNode::eval);
+        eventNodes.forEach(EventNode::eval);
 
     }
 

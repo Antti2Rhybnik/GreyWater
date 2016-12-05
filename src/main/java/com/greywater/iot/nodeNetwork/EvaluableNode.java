@@ -6,6 +6,8 @@ import java.util.List;
 
 public class EvaluableNode<T> extends Node<T> {
 
+    private static Compilable engine = (Compilable) new ScriptEngineManager().getEngineByName("javascript");
+
     private CompiledScript cs;
 
     EvaluableNode() {
@@ -17,28 +19,34 @@ public class EvaluableNode<T> extends Node<T> {
 
         try {
 
-            cs = NodeMaster.engine.compile(script);
+            cs = engine.compile(script);
 
-        } catch(ScriptException scrEx)  {
-            scrEx.printStackTrace();
+        } catch(ScriptException e)  {
+            e.printStackTrace();
         }
     }
 
-
-    void eval() {
+    T evaluateScript() {
 
         Bindings bindings = new SimpleBindings();
+        T res = null;
 
         inputs.forEach(node -> {
             bindings.put(node.getId(), node.getState());
         });
 
         try {
-            state = (T) cs.eval(bindings);
+
+            res = (T) cs.eval(bindings);
+
         } catch (ScriptException | ClassCastException e) {
             e.printStackTrace();
         }
+
+        return res;
     }
+
+    void eval() {}
 
 
 }

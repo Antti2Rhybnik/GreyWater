@@ -9,4 +9,8 @@ public class LogicalNode extends EvaluableNode<Boolean> {
     LogicalNode(List<Node> inputs, String script) {
         super(inputs, script);
     }
+
+    public void eval() {
+        state = super.evaluateScript();
+    }
 }

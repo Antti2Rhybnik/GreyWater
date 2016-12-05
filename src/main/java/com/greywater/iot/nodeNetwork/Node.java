@@ -50,6 +50,8 @@ public class Node<T> {
         } catch (SQLException | NamingException e) {
             e.printStackTrace();
         }
+
+
         return null;
     }
 

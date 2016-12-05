@@ -55,7 +55,7 @@ public class Message implements Serializable {
         this.sensorValue = sensorValue;
     }
 
-    //Возвращает лист сообщений, пришедших после Timestamp t
+
     public static void updateLastMessages() {
         lastMessages = new ArrayList<>();
 
@@ -76,8 +76,6 @@ public class Message implements Serializable {
 
                 lastMessages.add(msg);
             }
-
-            conn.close();
 
         }  catch (SQLException | NamingException e) {
             e.printStackTrace();
@@ -132,11 +130,8 @@ public class Message implements Serializable {
             ResultSet resultSet = pstmt.executeQuery();
 
             while (resultSet.next()) {
-
                 res = resultSet.getDouble("SENSOR_VALUE");
             }
-
-            conn.close();
 
             return res;
 

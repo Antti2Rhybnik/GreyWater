@@ -49,8 +49,8 @@ public class EventNode extends Node<String> {
 
         PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
 
-        UUID uid = UUID.fromString("38400000-8cf0-11bd-b23e-10b96e4ef00d");
-        String tableID = uid.randomUUID().toString();
+        //UUID uid = UUID.fromString("38400000-8cf0-11bd-b23e-10b96e4ef00d");
+        String tableID = UUID.randomUUID().toString();
 
         Calendar calendar = Calendar.getInstance();
         Date now = calendar.getTime();
@@ -69,14 +69,12 @@ public class EventNode extends Node<String> {
     void eval() {
         inputs.forEach(node -> {
             if ((Boolean) node.getState()) {
-                Connection conn = null;
-                try {
-                    conn = PersistManager.newConnection();
+
+                try (Connection conn = PersistManager.newConnection()) {
+
                     writeEvent(node.getId(), conn);
-                    conn.close();
-                } catch (NamingException e) {
-                    e.printStackTrace();
-                } catch (SQLException e) {
+
+                } catch (NamingException | SQLException e) {
                     e.printStackTrace();
                 }
             }
