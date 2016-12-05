@@ -7,6 +7,7 @@ import java.util.List;
 public class SensorNode extends Node<Double> {
 
     Long sensorId;
+    String sensorType;
 
     public SensorNode() {
         super();
@@ -37,4 +38,11 @@ public class SensorNode extends Node<Double> {
         this.sensorId = sensorId;
     }
 
+    public String getSensorType() {
+        return sensorType;
+    }
+
+    public void setSensorType(String sensorType) {
+        this.sensorType = sensorType;
+    }
 }

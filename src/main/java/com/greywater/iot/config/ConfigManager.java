@@ -215,24 +215,121 @@ public class ConfigManager {
 
 
     public static List<SensorNode> getSensorNodes() {
-        // тут, допустим, есть код...
-        return null;
+
+        List<SensorNode> sensorNodes = new ArrayList<>();
+
+        String sqlQuery = "SELECT * FROM SENSOR_NODES";
+
+        try (Connection conn = PersistManager.newConnection()) {
+
+            PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
+            ResultSet resultSet = pstmt.executeQuery();
+
+            while (resultSet.next()) {
+
+                SensorNode sn = new SensorNode();
+                // for Node
+                sn.setId(resultSet.getString("SN_ID"));
+                sn.setType("SENSOR_NODE");
+
+                // for SensorNode
+                sn.setSensorType(resultSet.getString("SENSOR_TYPE"));
+                sn.setSensorId(resultSet.getLong("SENSOR_ID"));
+
+
+                sensorNodes.add(sn);
+            }
+
+        }  catch (SQLException | NamingException e) {
+            e.printStackTrace();
+        }
+        return sensorNodes;
     }
 
     public static List<ArithmeticalNode> getArithmeticalNodes() {
-        // тут, допустим, есть код...
-        return null;
+
+        List<ArithmeticalNode> arithmeticalNodes = new ArrayList<>();
+
+        String sqlQuery = "SELECT * FROM ARITHMETICAL_NODES";
+
+        try (Connection conn = PersistManager.newConnection()) {
+
+            PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
+            ResultSet resultSet = pstmt.executeQuery();
+
+            while (resultSet.next()) {
+
+                ArithmeticalNode an = new ArithmeticalNode();
+                // for Node
+                an.setId(resultSet.getString("AN_ID"));
+                an.setType("ARITHMETICAL_NODE");
+
+                // for ArithmeticalNode
+                an.setIntegrable(resultSet.getString("INTEGRABLE").equalsIgnoreCase("true"));
+                an.setExpr(resultSet.getString("EXPR"));
+
+                arithmeticalNodes.add(an);
+            }
+
+        }  catch (SQLException | NamingException e) {
+            e.printStackTrace();
+        }
+        return arithmeticalNodes;
     }
 
 
     public static List<LogicalNode> getLogicalNodes() {
-        // тут, допустим, есть код...
-        return null;
+
+        List<LogicalNode> logicalNodes = new ArrayList<>();
+
+        String sqlQuery = "SELECT * FROM LOGICAL_NODES";
+
+        try (Connection conn = PersistManager.newConnection()) {
+
+            PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
+            ResultSet resultSet = pstmt.executeQuery();
+
+            while (resultSet.next()) {
+
+                LogicalNode an = new LogicalNode();
+                // for Node
+                an.setId(resultSet.getString("LN_ID"));
+                an.setType("ARITHMETICAL_NODE");
+
+                // for LogicalNode
+                an.setExpr(resultSet.getString("EXPR"));
+
+
+                logicalNodes.add(an);
+            }
+
+        }  catch (SQLException | NamingException e) {
+            e.printStackTrace();
+        }
+        return logicalNodes;
     }
 
     private static List<String> getParentsForNode(String nodeId) {
 
-        return null;
+        List<String> parents = new ArrayList<>();
+
+        String sqlQuery = "SELECT * FROM NODE__NODE WHERE CHILD_ID = ?";
+
+        try (Connection conn = PersistManager.newConnection()) {
+
+            PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
+            pstmt.setString(1, nodeId);
+            ResultSet resultSet = pstmt.executeQuery();
+
+            while (resultSet.next()) {
+
+                parents.add(resultSet.getString("PARENT_ID"));
+            }
+
+        }  catch (SQLException | NamingException e) {
+            e.printStackTrace();
+        }
+        return parents;
     }
 
     private static void constructObjects() {

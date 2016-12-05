@@ -14,9 +14,8 @@ public class EvaluableNode<T> extends Node<T> {
         super();
     }
 
-    EvaluableNode(List<Node> inputs, String script) {
-        super(inputs);
 
+    public void setExpr(String script) {
         try {
 
             cs = engine.compile(script);

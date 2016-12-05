@@ -4,11 +4,7 @@ import java.util.List;
 
 public class LogicalNode extends EvaluableNode<Boolean> {
 
-    LogicalNode() { super(); }
-
-    LogicalNode(List<Node> inputs, String script) {
-        super(inputs, script);
-    }
+    public LogicalNode() { super(); }
 
     public void eval() {
         state = super.evaluateScript();

@@ -13,10 +13,6 @@ public class ArithmeticalNode extends EvaluableNode<Double> {
         state = 0.0;
     }
 
-    ArithmeticalNode(List<Node> inputs, String script) {
-        super(inputs, script);
-    }
-
     public void eval() {
 
         Double result = super.evaluateScript();
