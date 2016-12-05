@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ArithmeticalNode extends EvaluableNode<Double> {
 
-    private boolean integrating = false;
+    private boolean integrable = false;
 
 
     public ArithmeticalNode() {
@@ -21,7 +21,7 @@ public class ArithmeticalNode extends EvaluableNode<Double> {
 
         Double result = super.evaluateScript();
 
-        if (integrating) {
+        if (integrable) {
             state += result;
         } else {
             state = result;
@@ -29,12 +29,12 @@ public class ArithmeticalNode extends EvaluableNode<Double> {
     }
 
 
-    public boolean isIntegrating() {
-        return integrating;
+    public boolean isIntegrable() {
+        return integrable;
     }
 
-    public void setIntegrating(boolean integrating) {
-        this.integrating = integrating;
+    public void setIntegrable(boolean integrable) {
+        this.integrable = integrable;
     }
 }
 

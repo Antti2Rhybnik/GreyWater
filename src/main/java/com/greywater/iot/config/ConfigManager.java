@@ -59,7 +59,8 @@ public class ConfigManager {
                     break;
                 case "arithmetical":
                     String arithmExpr = params.get("arithm_expr").asText();
-                    writeArithmeticalNode(nodeID, arithmExpr, conn);
+                    String arithmIntegrable = params.get("arithm_integrable").asText();
+                    writeArithmeticalNode(nodeID, arithmExpr, arithmIntegrable, conn);
                     break;
                 case "logical":
                     String logicExpr = params.get("logic_expr").asText();
@@ -81,7 +82,7 @@ public class ConfigManager {
     }
 
     // SOME HELPFUL METHODS!!1
-    public static void writeNode(String id, String type, Connection conn) throws SQLException, NamingException {
+    private static void writeNode(String id, String type, Connection conn) throws SQLException, NamingException {
 
         String sqlQuery = "insert into NEO_77I8IO0F4PQ8TZ67A28RD0L2L.NODES(NODE_ID, NODE_TYPE) values(?,?)";
 
@@ -102,7 +103,7 @@ public class ConfigManager {
 
     }
 
-    public static void writeRelation(String childId, String parentId, Connection conn) throws SQLException, NamingException {
+    private static void writeRelation(String childId, String parentId, Connection conn) throws SQLException, NamingException {
 
         String sqlQuery = "insert into NEO_77I8IO0F4PQ8TZ67A28RD0L2L.NODE__NODE(CHILD_ID, PARENT_ID) values(?,?)";
 
@@ -123,7 +124,7 @@ public class ConfigManager {
 
     }
 
-    public static void writeSensorNode(String id, String type, Connection conn) throws SQLException, NamingException {
+    private static void writeSensorNode(String id, String type, Connection conn) throws SQLException, NamingException {
 
         String sqlQuery = "insert into NEO_77I8IO0F4PQ8TZ67A28RD0L2L.SENSOR_NODES(SN_ID, SENSOR_TYPE) values(?,?)";
 
@@ -144,16 +145,27 @@ public class ConfigManager {
 
     }
 
-    public static void writeEvaluableNode(String id, String expr, Class clazz, Connection conn) throws SQLException, NamingException {
 
-        String sqlQuery = "";
-        if (clazz == ArithmeticalNode.class) {
-            sqlQuery = "insert into NEO_77I8IO0F4PQ8TZ67A28RD0L2L.ARITHMETICAL_NODES(AN_ID, EXPR) values(?,?)";
-        }
-        else if (clazz == LogicalNode.class) {
-            sqlQuery = "insert into NEO_77I8IO0F4PQ8TZ67A28RD0L2L.LOGICAL_NODES(LN_ID, EXPR) values(?,?)";
-        }
 
+    private static void writeArithmeticalNode(String id, String expr, String integrable, Connection conn) throws SQLException, NamingException {
+        String sqlQuery =  "insert into NEO_77I8IO0F4PQ8TZ67A28RD0L2L.ARITHMETICAL_NODES(AN_ID, EXPR, INTEGRABLE) values(?,?,?)";
+        PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
+
+        pstmt.setString(1, id);
+        pstmt.setString(2, expr);
+        pstmt.setString(3, integrable);
+
+        pstmt.executeQuery();
+    }
+
+    public static void writeArithmeticalNode(String id, String expr, String integrable) throws SQLException, NamingException {
+        Connection conn = PersistManager.newConnection();
+        writeArithmeticalNode(id, expr, integrable, conn);
+        conn.close();
+    }
+
+    private static void writeLogicalNode(String id, String expr, Connection conn) throws SQLException, NamingException {
+        String sqlQuery =  "insert into NEO_77I8IO0F4PQ8TZ67A28RD0L2L.LOGICAL_NODES(LN_ID, EXPR) values(?,?)";
         PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
 
         pstmt.setString(1, id);
@@ -162,27 +174,13 @@ public class ConfigManager {
         pstmt.executeQuery();
     }
 
-    public static void writeArithmeticalNode(String id, String expr, Connection conn) throws SQLException, NamingException {
-        writeEvaluableNode(id, expr, ArithmeticalNode.class, conn);
-    }
-
-    public static void writeArithmeticalNode(String id, String expr) throws SQLException, NamingException {
-        Connection conn = PersistManager.newConnection();
-        writeEvaluableNode(id, expr, ArithmeticalNode.class, conn);
-        conn.close();
-    }
-
-    public static void writeLogicalNode(String id, String expr, Connection conn) throws SQLException, NamingException {
-        writeEvaluableNode(id, expr, LogicalNode.class, conn);
-    }
-
     public static void writeLogicalNode(String id, String expr) throws SQLException, NamingException {
         Connection conn = PersistManager.newConnection();
-        writeEvaluableNode(id, expr, LogicalNode.class, conn);
+        writeLogicalNode(id, expr, conn);
         conn.close();
     }
 
-    public static void writeEventNode(String id, String importance, String msg, Connection conn) throws SQLException, NamingException {
+    private static void writeEventNode(String id, String importance, String msg, Connection conn) throws SQLException, NamingException {
 
         String sqlQuery = "insert into NEO_77I8IO0F4PQ8TZ67A28RD0L2L.EVENT_NODES(EN_ID, IMPORTANCE, MESSAGE) values(?,?,?)";
 
