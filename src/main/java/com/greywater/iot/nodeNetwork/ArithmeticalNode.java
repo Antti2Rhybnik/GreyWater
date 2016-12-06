@@ -22,6 +22,9 @@ public class ArithmeticalNode extends EvaluableNode<Double> {
         } else {
             state = result;
         }
+
+        System.out.println("ArithmeticalNode: " + state);
+
     }
 
 

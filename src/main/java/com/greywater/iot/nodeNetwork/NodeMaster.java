@@ -20,7 +20,7 @@ public class NodeMaster {
     private static ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private static List<Node> allNodes = new ArrayList<>();
     private static List<SensorNode> sensorNodes = new ArrayList<>();
-    private static List<ArithmeticalNode> arithmeticalNodes = new ArrayList<>();
+    public static List<ArithmeticalNode> arithmeticalNodes = new ArrayList<>();
     private static List<LogicalNode> logicalNodes = new ArrayList<>();
     private static List<EventNode> eventNodes = new ArrayList<>();
 
@@ -37,7 +37,39 @@ public class NodeMaster {
 
 
     public static void init() {
-        constructObjects();
+
+        //constructObjects();
+
+        SensorNode sn = new SensorNode();
+        sn.setSensorId(1L);
+        sn.setId("_1");
+        sn.setType("sensor");
+        sn.setSensorType("WATERFLOW");
+        sensorNodes.add(sn);
+
+        ArithmeticalNode an = new ArithmeticalNode();
+        an.setId("_2");
+        an.setType("arithmetical");
+        an.addInput(sn);
+        an.setExpr("_1");
+        an.setIntegrable(true);
+        arithmeticalNodes.add(an);
+
+        LogicalNode ln = new LogicalNode();
+        ln.setId("_3");
+        ln.setType("logical");
+        ln.addInput(an);
+        ln.setExpr("_2 > 100");
+        logicalNodes.add(ln);
+
+        EventNode en = new EventNode();
+        en.setId("_4");
+        en.setMessage("vse ploho");
+        en.setImportance("1");
+        en.addInput(ln);
+        eventNodes.add(en);
+
+
 
         scheduler.schedule(NodeMaster::process, 10, TimeUnit.SECONDS);
     }

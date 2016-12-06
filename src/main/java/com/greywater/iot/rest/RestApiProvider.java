@@ -3,6 +3,7 @@ package com.greywater.iot.rest;
 import com.greywater.iot.config.ConfigManager;
 import com.greywater.iot.gwcontext.GWContext;
 import com.greywater.iot.jpa.*;
+import com.greywater.iot.nodeNetwork.ArithmeticalNode;
 import com.greywater.iot.nodeNetwork.NodeMaster;
 import com.greywater.iot.persistence.PersistManager;
 
@@ -84,48 +85,35 @@ public class RestApiProvider {
 
 
 
-    @GET
-    @Path("test")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getTestString() throws ScriptException {
-        Compilable enigine = (Compilable) new ScriptEngineManager().getEngineByName("javascript");
-        CompiledScript compiledScript = enigine.compile("greetings from javascript");
 
-        return compiledScript.eval().toString();
+
+
+    @GET
+    @Path("sensorValues")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Message> getSensorValues(@QueryParam("id") Long id, @QueryParam("limit") Integer limit) {
+
+        return Message.getMessages(id, limit);
     }
 
 
+
     @GET
-    @Path("sensorEvents")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getSensorEvents(@QueryParam("id") String id, @QueryParam("limit") Integer limit) {
+    @Path("getNodeState")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getNodeState(@QueryParam("id") String id) {
 
-        List<Event> messages = new ArrayList<>();
-
-        try {
-
-            EntityManager em = PersistManager.newEntityManager();
-            TypedQuery<Event> query = em.createNamedQuery("Event.getLastNEvents", Event.class);
-            query.setParameter("1", id);
-            query.setParameter("2", limit);
-            messages = query.getResultList();
-            em.close();
-
-        } catch (Exception e) {
-            System.err.println("Exception");
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        String state = "";
+        for (ArithmeticalNode an: NodeMaster.arithmeticalNodes) {
+            if (an.getId().equals(id)) {
+                state = an.getState().toString();
+            }
         }
 
-        return Response.ok(messages).build();
+        return state;
     }
 
-    @GET
-    @Path("aggregationTypes")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String getAggregationTypes() {
 
-        return "[{\"aggregation\" : \"redirect\"}, {\"aggregation\": \"multiply\"}]";
-    }
 
 
     @GET

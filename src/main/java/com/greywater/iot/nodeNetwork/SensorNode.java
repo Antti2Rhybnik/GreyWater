@@ -27,6 +27,8 @@ public class SensorNode extends Node<Double> {
             }
         }
 
+        System.out.println("SensorNode: " + state);
+
     }
 
 

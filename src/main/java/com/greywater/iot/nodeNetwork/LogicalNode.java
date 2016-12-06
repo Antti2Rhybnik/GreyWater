@@ -8,5 +8,7 @@ public class LogicalNode extends EvaluableNode<Boolean> {
 
     public void eval() {
         state = super.evaluateScript();
+
+        System.out.println("LogicalNode: " + state);
     }
 }

@@ -5,6 +5,7 @@ import com.greywater.iot.persistence.PersistManager;
 import javax.naming.NamingException;
 import javax.xml.bind.annotation.DomHandler;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.rpc.holders.IntegerWrapperHolder;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -55,6 +56,37 @@ public class Message implements Serializable {
         this.sensorValue = sensorValue;
     }
 
+    public static List<Message> getMessages(Long id, Integer limit) {
+        List<Message> messages = new ArrayList<>();
+
+        String sqlQuery = "SELECT * FROM MESSAGES_TABLE WHERE SENSOR_ID = ? ORDER BY G_CREATED DESC LIMIT ?";
+
+        try (Connection conn = PersistManager.newConnection()) {
+
+            PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
+
+            pstmt.setLong(1, id);
+            pstmt.setInt(2, limit);
+
+            ResultSet resultSet = pstmt.executeQuery();
+
+            while (resultSet.next()) {
+
+                Message msg = new Message();
+                msg.setgDevice(resultSet.getString("G_DEVICE"));
+                msg.setgCreated(resultSet.getDate("G_CREATED"));
+                msg.setSensorId(resultSet.getLong("SENSOR_ID"));
+                msg.setSensorValue(resultSet.getDouble("SENSOR_VALUE"));
+
+                messages.add(msg);
+            }
+
+        }  catch (SQLException | NamingException e) {
+            e.printStackTrace();
+        }
+
+        return messages;
+    }
 
     public static void updateLastMessages() {
         lastMessages = new ArrayList<>();
