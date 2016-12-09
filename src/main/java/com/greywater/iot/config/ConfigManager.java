@@ -87,7 +87,7 @@ public class ConfigManager {
         pstmt.setString(1, id);
         pstmt.setString(2, type);
 
-        pstmt.executeQuery();
+        pstmt.execute();
 
     }
 
