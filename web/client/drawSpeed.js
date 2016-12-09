@@ -10,10 +10,13 @@ function initGraphics()
 
 	function drawGauge() {
 		gaugeData = new google.visualization.DataTable();
-		gaugeData.addColumn('number', 'Engine');
-		gaugeData.addColumn('number', 'Torpedo');
+		gaugeData.addColumn('number', 'Light');
+		gaugeData.addColumn('number', 'Water');
+		gaugeData.addColumn('number', 'Something else');
 		gaugeData.addRows(1);
 		gaugeData.setCell(0, 0, 120);
+		gaugeData.setCell(0, 1, 120);
+		gaugeData.setCell(0, 2, 120);
 
 		gauge = new google.visualization.Gauge(document.getElementById('gauge_div'));
 		gauge.draw(gaugeData, gaugeOptions)
@@ -84,23 +87,26 @@ function changeTemp(dir) {
 }
 
 function updateSpeed(){
-	var xhr = new XMLHttpRequest();
-    var file;
 
-    xhr.open("GET", "/GreyWater/rest/api/getNodeState?id=_2", true);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState != 4) return;
+	for (var i = 0; i < 3; ++i){
+		var xhr = new XMLHttpRequest();
+	    var file;
 
-        file = xhr.responseText;
-     	var myData = parseFloat(file*1000);
+	    xhr.open("GET", "/GreyWater/rest/api/getNodeState?id=_" + i, true);
+	    xhr.onreadystatechange = function () {
+	        if (xhr.readyState != 4) return;
 
-     	console.log(myData);
-     	gaugeData.setValue(0, 0, myData);
+	        file = xhr.responseText;
+	     	var myData = parseFloat(file*1000);
 
-		gauge.draw(gaugeData, gaugeOptions);
-    }
+	     	console.log(myData);
+	     	gaugeData.setValue(0, i, myData);
 
-    xhr.send();
+			gauge.draw(gaugeData, gaugeOptions);
+	    }
+
+	    xhr.send();
+	}
 }
 
 setInterval(updateSpeed, 1000);
