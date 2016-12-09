@@ -71,7 +71,7 @@ public class NodeMaster {
 
 
 
-        scheduler.schedule(NodeMaster::process, 10, TimeUnit.SECONDS);
+        scheduler.schedule(NodeMaster::process, 3, TimeUnit.SECONDS);
     }
 
     private static void constructObjects() {

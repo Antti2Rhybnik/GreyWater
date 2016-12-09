@@ -108,7 +108,7 @@ public class ConfigManager {
         pstmt.setString(1, childId);
         pstmt.setString(2, parentId);
 
-        pstmt.executeQuery();
+        pstmt.execute();
 
     }
 
@@ -129,7 +129,7 @@ public class ConfigManager {
         pstmt.setString(1, id);
         pstmt.setString(2, type);
 
-        pstmt.executeQuery();
+        pstmt.execute();
 
     }
 
@@ -151,7 +151,7 @@ public class ConfigManager {
         pstmt.setString(2, expr);
         pstmt.setString(3, integrable);
 
-        pstmt.executeQuery();
+        pstmt.execute();
     }
 
     public static void writeArithmeticalNode(String id, String expr, String integrable) throws SQLException, NamingException {
@@ -167,7 +167,7 @@ public class ConfigManager {
         pstmt.setString(1, id);
         pstmt.setString(2, expr);
 
-        pstmt.executeQuery();
+        pstmt.execute();
     }
 
     public static void writeLogicalNode(String id, String expr) throws SQLException, NamingException {
@@ -186,7 +186,7 @@ public class ConfigManager {
         pstmt.setString(2, importance);
         pstmt.setString(2, msg);
 
-        pstmt.executeQuery();
+        pstmt.execute();
     }
 
     public static void writeEventNode(String id, String importance, String msg) throws SQLException, NamingException {

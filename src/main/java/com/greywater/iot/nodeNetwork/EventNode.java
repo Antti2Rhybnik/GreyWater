@@ -57,7 +57,7 @@ public class EventNode extends Node<String> {
         pstmt.setString(4, importance);
         pstmt.setString(5, nodeID);
 
-        pstmt.executeQuery();
+        pstmt.execute();
     }
 
     void eval() {
@@ -66,7 +66,7 @@ public class EventNode extends Node<String> {
 
                 try (Connection conn = PersistManager.newConnection()) {
 
-                    writeEvent(node.getId(), conn);
+                   // writeEvent(node.getId(), conn);
 
                 } catch (NamingException | SQLException e) {
                     e.printStackTrace();
