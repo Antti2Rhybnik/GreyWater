@@ -88,11 +88,11 @@ function changeTemp(dir) {
 
 function updateSpeed(){
 
-	for (var i = 0; i < 3; ++i){
+
 		var xhr = new XMLHttpRequest();
 	    var file;
 
-	    xhr.open("GET", "/GreyWater/rest/api/getNodeState?id=_" + i, true);
+	    xhr.open("GET", "/GreyWater/rest/api/getNodeState?id=_" + 1, true);
 	    xhr.onreadystatechange = function () {
 	        if (xhr.readyState != 4) return;
 
@@ -100,13 +100,28 @@ function updateSpeed(){
 	     	var myData = parseFloat(file*1000);
 
 	     	console.log(myData);
-	     	gaugeData.setValue(0, i, myData);
+	     	gaugeData.setValue(0, 1, myData);
 
 			gauge.draw(gaugeData, gaugeOptions);
-	    }
+	    };
 
 	    xhr.send();
-	}
+	xhr = new XMLHttpRequest();
+	xhr.open("GET", "/GreyWater/rest/api/getNodeState?id=_" + 6, true);
+	xhr.onreadystatechange = function () {
+		if (xhr.readyState != 4) return;
+
+		file = xhr.responseText;
+		var myData = parseFloat(file*1000);
+
+		console.log(myData);
+		gaugeData.setValue(0, 		6, myData);
+
+		gauge.draw(gaugeData, gaugeOptions);
+	};
+
+	xhr.send();
+
 }
 
 setInterval(updateSpeed, 1000);

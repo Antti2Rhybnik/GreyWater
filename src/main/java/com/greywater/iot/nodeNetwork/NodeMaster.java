@@ -39,7 +39,7 @@ public class NodeMaster {
     public static void init() {
 
         //constructObjects();
-
+//Waterflow
         SensorNode sn = new SensorNode();
         sn.setSensorId(1L);
         sn.setId("_1");
@@ -59,7 +59,7 @@ public class NodeMaster {
         ln.setId("_3");
         ln.setType("logical");
         ln.addInput(an);
-        ln.setExpr("_2 > 100");
+        ln.setExpr("_2 > 300");
         logicalNodes.add(ln);
 
         EventNode en = new EventNode();
@@ -69,9 +69,23 @@ public class NodeMaster {
         en.addInput(ln);
         eventNodes.add(en);
 
+        //LightSensor
+        SensorNode lightSensor = new SensorNode();
+        lightSensor.setSensorId(2L);
+        lightSensor.setId("_5");
+        lightSensor.setType("sensor");
+        lightSensor.setSensorType("Light");
+        sensorNodes.add(lightSensor);
+
+        ArithmeticalNode arithmeticalLightNode = new ArithmeticalNode();
+        arithmeticalLightNode.setId("_6");
+        arithmeticalLightNode.setType("arithmetical");
+        arithmeticalLightNode.addInput(lightSensor);
+        arithmeticalLightNode.setExpr("_5");
+        arithmeticalNodes.add(arithmeticalLightNode);
 
 
-        scheduler.schedule(NodeMaster::process, 3, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(NodeMaster::process,0, 3, TimeUnit.SECONDS);
     }
 
     private static void constructObjects() {

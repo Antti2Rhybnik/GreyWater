@@ -12,7 +12,7 @@ import javax.servlet.annotation.WebListener;
 @WebListener
 public class AppInit implements ServletContextListener {
     public void contextInitialized(ServletContextEvent event) {
-        NodeMaster.init();
+        //NodeMaster.init();
         System.out.println("STARTED!!!");
     }
 
