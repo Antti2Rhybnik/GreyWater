@@ -8,10 +8,7 @@ import com.greywater.iot.persistence.PersistManager;
 import javax.naming.NamingException;
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -34,11 +31,20 @@ public class ConfigManager {
 
             String nodeID = jsonNode.get("node_id").asText();
             String nodeType = jsonNode.get("node_type").asText();
+
             // filling NODES table
             writeNode(nodeID, nodeType, conn);
 
             // filling NODE__NODE table
-            List<String> parentIDs = Arrays.asList(mapper.readValue(jsonNode.get("parents").textValue(), String[].class));
+            List<String> parentIDs = new ArrayList<String>();
+            final JsonNode arrNode = jsonNode.get("parents");
+            if (arrNode.isArray()) {
+                for (final JsonNode objNode : arrNode) {
+                    System.out.println(objNode.toString());
+                    parentIDs.add(objNode.toString());
+                }
+            }
+
             for (String parentId: parentIDs) {
                 writeRelation(nodeID, parentId, conn);
             }
@@ -101,12 +107,15 @@ public class ConfigManager {
 
     private static void writeRelation(String childId, String parentId, Connection conn) throws SQLException, NamingException {
 
-        String sqlQuery = "insert into NEO_77I8IO0F4PQ8TZ67A28RD0L2L.NODE__NODE(CHILD_ID, PARENT_ID) values(?,?)";
+        String sqlQuery = "insert into NEO_77I8IO0F4PQ8TZ67A28RD0L2L.NODE__NODE(RECORD_ID, CHILD_ID, PARENT_ID) values(?,?,?)";
 
         PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
 
-        pstmt.setString(1, childId);
-        pstmt.setString(2, parentId);
+        String recordId = UUID.randomUUID().toString();
+
+        pstmt.setString(1, recordId);
+        pstmt.setString(2, childId);
+        pstmt.setString(3, parentId);
 
         pstmt.execute();
 
