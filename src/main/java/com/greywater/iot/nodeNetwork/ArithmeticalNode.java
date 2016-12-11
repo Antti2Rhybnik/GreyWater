@@ -2,17 +2,39 @@ package com.greywater.iot.nodeNetwork;
 
 import java.util.List;
 
-/**
- * Created by alexander on 28.11.16.
- */
-class ArithmeticalNode extends EvaluableNode<Double> {
 
-    ArithmeticalNode() {
+public class ArithmeticalNode extends EvaluableNode<Double> {
+
+    private boolean integrable = false;
+
+
+    public ArithmeticalNode() {
         super();
+        state = 0.0;
     }
 
-    ArithmeticalNode(List<Node> inputs, String script) {
-        super(inputs, script);
+    // eval method should update state
+    public void eval() {
+
+        Double result = super.evaluateScript();
+
+        if (integrable) {
+            state += result;
+        } else {
+            state = result;
+        }
+
+        System.out.println("ArithmeticalNode: " + state);
+
+    }
+
+
+    public boolean isIntegrable() {
+        return integrable;
+    }
+
+    public void setIntegrable(boolean integrable) {
+        this.integrable = integrable;
     }
 }
 
