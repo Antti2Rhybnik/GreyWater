@@ -32,8 +32,9 @@ public class ConfigManager {
 
         Connection conn = PersistManager.newConnection();
 
+        int count = 0;
+
         for (JsonNode jsonNode: nodes) {
-            int count = 0;
 
             String nodeID = jsonNode.get("node_id").asText();
             String nodeType = jsonNode.get("node_type").asText();
@@ -89,6 +90,7 @@ public class ConfigManager {
                 default: break;
             }
             ++count;
+
         } // end for
 
         conn.close();
