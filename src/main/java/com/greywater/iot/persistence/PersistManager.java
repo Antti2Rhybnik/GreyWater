@@ -26,14 +26,20 @@ public class PersistManager {
         return emf.createEntityManager();
     }
 
-    public static Connection newConnection() throws SQLException, NamingException {
+    public static Connection newConnection() throws SQLException {
 
-        if (dataSource == null || ctx == null) {
-            ctx = new InitialContext();
-            dataSource = (DataSource) ctx.lookup("java:comp/env/jdbc/DefaultDB");
+        try {
+
+            if (dataSource == null || ctx == null) {
+                ctx = new InitialContext();
+                dataSource = (DataSource) ctx.lookup("java:comp/env/jdbc/DefaultDB");
+            }
+
+            return dataSource.getConnection();
+
+        } catch (NamingException e) {
+            throw new SQLException("wrong lookup for java:comp/env/jdbc/DefaultDB", e);
         }
-
-        return dataSource.getConnection();
     }
 
 }

@@ -81,7 +81,7 @@ public class Message implements Serializable {
                 messages.add(msg);
             }
 
-        }  catch (SQLException | NamingException e) {
+        }  catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -109,7 +109,7 @@ public class Message implements Serializable {
                 lastMessages.add(msg);
             }
 
-        }  catch (SQLException | NamingException e) {
+        }  catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -131,7 +131,7 @@ public class Message implements Serializable {
                 return new Timestamp(0);
             }
 
-        } catch (SQLException | NamingException ex) {
+        } catch (SQLException ex) {
 
             return new Timestamp(0);
         }
@@ -167,7 +167,7 @@ public class Message implements Serializable {
 
             return res;
 
-        } catch (SQLException | NamingException e) {
+        } catch (SQLException e) {
 
             e.printStackTrace();
             return res;

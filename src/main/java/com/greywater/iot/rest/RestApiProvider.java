@@ -1,6 +1,7 @@
 package com.greywater.iot.rest;
 
 import com.greywater.iot.config.ConfigManager;
+import com.greywater.iot.config.SaveConfigException;
 import com.greywater.iot.gwcontext.GWContext;
 import com.greywater.iot.jpa.*;
 import com.greywater.iot.nodeNetwork.ArithmeticalNode;
@@ -74,9 +75,9 @@ public class RestApiProvider {
 
         try {
             ConfigManager.saveConfig(config);
-        } catch (IOException | SQLException | NamingException e) {
+        } catch (SaveConfigException e) {
             e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            return Response.ok(e.getMessage()).status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
 
         System.out.println("saveNodeConfig end");

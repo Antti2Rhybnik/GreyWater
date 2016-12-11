@@ -68,7 +68,7 @@ public class EventNode extends Node<String> {
 
                    // writeEvent(node.getId(), conn);
 
-                } catch (NamingException | SQLException e) {
+                } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }

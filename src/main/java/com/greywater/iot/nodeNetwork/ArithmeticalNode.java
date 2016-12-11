@@ -13,6 +13,7 @@ public class ArithmeticalNode extends EvaluableNode<Double> {
         state = 0.0;
     }
 
+    // eval method should update state
     public void eval() {
 
         Double result = super.evaluateScript();

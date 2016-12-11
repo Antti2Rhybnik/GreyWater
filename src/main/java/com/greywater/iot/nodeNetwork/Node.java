@@ -36,18 +36,20 @@ public class Node<T> {
         }
     }
     
-    public static String getTypeFromDb(String id){
+    public static String getTypeFromDb(String id) {
         
         String sqlQuery = "SELECT NODE_TYPE FROM NODES WHERE NODE_ID = ?";
-        try(Connection conn = PersistManager.newConnection()) {
-            PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
+        try(Connection conn = PersistManager.newConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sqlQuery)) {
+
             pstmt.setString(1, id);
             ResultSet resultSet = pstmt.executeQuery();
+
             if (resultSet.next()) {
-                pstmt.close();
                 return resultSet.getString(0);
             }
-        } catch (SQLException | NamingException e) {
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
