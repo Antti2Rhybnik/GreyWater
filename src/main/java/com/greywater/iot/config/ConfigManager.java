@@ -33,6 +33,7 @@ public class ConfigManager {
         Connection conn = PersistManager.newConnection();
 
         for (JsonNode jsonNode: nodes) {
+            int count = 0;
 
             String nodeID = jsonNode.get("node_id").asText();
             String nodeType = jsonNode.get("node_type").asText();
@@ -62,7 +63,7 @@ public class ConfigManager {
                 e.printStackTrace();
             }
             JSONArray obj_arr = (JSONArray) obj_parsed;
-            JSONObject obj = (JSONObject) obj_arr.get(0);
+            JSONObject obj = (JSONObject) obj_arr.get(count);
             JSONObject params = (JSONObject) obj.get("parameters");
             switch (nodeType) {
 
@@ -87,7 +88,7 @@ public class ConfigManager {
 
                 default: break;
             }
-
+            ++count;
         } // end for
 
         conn.close();
