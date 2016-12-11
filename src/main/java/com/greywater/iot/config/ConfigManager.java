@@ -4,6 +4,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.greywater.iot.nodeNetwork.*;
 import com.greywater.iot.persistence.PersistManager;
+import org.eclipse.persistence.sessions.serializers.JSONSerializer;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import javax.naming.NamingException;
 import java.io.IOException;
@@ -40,37 +45,43 @@ public class ConfigManager {
             final JsonNode arrNode = jsonNode.get("parents");
             if (arrNode.isArray()) {
                 for (final JsonNode objNode : arrNode) {
-                    System.out.println(objNode.toString());
                     parentIDs.add(objNode.toString());
                 }
             }
 
             for (String parentId: parentIDs) {
-                writeRelation(nodeID, parentId, conn);
+                writeRelation(nodeID, parentId.substring(1,parentId.length()-1), conn);
             }
 
             // filling other
-            JsonNode params = mapper.readValue(jsonNode.get("parameters").textValue(), JsonNode.class);
-
-
+            JSONParser parser = new JSONParser();
+            Object obj_parsed = null;
+            try {
+                obj_parsed = parser.parse(config);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            JSONArray obj_arr = (JSONArray) obj_parsed;
+            JSONObject obj = (JSONObject) obj_arr.get(0);
+            JSONObject params = (JSONObject) obj.get("parameters");
             switch (nodeType) {
 
                 case "sensor":
-                    String sensorType = params.get("sensor_type").asText();
+                    String sensorType = (String)params.get("sensor_type");
                     writeSensorNode(nodeID, sensorType, conn);
                     break;
                 case "arithmetical":
-                    String arithmExpr = params.get("arithm_expr").asText();
-                    String arithmIntegrable = params.get("arithm_integrable").asText();
+                    String arithmExpr = (String)params.get("arithm_expr");
+                    String arithmIntegrable = (String)params.get("arithm_integrable");
                     writeArithmeticalNode(nodeID, arithmExpr, arithmIntegrable, conn);
                     break;
                 case "logical":
-                    String logicExpr = params.get("logic_expr").asText();
+                    String logicExpr = (String)params.get("logic_expr");
                     writeLogicalNode(nodeID, logicExpr, conn);
                     break;
                 case "event":
-                    String importance = params.get("event_importance").asText();
-                    String msg = params.get("event_msg").asText();
+                    String importance = (String)params.get("event_importance");
+                    String msg = (String)params.get("event_msg");
                     writeEventNode(nodeID, importance, msg, conn);
                     break;
 
