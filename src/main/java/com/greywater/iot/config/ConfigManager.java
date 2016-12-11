@@ -40,7 +40,7 @@ public class ConfigManager {
                 System.out.println("parsed node_type: " + nodeType);//DBG
 
                 // filling NODES table
-                //writeNode(nodeID, nodeType, conn);
+                writeNode(nodeID, nodeType, conn);
 
                 // filling NODE__NODE table
                 if (!jsonNode.hasNonNull("parents")) {
@@ -65,34 +65,34 @@ public class ConfigManager {
                 switch (nodeType) {
 
                     case "sensor":
-                        if (!jsonNode.hasNonNull("sensor_type")) throw new SaveConfigException("Incorrect format. Missing or Null field 'sensor_type' for node type '" + nodeType +"'" );
+                        if (!params.hasNonNull("sensor_type")) throw new SaveConfigException("Incorrect format. Missing or Null field 'sensor_type' for node type '" + nodeType +"'" );
                         String sensorType = params.get("sensor_type").asText();
                         System.out.println("parsed sensor_type: " + sensorType);//DBG
-                        //writeSensorNode(nodeID, sensorType, conn);
+                        writeSensorNode(nodeID, sensorType, conn);
                         break;
                     case "arithmetical":
-                        if (!jsonNode.hasNonNull("arithm_expr")) throw new SaveConfigException("Incorrect format. Missing or Null field 'arithm_expr' for node type '" + nodeType +"'" );
+                        if (!params.hasNonNull("arithm_expr")) throw new SaveConfigException("Incorrect format. Missing or Null field 'arithm_expr' for node type '" + nodeType +"'" );
                         String arithmExpr = params.get("arithm_expr").asText();
                         System.out.println("parsed arithm_expr: " + arithmExpr);//DBG
-                        if (!jsonNode.hasNonNull("arithm_integrable")) throw new SaveConfigException("Incorrect format. Missing or Null field 'arithm_integrable' for node type '" + nodeType +"'" );
+                        if (!params.hasNonNull("arithm_integrable")) throw new SaveConfigException("Incorrect format. Missing or Null field 'arithm_integrable' for node type '" + nodeType +"'" );
                         String arithmIntegrable = params.get("arithm_integrable").asText();
                         System.out.println("parsed arithm_integrable: " + arithmIntegrable);//DBG
-                        //writeArithmeticalNode(nodeID, arithmExpr, arithmIntegrable, conn);
+                        writeArithmeticalNode(nodeID, arithmExpr, arithmIntegrable, conn);
                         break;
                     case "logical":
-                        if (!jsonNode.hasNonNull("logic_expr")) throw new SaveConfigException("Incorrect format. Missing or Null field 'logic_expr' for node type '" + nodeType +"'" );
+                        if (!params.hasNonNull("logic_expr")) throw new SaveConfigException("Incorrect format. Missing or Null field 'logic_expr' for node type '" + nodeType +"'" );
                         String logicExpr = params.get("logic_expr").asText();
                         System.out.println("parsed logic_expr: " + logicExpr);//DBG
-                        //writeLogicalNode(nodeID, logicExpr, conn);
+                        writeLogicalNode(nodeID, logicExpr, conn);
                         break;
                     case "event":
-                        if (!jsonNode.hasNonNull("event_importance")) throw new SaveConfigException("Incorrect format. Missing or Null field 'event_importance' for node type '" + nodeType +"'" );
+                        if (!params.hasNonNull("event_importance")) throw new SaveConfigException("Incorrect format. Missing or Null field 'event_importance' for node type '" + nodeType +"'" );
                         String importance = params.get("event_importance").asText();
                         System.out.println("parsed event_importance: " + importance);//DBG
-                        if (!jsonNode.hasNonNull("event_msg")) throw new SaveConfigException("Incorrect format. Missing or Null field 'event_msg' for node type '" + nodeType +"'" );
+                        if (!params.hasNonNull("event_msg")) throw new SaveConfigException("Incorrect format. Missing or Null field 'event_msg' for node type '" + nodeType +"'" );
                         String msg = params.get("event_msg").asText();
                         System.out.println("parsed event_msg: " + msg);//DBG
-                        //writeEventNode(nodeID, importance, msg, conn);
+                        writeEventNode(nodeID, importance, msg, conn);
                         break;
 
                     default:
