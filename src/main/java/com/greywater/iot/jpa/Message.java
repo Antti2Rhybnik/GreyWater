@@ -3,7 +3,9 @@ package com.greywater.iot.jpa;
 import com.greywater.iot.persistence.PersistManager;
 
 import javax.naming.NamingException;
+import javax.xml.bind.annotation.DomHandler;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.rpc.holders.IntegerWrapperHolder;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -21,8 +23,10 @@ public class Message implements Serializable {
 
     private String gDevice;
     private Date gCreated;
-    private String sensorId;
+    private Long sensorId;
     private Double sensorValue;
+
+    public static List<Message> lastMessages;
 
     public String getgDevice() {
         return gDevice;
@@ -36,11 +40,11 @@ public class Message implements Serializable {
         this.gCreated = gCreated;
     }
 
-    public String getSensorId() {
+    public Long getSensorId() {
         return sensorId;
     }
 
-    public void setSensorId(String sensorId) {
+    public void setSensorId(Long sensorId) {
         this.sensorId = sensorId;
     }
 
@@ -52,30 +56,62 @@ public class Message implements Serializable {
         this.sensorValue = sensorValue;
     }
 
-    //Возвращает лист сообщений, пришедших после Timestamp t
-    public static List<Message> getAfterTime(Timestamp t) throws SQLException, NamingException {
-        List<Message> msgList = new ArrayList<>();
+    public static List<Message> getMessages(Long id, Integer limit) {
+        List<Message> messages = new ArrayList<>();
 
-        String sqlQuery = "SELECT * FROM MESSAGES_TABLE WHERE G_CREATED > ?";
+        String sqlQuery = "SELECT * FROM MESSAGES_TABLE WHERE SENSOR_ID = ? ORDER BY G_CREATED DESC LIMIT ?";
 
-        Connection conn = PersistManager.newConnection();
-        PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
-        pstmt.setTimestamp(1, t);
-        ResultSet resultSet = pstmt.executeQuery();
+        try (Connection conn = PersistManager.newConnection()) {
 
-        while (resultSet.next()) {
+            PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
 
-            Message msg = new Message();
-            msg.setgDevice(resultSet.getString("G_DEVICE"));
-            msg.setgCreated(resultSet.getDate("G_CREATED"));
-            msg.setSensorId(resultSet.getString("SENSOR_ID"));
-            msg.setSensorValue(resultSet.getDouble("SENSOR_VALUE"));
+            pstmt.setLong(1, id);
+            pstmt.setInt(2, limit);
 
-            msgList.add(msg);
+            ResultSet resultSet = pstmt.executeQuery();
+
+            while (resultSet.next()) {
+
+                Message msg = new Message();
+                msg.setgDevice(resultSet.getString("G_DEVICE"));
+                msg.setgCreated(resultSet.getDate("G_CREATED"));
+                msg.setSensorId(resultSet.getLong("SENSOR_ID"));
+                msg.setSensorValue(resultSet.getDouble("SENSOR_VALUE"));
+
+                messages.add(msg);
+            }
+
+        }  catch (SQLException e) {
+            e.printStackTrace();
         }
 
-        conn.close();
-        return msgList;
+        return messages;
+    }
+
+    public static void updateLastMessages() {
+        lastMessages = new ArrayList<>();
+
+        String sqlQuery = "SELECT * FROM MESSAGES_TABLE ORDER BY G_CREATED DESC LIMIT 50";
+
+        try (Connection conn = PersistManager.newConnection()) {
+
+            PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
+            ResultSet resultSet = pstmt.executeQuery();
+
+            while (resultSet.next()) {
+
+                Message msg = new Message();
+                msg.setgDevice(resultSet.getString("G_DEVICE"));
+                msg.setgCreated(resultSet.getDate("G_CREATED"));
+                msg.setSensorId(resultSet.getLong("SENSOR_ID"));
+                msg.setSensorValue(resultSet.getDouble("SENSOR_VALUE"));
+
+                lastMessages.add(msg);
+            }
+
+        }  catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static Timestamp getLastTime() {
@@ -95,7 +131,7 @@ public class Message implements Serializable {
                 return new Timestamp(0);
             }
 
-        } catch (SQLException | NamingException ex) {
+        } catch (SQLException ex) {
 
             return new Timestamp(0);
         }
@@ -111,6 +147,32 @@ public class Message implements Serializable {
     }
 
     public Message() {
+    }
+
+    public Double getLastValue(Integer id) {
+
+        String sqlQuery = "SELECT SENSOR_VALUE FROM MESSAGES_TABLE WHERE SENSOR_ID = ? ORDER BY G_CREATED DESC LIMIT 1";
+
+        Double res = 0.;
+
+        try(Connection conn = PersistManager.newConnection()) {
+
+            PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
+            pstmt.setInt(1, id);
+            ResultSet resultSet = pstmt.executeQuery();
+
+            while (resultSet.next()) {
+                res = resultSet.getDouble("SENSOR_VALUE");
+            }
+
+            return res;
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            return res;
+        }
+
     }
 
     @Override
