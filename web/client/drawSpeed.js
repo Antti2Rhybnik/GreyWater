@@ -12,7 +12,7 @@ function initGraphics()
 		gaugeData = new google.visualization.DataTable();
 		gaugeData.addColumn('number', 'Light');
 		gaugeData.addColumn('number', 'Water');
-		gaugeData.addColumn('number', 'Something else');
+		gaugeData.addColumn('number', 'Temperature');
 		gaugeData.addRows(1);
 		gaugeData.setCell(0, 0, 120);
 		gaugeData.setCell(0, 1, 120);
@@ -86,27 +86,63 @@ function changeTemp(dir) {
 	gauge.draw(gaugeData, gaugeOptions);
 }
 
-function updateSpeed(){
+function updateSpeed() {
 
-	for (var i = 0; i < 3; ++i){
-		var xhr = new XMLHttpRequest();
-	    var file;
 
-	    xhr.open("GET", "/GreyWater/rest/api/getNodeState?id=_" + i, true);
-	    xhr.onreadystatechange = function () {
-	        if (xhr.readyState != 4) return;
+		var xhrLight = new XMLHttpRequest();
+	    //var file;
 
-	        file = xhr.responseText;
-	     	var myData = parseFloat(file*1000);
+		xhrLight.open("GET", "/GreyWater/rest/api/getNodeState?id=_" + 6, true);
+		xhrLight.onreadystatechange = function () {
+	        if (xhrLight.readyState != 4) return;
 
-	     	console.log(myData);
-	     	gaugeData.setValue(0, i, myData);
+	        var fileLight = xhrLight.responseText;
+	     	var lightData = parseFloat(fileLight*1000);
+
+	     	console.log("light " + lightData);
+	     	gaugeData.setValue(0, 0, lightData);
 
 			gauge.draw(gaugeData, gaugeOptions);
-	    }
+	    };
 
-	    xhr.send();
-	}
+	xhrLight.send();
+
+	var xhrWater = new XMLHttpRequest();
+	xhrWater.open("GET", "/GreyWater/rest/api/getNodeState?id=_" + 2, true);
+	xhrWater.onreadystatechange = function () {
+		if (xhrWater.readyState != 4) return;
+
+		var fileWater = xhrWater.responseText;
+		var waterData = parseFloat(fileWater*1000);
+
+		console.log("water " + waterData);
+		gaugeData.setValue(0, 1, waterData);
+
+		gauge.draw(gaugeData, gaugeOptions);
+	};
+
+	xhrWater.send();
+
+
+
+	var xhrLight2 = new XMLHttpRequest();
+	//var file;
+
+	xhrLight2.open("GET", "/GreyWater/rest/api/getNodeState?id=_" + 8, true);
+	xhrLight2.onreadystatechange = function () {
+		if (xhrLight2.readyState != 4) return;
+
+		var fileLight2 = xhrLight2.responseText;
+		var lightData2 = parseFloat(fileLight2*1000);
+
+		console.log("light " + lightData2);
+		gaugeData.setValue(0, 2, lightData2);
+
+		gauge.draw(gaugeData, gaugeOptions);
+	};
+
+	xhrLight2.send();
+
 }
 
 setInterval(updateSpeed, 1000);
