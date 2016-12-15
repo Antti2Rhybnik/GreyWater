@@ -22,12 +22,13 @@ public class SensorNode extends Node<Double> {
 
         for (Message m : Message.lastMessages) {
             if (m.getSensorId().equals(sensorId)) {
+                System.out.println(sensorId);
                 state = m.getSensorValue();
                 break;
             }
         }
 
-        System.out.println("SensorNode: " + state);
+        System.out.println("SensorNode " + id + ": " + state);
 
     }
 
