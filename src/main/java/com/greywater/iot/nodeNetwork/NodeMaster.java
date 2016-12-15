@@ -85,6 +85,22 @@ public class NodeMaster {
         arithmeticalNodes.add(arithmeticalLightNode);
 
 
+        //LightSensor
+        SensorNode tempSensor = new SensorNode();
+        tempSensor.setSensorId(3L);
+        tempSensor.setId("_7");
+        tempSensor.setType("sensor");
+        tempSensor.setSensorType("Temp");
+        sensorNodes.add(tempSensor);
+
+        ArithmeticalNode arithmeticalTempNode = new ArithmeticalNode();
+        arithmeticalTempNode.setId("_8");
+        arithmeticalTempNode.setType("arithmetical");
+        arithmeticalTempNode.addInput(tempSensor);
+        arithmeticalTempNode.setExpr("_7");
+        arithmeticalNodes.add(arithmeticalTempNode);
+
+
         scheduler.scheduleAtFixedRate(NodeMaster::process,0, 3, TimeUnit.SECONDS);
     }
 
@@ -123,5 +139,7 @@ public class NodeMaster {
     }
 
 
-
+    public static void stop() {
+        scheduler.shutdown();
+    }
 }

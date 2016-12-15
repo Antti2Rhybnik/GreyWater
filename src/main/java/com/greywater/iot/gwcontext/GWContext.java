@@ -45,14 +45,6 @@ public class GWContext implements ServletContextListener {
     }
 
 
-    public static void stop() {
-        if(!scheduler.isShutdown()) {
-            scheduler.shutdown();
-        }
-        if (!msgDistribExecutor.isShutdown()) {
-            msgDistribExecutor.shutdown();
-        }
-    }
 
 
     public static ExecutorService getMsgDistribExecutor() {

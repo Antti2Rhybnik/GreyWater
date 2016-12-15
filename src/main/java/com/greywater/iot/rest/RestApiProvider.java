@@ -122,7 +122,7 @@ public class RestApiProvider {
     @Produces(MediaType.APPLICATION_JSON)
     public Response stop() {
 
-        GWContext.stop();
+        NodeMaster.stop();
         System.out.println("STOPPED!!!");
 
         return Response.ok("stopped").build();

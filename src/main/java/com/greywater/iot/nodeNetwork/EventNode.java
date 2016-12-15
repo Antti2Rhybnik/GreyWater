@@ -74,6 +74,6 @@ public class EventNode extends Node<String> {
             }
         });
 
-        System.out.println("EventNode: " + state);
+        System.out.println("EventNode " + id + ": " + state);
     }
 }
