@@ -5,8 +5,8 @@ function initGraphics()
 {
 	google.charts.load('current', {'packages':['gauge','corechart','table']});
 	google.charts.setOnLoadCallback(drawGauge);
-	gaugeOptions = {min: 0, max: 480000, yellowFrom: 300000, yellowTo: 350000,
-	redFrom: 400000, redTo: 480000, minorTicks: 5};
+	gaugeOptions = {min: 0, max: 1500, yellowFrom: 600, yellowTo: 800,
+	redFrom: 800, redTo: 1500, minorTicks: 5};
 
 	function drawGauge() {
 		gaugeData = new google.visualization.DataTable();
@@ -97,7 +97,7 @@ function updateSpeed() {
 	        if (xhrLight.readyState != 4) return;
 
 	        var fileLight = xhrLight.responseText;
-	     	var lightData = parseFloat(fileLight*1000);
+	     	var lightData = parseFloat(fileLight);
 
 	     	console.log("light " + lightData);
 	     	gaugeData.setValue(0, 0, lightData);
@@ -113,7 +113,7 @@ function updateSpeed() {
 		if (xhrWater.readyState != 4) return;
 
 		var fileWater = xhrWater.responseText;
-		var waterData = parseFloat(fileWater*1000);
+		var waterData = parseFloat(fileWater);
 
 		console.log("water " + waterData);
 		gaugeData.setValue(0, 1, waterData);
@@ -133,7 +133,7 @@ function updateSpeed() {
 		if (xhrLight2.readyState != 4) return;
 
 		var fileLight2 = xhrLight2.responseText;
-		var lightData2 = parseFloat(fileLight2*1000);
+		var lightData2 = parseFloat(fileLight2);
 
 		console.log("light " + lightData2);
 		gaugeData.setValue(0, 2, lightData2);

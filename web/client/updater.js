@@ -78,9 +78,9 @@ function drawSensor(sensorID) {
             var data = {
                 series: [[]]
             };
-            for (var i = 0; i < myData.length; i++) {
+            for (var i = myData.length - 1; i >= 0; --i) {
                 if (sensorID == myData[i].vsensor_id) {
-                    var tmp = {x: i, y: myData[i].sensorValue};
+                    var tmp = {x: myData.length-i, y: myData[i].sensorValue};
                     data.series[0].push(tmp);
                 }
             }
