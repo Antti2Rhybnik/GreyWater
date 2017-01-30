@@ -1,0 +1,85 @@
+*{margin: 0; padding: 0;}
+.wrapper{
+	width: 45%;
+	margin: 5%;
+}
+#tabs{
+	width: 100%;
+}
+#tabs ul{
+	list-style: none;
+	display: table-row;
+}
+#tabs ul li{
+	display: table-cell;
+	background: #ccc;
+	height: 40px;
+	text-align: center;
+	border-left: 5px solid #fff;
+}
+#tabs ul li:first-child{
+	border-left: none;
+	background: #f3f3f3;
+}
+#tabs ul li a{
+	display: table-cell;
+	width: 500px;
+	height: 40px;
+	line-height: 40px;
+	color: #000;
+	text-decoration: none;
+	font-size: 20px;
+}
+#tabs ul li a:hover{
+	color: #e8117f;
+}
+/*границы вкладок таблицы*/
+.tab-content{
+	border: 10px solid #f3f3f3;
+}
+/*вкладки*/
+.tabs-text{
+	padding: 10px;
+	display: none;
+}
+
+/*контейнер для заголовков*/
+.container{
+	margin-left:3%;
+	overflow:hidden;
+	width:100%;
+	font-size: 150%;
+}
+.box{
+	white-space:nowrap
+}
+.box div{
+	width:25%;
+	display:inline-block;
+}
+.box label{
+	width:25%;
+	display:inline-block;
+}
+/*конец стилей для заголовков*/
+
+/*выпадаюий список - TODO убрать костыль*/
+.list{
+	position:absolute;
+	right:52%;
+}
+/*значение цифрой*/
+.meaning{
+	margin-left:70%;
+	float:right;
+}
+.good{
+ 	background: #98FB98;
+	font-size:150%;
+	margin-left:13%;
+	width:18%;
+}
+/*единицы измерения*/
+.edIzm{
+	margin-left:150%;
+}
