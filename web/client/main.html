@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/GreyWater/client/css/styleTabs.css">
+    <link rel="stylesheet" href="/GreyWater/client/css/banka.css">
+    <link rel="stylesheet" href="/GreyWater/client/css/stylePanel.css">
+    <link rel="stylesheet" type="text/css" href="/GreyWater/client/css/stylesCheckbox.css" />
+    <link rel="stylesheet" type="text/css" href="/GreyWater/client/jquery.tzCheckbox/jquery.tzCheckbox.css" />
+    <link rel="stylesheet" href="/GreyWater/client/css/styleGraph.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.10.1/chartist.min.css">
+</head>
+
+<body>
+    <div class="wrapper notSelectable">
+        <div id="tabs">
+            <ul id="items">
+                <li class="active"><a href="#sensors">Датчики</a></li>
+                <li id="lookPanel" onclick="runControlPanel()"><a href="#panel">Контрольная панель</a></li>
+            </ul>
+        </div>
+        <div class="tab-content">
+            <div id="sensors" class="tabs-text">
+                <div class="container">
+                    <div class="box">
+                        <div>Датчик</div>
+                        <div>Панель</div>
+                        <div>График</div>
+                        <div>Вид шкалы</div>
+                    </div>
+                </div>
+                <!--Это вкладка датчики, div нужен чтобы подгружать в него
+                ajax ом датчики с чекбоксами -->
+                <form method="get" action="./">
+                    <ul>
+                        <div id="insertSensorsHere"></div>
+                        <!--сенсоры сюда-->
+                    </ul>
+                </form>
+            </div>
+            <div id="panel" class="tabs-text tab-content">
+                <div class="container">
+                    <div class="box">
+                        <div>Датчик</div>
+                        <div>Значение</div>
+                        <div>Единицы измерения</div>
+                    </div>
+                </div>
+                <form>
+                    <ul>
+                        <div id="wrapperMeaning"></div>
+                        <!--для значений сенсоров-->
+                    </ul>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--TODO панель выпадающая с картинками, убрать в css img, у меня не получилось-->
+    <div class="wrapperPanelGraph">
+        <div class="containerforPanel">
+            <div class="profile">
+                <img unselectable="on" ondrag="return false" ondragdrop="return false" ondragstart="return false" src='img/stand.jpg' style="width:100%;">
+            </div>
+            <div onclick="panelClick(); graph2Off();" class="panel">
+                <img unselectable="on" ondrag="return false" ondragdrop="return false" ondragstart="return false" src='img/strelka.png' id="strelka" style="width:50%; opacity:0.1">
+            </div>
+        </div>
+        <!--TODO графики надо задать процентарно размеры-->
+        <div id="graphHere">
+            <div class="graph0"></div>
+            <div class="graph1"></div>
+        </div>
+    </div>
+    <!--TODO панель сообщения об ошибке-->
+    <script src="/GreyWater/client/js/config.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.10.1/chartist.min.js"></script>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+    <script src="/GreyWater/client/js/panelConfigure.js"></script>
+    <script src="/GreyWater/client/jquery.tzCheckbox/jquery.tzCheckbox.js"></script>
+    <script src="/GreyWater/client/js/scriptCheckbox.js"></script>
+    <script src="/GreyWater/client/js/tabs.js"></script>
+    <script src="/GreyWater/client/js/ajax.js"></script>
+    <script src="/GreyWater/client/js/panel.js"></script>
+    <script src="/GreyWater/client/js/updater.js"></script>
+</body>
+
+</html>

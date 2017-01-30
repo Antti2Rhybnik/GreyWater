@@ -1,0 +1,23 @@
+.profile {
+    margin: 0 auto;
+    display: none;
+    color: #fff;
+    font-size: 20px;
+    text-align: center;
+    padding-top: 30px;
+}
+
+.panel {
+    display: block;
+    margin: 0 auto;
+    width: 100px;
+    text-align: center;
+}
+
+.containerforPanel {
+	cursor:default;
+    /*position: absolute;
+    left: 51%;
+    top: 6%;
+    width: 48%;*/
+}
