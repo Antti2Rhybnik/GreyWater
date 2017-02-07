@@ -2,8 +2,10 @@ package com.greywater.iot.nodeNetwork;
 
 import com.greywater.iot.jpa.Message;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
+@XmlRootElement
 public class SensorNode extends Node<Double> {
 
     Long sensorId;
@@ -11,6 +13,7 @@ public class SensorNode extends Node<Double> {
 
     public SensorNode() {
         super();
+        type = "sensor";
     }
 
 

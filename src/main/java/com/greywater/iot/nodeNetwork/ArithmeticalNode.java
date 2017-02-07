@@ -11,6 +11,7 @@ public class ArithmeticalNode extends EvaluableNode<Double> {
     public ArithmeticalNode() {
         super();
         state = 0.0;
+        type = "arithmetical";
     }
 
     // eval method should update state

@@ -6,6 +6,7 @@ import com.greywater.iot.gwcontext.GWContext;
 import com.greywater.iot.jpa.*;
 import com.greywater.iot.nodeNetwork.ArithmeticalNode;
 import com.greywater.iot.nodeNetwork.NodeMaster;
+import com.greywater.iot.nodeNetwork.SensorNode;
 import com.greywater.iot.persistence.PersistManager;
 
 import javax.inject.Singleton;
@@ -16,6 +17,7 @@ import javax.script.CompiledScript;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -34,40 +36,8 @@ public class RestApiProvider {
     }
 
 
-    /**
-     * На вход поступает примерно следующий джейсон:
-     *
-     * [{
-     *   "id" : "1",
-     *   "aggregationType": "redirect",
-     *   "sensors": [{
-     *        "id":"1",
-     *        "type": "humidity"
-     *   }],
-     *   "things": [{
-     *        "id": "1",
-     *        "name": "tank"
-     *   }],
-     *   "parameters": {
-     *        "min": 12,
-     *        "max": 22
-     *   }
-     * }]
-     *
-     * Это преобразуется в:
-     *
-     * [VirtualSensor{
-     *  id = '1',
-     *  aggregationType = 'redirect',
-     *  sensors = [ Sensor{ id = '1', type = 'humidity' } ],
-     *  things = [ Thing{ id = '1', name = 'tank' } ],
-     *  parameters = Parameters{ id = '7b5055ef-8d2b-4624-a8fb-2b19b2f08fc6', max = 22.0, min = 12.0 }
-     * }]
-     */
-
-
     @POST
-    @Path("save_nodes_config")
+    @Path("saveNodesConfig")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response saveNodesConfig(String config) {
@@ -86,8 +56,12 @@ public class RestApiProvider {
 
 
 
-
-
+    @GET
+    @Path("sensorsInfo")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<SensorNode> getSensorsInfo() {
+        return NodeMaster.sensorNodes;
+    }
 
     @GET
     @Path("sensorValues")
@@ -115,7 +89,13 @@ public class RestApiProvider {
     }
 
 
-
+    @GET
+    @Path("test")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response test() {
+        NodeMaster.init1();
+        return Response.ok(ConfigManager.getConfig()).build();
+    }
 
     @GET
     @Path("stop")

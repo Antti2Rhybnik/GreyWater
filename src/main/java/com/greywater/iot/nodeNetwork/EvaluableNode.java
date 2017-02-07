@@ -7,6 +7,8 @@ import java.util.List;
 public class EvaluableNode<T> extends Node<T> {
 
     private static Compilable engine = (Compilable) new ScriptEngineManager().getEngineByName("javascript");
+    private String expr;
+
 
     private CompiledScript cs;
 
@@ -14,10 +16,14 @@ public class EvaluableNode<T> extends Node<T> {
         super();
     }
 
+    public String getExpr() {
+        return expr;
+    }
+
 
     public void setExpr(String script) {
         try {
-
+            expr = script;
             cs = engine.compile(script);
 
         } catch(ScriptException e)  {
