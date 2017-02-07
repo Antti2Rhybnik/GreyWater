@@ -1,5 +1,7 @@
 //подгрузить список сенсоров и чекбоксы/типы к ним
 function updateSensorsPanel() {
+
+    console.log("updateSensorsPanel");
     var xhr = new XMLHttpRequest();
     xhr.open("GET", sensorsRequestName, true);
     xhr.onreadystatechange = function() {

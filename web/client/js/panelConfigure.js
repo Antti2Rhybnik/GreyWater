@@ -5,8 +5,8 @@ function getRandomInt(min, max) {
 
 //псмотреть поставленные чекбоксы, обновить массивы sensorsOnPanel и sensorsOnGraph
 function getValues() {
-    sensorsOnPanel = new Array();
-    sensorsOnGraph = new Array();
+    sensorsOnPanel = [];
+    sensorsOnGraph = [];
     var list = null;
     list = $(':checkbox:checked');
     for (var i = 0; i < list.length; i++)
@@ -20,13 +20,14 @@ function getValues() {
 //перезагружает массив данных сенсоров
 function updateSensorsData()
 {
+    console.log("updateSensorsData");
     var xhr = new XMLHttpRequest();
     xhr.open("GET", messagesRequestName, true);
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             sensorsValue = JSON.parse(xhr.responseText);
         }
-    }
+    };
     xhr.send();
 }
 

@@ -18,8 +18,8 @@ import com.greywater.iot.jpa.Message;
 public class NodeMaster {
 
     private static ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-    private static List<Node> allNodes = new ArrayList<>();
-    private static List<SensorNode> sensorNodes = new ArrayList<>();
+    public static List<Node> allNodes = new ArrayList<>();
+    public static List<SensorNode> sensorNodes = new ArrayList<>();
     public static List<ArithmeticalNode> arithmeticalNodes = new ArrayList<>();
     private static List<LogicalNode> logicalNodes = new ArrayList<>();
     private static List<EventNode> eventNodes = new ArrayList<>();
@@ -35,72 +35,76 @@ public class NodeMaster {
 
     }
 
-
-    public static void init() {
-
+    public static void init1() {
         //constructObjects();
-//Waterflow
+        //Waterflow
         SensorNode sn = new SensorNode();
         sn.setSensorId(1L);
         sn.setId("_1");
-        sn.setType("sensor");
         sn.setSensorType("WATERFLOW");
         sensorNodes.add(sn);
+        allNodes.add(sn);
 
         ArithmeticalNode an = new ArithmeticalNode();
         an.setId("_2");
-        an.setType("arithmetical");
         an.addInput(sn);
         an.setExpr("_1");
         an.setIntegrable(true);
         arithmeticalNodes.add(an);
+        allNodes.add(an);
 
         LogicalNode ln = new LogicalNode();
         ln.setId("_3");
-        ln.setType("logical");
         ln.addInput(an);
         ln.setExpr("_2 > 300");
         logicalNodes.add(ln);
+        allNodes.add(ln);
 
         EventNode en = new EventNode();
         en.setId("_4");
+
         en.setMessage("vse ploho");
         en.setImportance("1");
         en.addInput(ln);
         eventNodes.add(en);
+        allNodes.add(en);
 
         //LightSensor
         SensorNode lightSensor = new SensorNode();
         lightSensor.setSensorId(2L);
         lightSensor.setId("_5");
-        lightSensor.setType("sensor");
         lightSensor.setSensorType("Light");
         sensorNodes.add(lightSensor);
+        allNodes.add(lightSensor);
+
 
         ArithmeticalNode arithmeticalLightNode = new ArithmeticalNode();
         arithmeticalLightNode.setId("_6");
-        arithmeticalLightNode.setType("arithmetical");
         arithmeticalLightNode.addInput(lightSensor);
         arithmeticalLightNode.setExpr("_5");
         arithmeticalNodes.add(arithmeticalLightNode);
+        allNodes.add(arithmeticalLightNode);
 
 
         //LightSensor
         SensorNode tempSensor = new SensorNode();
         tempSensor.setSensorId(3L);
         tempSensor.setId("_7");
-        tempSensor.setType("sensor");
         tempSensor.setSensorType("Temp");
         sensorNodes.add(tempSensor);
+        allNodes.add(tempSensor);
 
         ArithmeticalNode arithmeticalTempNode = new ArithmeticalNode();
         arithmeticalTempNode.setId("_8");
-        arithmeticalTempNode.setType("arithmetical");
         arithmeticalTempNode.addInput(tempSensor);
         arithmeticalTempNode.setExpr("_7");
         arithmeticalNodes.add(arithmeticalTempNode);
+        allNodes.add(arithmeticalTempNode);
 
+    }
 
+    public static void init() {
+        init1();
         scheduler.scheduleAtFixedRate(NodeMaster::process,0, 3, TimeUnit.SECONDS);
     }
 
@@ -112,7 +116,7 @@ public class NodeMaster {
         eventNodes = ConfigManager.getEventNodes();
 
 
-        List<Node> allNodes = new ArrayList<>();
+        allNodes = new ArrayList<>();
 
         allNodes.addAll(sensorNodes);
         allNodes.addAll(arithmeticalNodes);

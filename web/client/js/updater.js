@@ -1,7 +1,9 @@
 //обновить и пихнуть данные из файла в графики
 function drawSensorGraph() {
     updateSensorsData();
-    for (var j = 0; j < sensorsOnGraph.length; j++) { //id датчиков, выведенных на график
+
+    console.log("drawSensorGraph");
+       for (var j = 0; j < sensorsOnGraph.length; j++) { //id датчиков, выведенных на график
         var data = {
             series: [
                 []
