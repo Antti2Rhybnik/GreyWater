@@ -1,0 +1,23 @@
+[
+  {
+    "parameters": {
+      "sensor_type": "WATERFLOW",
+      "sensor_id": 1,
+      "sensor_unit": "мл/сек"
+    }
+  },
+  {
+    "parameters": {
+      "sensor_type": "Light",
+      "sensor_id": 2,
+      "sensor_unit": "п/сек"
+    }
+  },
+  {
+    "parameters": {
+      "sensor_type": "ASDas",
+      "sensor_id": 3,
+      "sensor_unit": "мл/сек"
+    }
+  }
+]

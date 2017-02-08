@@ -1,0 +1,12 @@
+.wrapperPanelGraph{
+	display: block;
+	position: absolute;
+	top:6%;
+	left:51%;
+	width:48%;
+}
+
+.invisible{
+	display:none;
+	height:0px;
+}

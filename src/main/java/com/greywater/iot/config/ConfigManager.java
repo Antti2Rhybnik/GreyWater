@@ -1,9 +1,13 @@
 package com.greywater.iot.config;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.greywater.iot.nodeNetwork.*;
 import com.greywater.iot.persistence.PersistManager;
 
@@ -243,6 +247,32 @@ public class ConfigManager {
         conn.close();
     }
 
+    public static List<Node> getNodes() {
+        List<Node> nodes = new ArrayList<>();
+        String sqlQuery = "SELECT * FROM NODES";
+
+        try (Connection conn = PersistManager.newConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
+             ResultSet resultSet = pstmt.executeQuery()) {
+
+            while (resultSet.next()) {
+
+                Node node = new Node();
+                // for Node
+                node.setId(resultSet.getString("SN_ID"));
+                node.setType("SENSOR_NODE");
+
+                // for SensorNode
+
+                nodes.add(node);
+            }
+
+        }  catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return nodes;
+
+    }
 
     public static List<SensorNode> getSensorNodes() {
 
@@ -388,4 +418,62 @@ public class ConfigManager {
         return parents;
     }
 
+
+    public static String getConfig() {
+        // FIXME: если объектов нет, то надо бы создать (не во время вычислений, естественно)
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        ArrayNode arrayConf = mapper.createArrayNode();
+
+        for (Node node: NodeMaster.allNodes) {
+
+            ObjectNode nodeConf = mapper.createObjectNode();
+            ObjectNode paramConf = mapper.createObjectNode();
+            ArrayNode parentsConf = mapper.createArrayNode();
+
+            switch(node.getType()) {
+                case "sensor":
+                    paramConf.put("sensor_type", ((SensorNode)node).getSensorType());
+                    paramConf.put("sensor_unit", "123"); // FIXME: add in SensorNode
+                    break;
+                case "arithmetical":
+                    paramConf.put("arithm_expr", ((ArithmeticalNode)node).getExpr());
+                    paramConf.put("arithm_integrable", ((ArithmeticalNode)node).isIntegrable());
+                    break;
+                case "logical":
+                    paramConf.put("logic_expr", ((LogicalNode)node).getExpr());
+                    break;
+                case "event":
+                    paramConf.put("event_importance", ((EventNode)node).getImportance());
+                    paramConf.put("event_msg", ((EventNode)node).getMessage());
+                    break;
+
+                default:
+                    break;
+            }
+
+            nodeConf.putPOJO("parameters", paramConf);
+
+            nodeConf.put("node_id", node.getId());
+            nodeConf.put("node_type", node.getType());
+
+            if (!node.getType().equals("sensor")) {
+                for (Object parent : node.getInputs()) {
+                    parentsConf.add(((Node) parent).getId());
+                }
+                nodeConf.putPOJO("parents", parentsConf);
+            }
+
+            arrayConf.addPOJO(nodeConf);
+        }
+
+        try {
+            System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(arrayConf));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return arrayConf.toString();
+    }
 }

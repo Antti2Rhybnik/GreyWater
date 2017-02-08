@@ -1,1 +1,32 @@
-[{"id" : 0,"timestamp" : 777,"value" : 10,"vsensor_id" : 3},{"id" : 1,"timestamp" : 335,"value" : 890,"vsensor_id" : 0},{"id" : 2,"timestamp" : 649,"value" : 492,"vsensor_id" : 1},{"id" : 3,"timestamp" : 27,"value" : 362,"vsensor_id" : 1},{"id" : 4,"timestamp" : 763,"value" : 59,"vsensor_id" : 0},{"id" : 5,"timestamp" : 426,"value" : 540,"vsensor_id" : 1},{"id" : 6,"timestamp" : 211,"value" : 736,"vsensor_id" : 2},{"id" : 7,"timestamp" : 429,"value" : 567,"vsensor_id" : 3},{"id" : 8,"timestamp" : 862,"value" : 530,"vsensor_id" : 2},{"id" : 9,"timestamp" : 135,"value" : 67,"vsensor_id" : 3},{"id" : 10,"timestamp" : 22,"value" : 802,"vsensor_id" : 4},{"id" : 11,"timestamp" : 167,"value" : 69,"vsensor_id" : 3},{"id" : 12,"timestamp" : 11,"value" : 456,"vsensor_id" : 3},{"id" : 13,"timestamp" : 373,"value" : 229,"vsensor_id" : 2},{"id" : 14,"timestamp" : 784,"value" : 919,"vsensor_id" : 1},{"id" : 15,"timestamp" : 324,"value" : 198,"vsensor_id" : 2},{"id" : 16,"timestamp" : 413,"value" : 370,"vsensor_id" : 0},{"id" : 17,"timestamp" : 980,"value" : 91,"vsensor_id" : 1},{"id" : 18,"timestamp" : 862,"value" : 873,"vsensor_id" : 1},{"id" : 19,"timestamp" : 281,"value" : 996,"vsensor_id" : 0},{"id" : 20,"timestamp" : 84,"value" : 925,"vsensor_id" : 0},{"id" : 21,"timestamp" : 505,"value" : 336,"vsensor_id" : 2},{"id" : 22,"timestamp" : 313,"value" : 729,"vsensor_id" : 1},{"id" : 23,"timestamp" : 895,"value" : 124,"vsensor_id" : 2},{"id" : 24,"timestamp" : 814,"value" : 545,"vsensor_id" : 2},{"id" : 25, "timestamp" : 142,"value" : 420, "vsensor_id" : 5}]
+[
+  {
+    "gDevice": "",
+    "gCreated": 1,
+    "sensorId": 1,
+    "sensorValue": 24.4
+  },
+  {
+    "gDevice": "",
+    "gCreated": 23,
+    "sensorId": 1,
+    "sensorValue": 21.4
+  },
+  {
+    "gDevice": "",
+    "gCreated": 12,
+    "sensorId": 2,
+    "sensorValue": 52
+  },
+  {
+    "gDevice": "",
+    "gCreated": 17,
+    "sensorId": 2,
+    "sensorValue": 24.4
+  },
+  {
+    "gDevice": "",
+    "gCreated": 27,
+    "sensorId": 1,
+    "sensorValue": 14
+  }
+]

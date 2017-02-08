@@ -22,7 +22,7 @@ public class Node<T> {
     T state;
     String type;
 
-    Node() {}
+    public Node() {}
 
     Node(List<Node> inputs) {
         this.inputs = inputs;
@@ -60,6 +60,9 @@ public class Node<T> {
 
     public void setInputs(List<Node> inputs) {
         this.inputs = inputs;
+    }
+    public List<Node> getInputs() {
+        return inputs;
     }
 
     public T getState() {

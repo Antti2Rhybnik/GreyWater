@@ -19,6 +19,7 @@ public class EventNode extends Node<String> {
 
     public EventNode() {
         super();
+        type = "event";
     }
 
 
