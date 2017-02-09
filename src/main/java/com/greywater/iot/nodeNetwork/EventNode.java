@@ -41,11 +41,10 @@ public class EventNode extends Node<String> {
 
     public void writeEvent(String nodeID, Connection conn) throws SQLException, NamingException {
 
-        String sqlQuery = "insert into NEO_77I8IO0F4PQ8TZ67A28RD0L2L.EVENTS_TABLE(ID, EVENT_TIME, EVENT_MESSAGE, EVENT_IMPORTANCE, NODE_ID) values(?,?,?,?,?)";
+        String sqlQuery = "insert into NEO_77I8IO0F4PQ8TZ67A28RD0L2L.EVENTS(ID, EVENT_TIME, EVENT_MESSAGE, EVENT_IMPORTANCE) values(?,?,?,?)";
 
         PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
-
-        //UUID uid = UUID.fromString("38400000-8cf0-11bd-b23e-10b96e4ef00d");
+        
         String tableID = UUID.randomUUID().toString();
 
         Calendar calendar = Calendar.getInstance();
@@ -56,22 +55,22 @@ public class EventNode extends Node<String> {
         pstmt.setTimestamp(2, currentTimestamp);
         pstmt.setString(3, message);
         pstmt.setString(4, importance);
-        pstmt.setString(5, nodeID);
 
         pstmt.execute();
     }
 
     void eval() {
+
         inputs.forEach(node -> {
-            if ((Boolean) node.getState()) {
-
-                try (Connection conn = PersistManager.newConnection()) {
-
-                   // writeEvent(node.getId(), conn);
-
-                } catch (SQLException e) {
+            if ((Boolean) node.getState()) try (Connection conn = PersistManager.newConnection()) {
+                try {
+                    writeEvent(node.getId(), conn);
+                } catch (NamingException e) {
                     e.printStackTrace();
                 }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         });
 
