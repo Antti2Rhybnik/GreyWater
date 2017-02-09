@@ -5,3 +5,14 @@
 .gradle/
 .idea/
 build/
+
+
+reactApp/build
+
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -- is a black hole >>
+reactApp/node_modules
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+# misc
+reactApp/.env
+reactApp/npm-debug.log

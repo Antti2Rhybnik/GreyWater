@@ -37,7 +37,7 @@ public class RestApiProvider {
 
 
     @POST
-    @Path("saveNodesConfig")
+    @Path("saveNodes")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response saveNodesConfig(String config) {
@@ -90,7 +90,7 @@ public class RestApiProvider {
 
 
     @GET
-    @Path("test")
+    @Path("getNodes")
     @Produces(MediaType.APPLICATION_JSON)
     public Response test() {
         NodeMaster.init1();
