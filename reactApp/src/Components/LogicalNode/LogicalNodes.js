@@ -21,7 +21,7 @@ class LogicalNodes extends Component {
 
         return (
             <div>
-                <h3>LogicalNodes</h3>
+                <h3>Logical Nodes</h3>
                 <div>{renders}</div>
             </div>
         );

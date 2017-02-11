@@ -1,7 +1,7 @@
 let initState = [
     { node_id: '_1', node_type: 'sensor', parameters : { sensor_type: 'Water 1.0', sensor_unit: "m/s"} },
-    { node_id: '_2', node_type: 'arithmetical', parameters : { arithm_expr: '_1 + 2', integrable: false } },
-    { node_id: '_3', node_type: 'arithmetical', parameters : { arithm_expr: '_1 + 77', integrable: false } }
+    { node_id: '_2', node_type: 'arithmetical', parameters : { arithm_expr: '_1 + 2', arithm_integrable: false } },
+    { node_id: '_3', node_type: 'arithmetical', parameters : { arithm_expr: '_1 + 77', arithm_integrable: false } }
 ];
 
 

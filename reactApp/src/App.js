@@ -4,10 +4,14 @@ import { connect } from 'react-redux';
 // import logo from './logo.svg';
 import './App.css';
 
-import SensorNodes from './SensorNodes';
-import ArithmeticalNodes from './ArithmeticalNodes';
-import LogicalNodes from './LogicalNodes';
-import EventNodes from './EventNodes';
+import SensorNodes from './Components/SensorNode/SensorNodes';
+import ArithmeticalNodes from './Components/ArithmeticalNode/ArithmeticalNodes';
+import LogicalNodes from './Components/LogicalNode/LogicalNodes';
+import EventNodes from './Components/EventNode/EventNodes';
+import ArithmeticalNodeAdd from './Components/ArithmeticalNode/ArithmeticalNodeAdd';
+import EventNodeAdd from './Components/EventNode/EventNodeAdd';
+import SensorNodeAdd from './Components/SensorNode/SensorNodeAdd';
+import LogicalNodeAdd from './Components/LogicalNode/LogicalNodeAdd';
 
 import { requireNodes, saveNodes } from './async/serverAPI';
 
@@ -58,6 +62,12 @@ class App extends Component {
                     <ArithmeticalNodes nodes={arithmeticalNodes}/>
                     <LogicalNodes nodes={logicalNodes}/>
                     <EventNodes nodes={eventNodes}/>
+                </div>
+                <div className="App-cnt">
+                    <SensorNodeAdd/>
+                    <ArithmeticalNodeAdd/>
+                    <LogicalNodeAdd/>
+                    <EventNodeAdd/>
                 </div>
             </div>
         );

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import ArithmeticalNode from './ArithmeticalNode';
+import EventNode from './EventNode';
 
-class ArithmeticalNodes extends Component {
+class EventNodes extends Component {
 
     render() {
 
@@ -14,14 +14,14 @@ class ArithmeticalNodes extends Component {
 
             return (
                 <div key={idx}>
-                    <ArithmeticalNode node_id={node_id} parameters={parameters} />
+                    <EventNode node_id={node_id} parameters={parameters} />
                 </div>
             );
         });
 
         return (
             <div>
-                <h3>ArithmeticalNodes</h3>
+                <h3>Event Nodes</h3>
                 <div>{renders}</div>
             </div>
         );
@@ -30,4 +30,4 @@ class ArithmeticalNodes extends Component {
 }
 
 
-export default ArithmeticalNodes;
+export default EventNodes;

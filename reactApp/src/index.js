@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
 
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
@@ -13,7 +13,7 @@ import combiner from './reducers/combiner';
 
 const store = createStore(combiner, composeWithDevTools(applyMiddleware(thunk)));
 
-ReactDOM.render(
+render(
     <Provider store={store}>
         <App/>
     </Provider>,

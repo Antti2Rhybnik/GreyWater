@@ -21,7 +21,7 @@ class SensorNodes extends Component {
 
         return (
             <div>
-                <h3>SensorNodes</h3>
+                <h3>Sensor Nodes</h3>
                 <div>{renders}</div>
             </div>
         );
