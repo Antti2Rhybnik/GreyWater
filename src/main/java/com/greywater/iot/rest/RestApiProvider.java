@@ -35,7 +35,6 @@ public class RestApiProvider {
     public RestApiProvider() {
     }
 
-
     @POST
     @Path("saveNodes")
     @Produces(MediaType.TEXT_PLAIN)
@@ -54,8 +53,6 @@ public class RestApiProvider {
         return Response.ok("saved").build();
     }
 
-
-
     @GET
     @Path("sensorsInfo")
     @Produces(MediaType.APPLICATION_JSON)
@@ -70,8 +67,6 @@ public class RestApiProvider {
 
         return Message.getMessages(id, limit);
     }
-
-
 
     @GET
     @Path("getNodeState")
@@ -88,6 +83,14 @@ public class RestApiProvider {
         return state;
     }
 
+
+    @GET
+    @Path("getEvent")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getEvent(@QueryParam("id") String id) {
+
+        return Message.getLastEvent();
+    }
 
     @GET
     @Path("getNodes")
@@ -118,6 +121,4 @@ public class RestApiProvider {
 
         return Response.ok("started").build();
     }
-
-
 }
