@@ -41,10 +41,10 @@ public class EventNode extends Node<String> {
 
     public void writeEvent(String nodeID, Connection conn) throws SQLException, NamingException {
 
-        String sqlQuery = "insert into NEO_77I8IO0F4PQ8TZ67A28RD0L2L.EVENTS(ID, EVENT_TIME, EVENT_MESSAGE, EVENT_IMPORTANCE) values(?,?,?,?)";
+        String sqlQuery = "insert into NEO_77I8IO0F4PQ8TZ67A28RD0L2L.EVENTS(ID, EVENT_TIME, EVENT_MESSAGE, EVENT_IMPORTANCE, NODE_ID) values(?,?,?,?,?)";
 
         PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
-        
+
         String tableID = UUID.randomUUID().toString();
 
         Calendar calendar = Calendar.getInstance();
@@ -55,6 +55,7 @@ public class EventNode extends Node<String> {
         pstmt.setTimestamp(2, currentTimestamp);
         pstmt.setString(3, message);
         pstmt.setString(4, importance);
+        pstmt.setString(5, nodeID);
 
         pstmt.execute();
     }
