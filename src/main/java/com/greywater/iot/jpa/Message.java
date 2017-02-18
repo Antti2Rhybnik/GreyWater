@@ -172,7 +172,27 @@ public class Message implements Serializable {
             e.printStackTrace();
             return res;
         }
+    }
 
+    public static String getLastEvent() {
+        String sqlQuery = "SELECT EVENT_MESSAGE FROM EVENTS ORDER BY EVENT_TIME DESC LIMIT 1";
+        String res = "";
+        try(Connection conn = PersistManager.newConnection()) {
+
+            PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
+            ResultSet resultSet = pstmt.executeQuery();
+
+            while (resultSet.next()) {
+                res = resultSet.getString("EVENT_MESSAGE");
+            }
+
+            return res;
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            return res;
+        }
     }
 
     @Override
