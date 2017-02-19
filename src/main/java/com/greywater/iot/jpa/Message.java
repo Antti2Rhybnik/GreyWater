@@ -195,6 +195,29 @@ public class Message implements Serializable {
         }
     }
 
+
+    public static String getEvent(String node_id) {
+        String sqlQuery = "SELECT EVENT_MESSAGE FROM EVENTS WHERE NODE_ID = ? ORDER BY EVENT_TIME DESC LIMIT 1";
+        String res = "";
+        try(Connection conn = PersistManager.newConnection()) {
+
+            PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
+            pstmt.setString(1, node_id);
+            ResultSet resultSet = pstmt.executeQuery();
+
+            while (resultSet.next()) {
+                res = resultSet.getString("EVENT_MESSAGE");
+            }
+
+            return res;
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            return res;
+        }
+    }
+
     @Override
     public String toString() {
         return "Message{" +
