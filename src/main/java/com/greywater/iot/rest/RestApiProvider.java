@@ -85,11 +85,19 @@ public class RestApiProvider {
 
 
     @GET
-    @Path("getEvent")
+    @Path("getLastEvent")
     @Produces(MediaType.TEXT_PLAIN)
-    public String getEvent(@QueryParam("id") String id) {
+    public String getLastEvent() {
 
         return Message.getLastEvent();
+    }
+
+    @GET
+    @Path("getEvent")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getEvent(@QueryParam("node_id") String node_id) {
+
+        return Message.getEvent(node_id);
     }
 
     @GET
