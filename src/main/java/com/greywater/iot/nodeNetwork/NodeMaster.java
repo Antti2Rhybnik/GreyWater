@@ -1,18 +1,19 @@
 package com.greywater.iot.nodeNetwork;
 
 
-import javax.script.Compilable;
-import javax.script.ScriptEngineManager;
-import javax.servlet.annotation.WebListener;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.greywater.iot.config.ConfigManager;
 import com.greywater.iot.jpa.Message;
+import com.greywater.iot.rest.RandomServerException;
 
 
 public class NodeMaster {
@@ -23,6 +24,7 @@ public class NodeMaster {
     public static List<ArithmeticalNode> arithmeticalNodes = new ArrayList<>();
     private static List<LogicalNode> logicalNodes = new ArrayList<>();
     private static List<EventNode> eventNodes = new ArrayList<>();
+    public static boolean constructed = false;
 
 
     public static void process() {
@@ -33,6 +35,19 @@ public class NodeMaster {
         logicalNodes.forEach(LogicalNode::eval);
         eventNodes.forEach(EventNode::eval);
 
+    }
+
+    public static void start() throws RandomServerException {
+        if (!constructed) {
+            try {
+                constructObjects();
+                constructed = true;
+            } catch (IOException e) {
+                throw new RandomServerException("Random is force", e);
+            }
+        }
+        scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.scheduleAtFixedRate(NodeMaster::process, 0, 2, TimeUnit.SECONDS);
     }
 
     public static void init1() {
@@ -104,46 +119,139 @@ public class NodeMaster {
     }
 
     public static void init() {
-        init1();
-        scheduler.scheduleAtFixedRate(NodeMaster::process,0, 3, TimeUnit.SECONDS);
+
+        scheduler.scheduleAtFixedRate(NodeMaster::process, 0, 3, TimeUnit.SECONDS);
     }
 
-    private static void constructObjects() {
-
-        sensorNodes = ConfigManager.getSensorNodes();
-        arithmeticalNodes = ConfigManager.getArithmeticalNodes();
-        logicalNodes = ConfigManager.getLogicalNodes();
-        eventNodes = ConfigManager.getEventNodes();
-
+    public static void constructObjects() throws IOException {
 
         allNodes = new ArrayList<>();
+        sensorNodes = new ArrayList<>();
+        arithmeticalNodes = new ArrayList<>();
+        logicalNodes = new ArrayList<>();
+        eventNodes = new ArrayList<>();
 
-        allNodes.addAll(sensorNodes);
-        allNodes.addAll(arithmeticalNodes);
-        allNodes.addAll(logicalNodes);
-        allNodes.addAll(eventNodes);
+        try {
+            String config = ConfigManager.loadConfig();
+
+//            System.out.println(config);
+            // parse
+            ObjectMapper mapper = new ObjectMapper();
+
+            List<JsonNode> nodes = Arrays.asList(mapper.readValue(config, JsonNode[].class));
+
+            for (JsonNode jsonNode : nodes) {
 
 
-        for (Node node: allNodes) {
+                String nodeID = jsonNode.get("node_id").asText();
+                String nodeType = jsonNode.get("node_type").asText();
 
-            List<String> parentsIDs = ConfigManager.getParentsForNode(node.getId());
+//                System.out.println(nodeID + " " + nodeType);
 
-            for (String parentId : parentsIDs) {
+                JsonNode params = mapper.readValue(String.valueOf(jsonNode.get("parameters")), JsonNode.class);
 
-                Node nn = allNodes
+                switch (nodeType) {
+
+                    case "sensor":
+
+                        Long sensorId = params.get("sensor_id").asLong();
+                        String sensorType = params.get("sensor_type").asText();
+                        String sensorUnit = params.get("sensor_unit").asText();
+
+//                        System.out.println(sensorId + " "  + sensorType + " " + sensorUnit);
+
+                        SensorNode sn = new SensorNode();
+                        sn.setSensorId(sensorId);
+                        sn.setSensorType(sensorType);
+                        sn.setSensorUnit(sensorUnit);
+                        sn.setId(nodeID);
+                        sensorNodes.add(sn);
+                        allNodes.add(sn);
+                        break;
+                    case "arithmetical":
+
+                        String arithmExpr = params.get("expr").asText();
+                        Boolean arithmIntegrable = params.get("integrable").asBoolean();
+
+                        ArithmeticalNode an = new ArithmeticalNode();
+                        an.setExpr(arithmExpr);
+                        an.setIntegrable(arithmIntegrable);
+                        an.setId(nodeID);
+                        arithmeticalNodes.add(an);
+                        allNodes.add(an);
+                        break;
+                    case "logical":
+
+                        String logicExpr = params.get("expr").asText();
+
+                        LogicalNode ln = new LogicalNode();
+                        ln.setExpr(logicExpr);
+                        ln.setId(nodeID);
+                        logicalNodes.add(ln);
+                        allNodes.add(ln);
+                        break;
+                    case "event":
+
+                        String importance = params.get("importance").asText();
+                        String msg = params.get("msg").asText();
+
+                        EventNode en = new EventNode();
+                        en.setMessage(msg);
+                        en.setImportance(importance);
+                        en.setId(nodeID);
+                        eventNodes.add(en);
+                        allNodes.add(en);
+                        break;
+
+                    default:
+                        break;
+                }
+
+            } // end for
+
+
+            for(Node node: allNodes) {
+                System.out.println(node.getId());
+            }
+
+            for (JsonNode jsonNode : nodes) {
+
+                String nodeID = jsonNode.get("node_id").asText();
+
+                System.out.println(nodeID);
+
+                Node node = allNodes
                         .stream()
-                        .filter((n -> parentId.equals(n.getId())))
+                        .filter((n -> nodeID.equals(n.getId())))
                         .findFirst()
                         .get();
 
-                node.addInput(nn);
-            }
-        }
+                List<String> parentIDs = Arrays.asList(mapper.readValue(String.valueOf(jsonNode.get("parents")), String[].class));
 
+
+                for (String parentId : parentIDs) {
+
+                    Node nn = allNodes
+                            .stream()
+                            .filter((n -> parentId.equals(n.getId())))
+                            .findFirst()
+                            .get();
+
+                    node.addInput(nn);
+                }
+
+            }
+
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
+
+
 
 
     public static void stop() {
         scheduler.shutdown();
+        constructed = false;
     }
 }

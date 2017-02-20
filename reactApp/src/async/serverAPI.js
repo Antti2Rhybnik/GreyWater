@@ -41,8 +41,6 @@ const requireNodes = () => new Promise((resolve, reject) => {
 });
 
 
-
-
 const saveNodes = (nodes) => new Promise((resolve, reject) => {
     const METHOD = 'POST';
     const URL = '/GreyWater/rest/api/saveNodes';
@@ -81,5 +79,72 @@ const saveNodes = (nodes) => new Promise((resolve, reject) => {
 });
 
 
+const startServer = () =>  new Promise((resolve, reject) => {
+    const METHOD = 'GET';
+    const URL = '/GreyWater/rest/api/start';
+    const ASYNC = true;
+    const DONE = 4;
+    const SUCCESS = 200;
 
-export { requireNodes, saveNodes };
+    console.log("startServer");
+
+    const xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function() {
+
+        let { readyState: state, status: code } = xhr;
+
+        if (state === DONE) {
+
+            if (code === SUCCESS) {
+                resolve();
+            } else {
+                reject(new Error(`Failed HTTP request (${code})`));
+            }
+        }
+
+    };
+
+    xhr.onerror = reject;
+
+    xhr.open(METHOD, URL, ASYNC);
+    xhr.send();
+
+});
+
+const stopServer = () =>  new Promise((resolve, reject) => {
+    const METHOD = 'GET';
+    const URL = '/GreyWater/rest/api/stop';
+    const ASYNC = true;
+    const DONE = 4;
+    const SUCCESS = 200;
+
+    console.log("stopServer");
+
+    const xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function() {
+
+        let { readyState: state, status: code } = xhr;
+
+        if (state === DONE) {
+
+            if (code === SUCCESS) {
+                resolve();
+            } else {
+                reject(new Error(`Failed HTTP request (${code})`));
+            }
+        }
+
+    };
+
+    xhr.onerror = reject;
+
+    xhr.open(METHOD, URL, ASYNC);
+    xhr.send();
+
+});
+
+
+
+export { requireNodes, saveNodes, startServer, stopServer };

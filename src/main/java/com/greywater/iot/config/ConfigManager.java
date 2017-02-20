@@ -8,8 +8,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import com.greywater.iot.nodeNetwork.*;
 import com.greywater.iot.persistence.PersistManager;
+import com.greywater.iot.rest.RandomServerException;
 
 import javax.naming.NamingException;
 import java.io.IOException;
@@ -21,6 +23,62 @@ import java.util.stream.Collectors;
 
 
 public class ConfigManager {
+
+
+    public static boolean isValidJSON(final String json) throws IOException {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            mapper.readTree(json);
+        } catch(JsonProcessingException e){
+            return false;
+        }
+
+        return true;
+    }
+
+    public static String loadConfig() {
+        String conf = "";
+        String sqlQuery = "SELECT * FROM NEO_77I8IO0F4PQ8TZ67A28RD0L2L.CONFIGS";
+
+        try(Connection conn = PersistManager.newConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
+            ResultSet resultSet = pstmt.executeQuery()) {
+
+                if (resultSet.next()) {
+                    conf = resultSet.getString("JSON");
+                }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return conf;
+    }
+
+
+    public static void storeConfig(String config) throws RandomServerException {
+
+        try(Connection conn = PersistManager.newConnection()) {
+
+            conn.createStatement().execute("delete from NEO_77I8IO0F4PQ8TZ67A28RD0L2L.CONFIGS");
+
+            String sqlQuery = "insert into NEO_77I8IO0F4PQ8TZ67A28RD0L2L.CONFIGS(ID, JSON) values(?,?)";
+
+            PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
+
+            pstmt.setString(1, UUID.randomUUID().toString());
+            pstmt.setString(2, config);
+
+            pstmt.execute();
+
+        } catch (SQLException e) {
+            throw new RandomServerException("Something wrong with Database", e);
+        }
+
+
+    }
 
 
     public static void saveConfig(String config) throws SaveConfigException {
@@ -113,6 +171,8 @@ public class ConfigManager {
     }
 
 
+
+
     private static void writeNode(String id, String type, Connection conn) throws SQLException {
 
         String sqlQuery = "insert into NEO_77I8IO0F4PQ8TZ67A28RD0L2L.NODES(NODE_ID, NODE_TYPE) values(?,?)";
@@ -179,8 +239,6 @@ public class ConfigManager {
 
     }
 
-
-
     private static void writeArithmeticalNode(String id, String expr, String integrable, Connection conn) throws SQLException {
         String sqlQuery =  "insert into NEO_77I8IO0F4PQ8TZ67A28RD0L2L.ARITHMETICAL_NODES(AN_ID, EXPR, INTEGRABLE) values(?,?,?)";
         PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
@@ -235,6 +293,7 @@ public class ConfigManager {
     }
 
     private static void deleteConfig() throws SQLException {
+        // rewrite config
         Connection conn = PersistManager.newConnection();
 
         conn.createStatement().execute("delete from NEO_77I8IO0F4PQ8TZ67A28RD0L2L.EVENT_NODES");
@@ -258,11 +317,9 @@ public class ConfigManager {
             while (resultSet.next()) {
 
                 Node node = new Node();
-                // for Node
-                node.setId(resultSet.getString("SN_ID"));
-                node.setType("SENSOR_NODE");
 
-                // for SensorNode
+                node.setId(resultSet.getString("NODE_ID"));
+                node.setType(resultSet.getString("NODE_TYPE"));
 
                 nodes.add(node);
             }
@@ -289,11 +346,11 @@ public class ConfigManager {
                 SensorNode node = new SensorNode();
                 // for Node
                 node.setId(resultSet.getString("SN_ID"));
-                node.setType("SENSOR_NODE");
+                node.setType("sensor");
 
                 // for SensorNode
-                node.setSensorType(resultSet.getString("SENSOR_TYPE"));
-                node.setSensorId(resultSet.getLong("SENSOR_ID"));
+                node.setSensorType(resultSet.getString("SENSOR_TYPE")); // as sensor name
+                node.setSensorId(resultSet.getLong("SN_ID"));
 
 
                 sensorNodes.add(node);
@@ -320,7 +377,7 @@ public class ConfigManager {
                 ArithmeticalNode node = new ArithmeticalNode();
                 // for Node
                 node.setId(resultSet.getString("AN_ID"));
-                node.setType("ARITHMETICAL_NODE");
+                node.setType("arithmetical");
 
                 // for ArithmeticalNode
                 node.setIntegrable(resultSet.getString("INTEGRABLE").equalsIgnoreCase("true"));
@@ -350,7 +407,7 @@ public class ConfigManager {
                 LogicalNode node = new LogicalNode();
                 // for Node
                 node.setId(resultSet.getString("LN_ID"));
-                node.setType("ARITHMETICAL_NODE");
+                node.setType("logical");
 
                 // for LogicalNode
                 node.setExpr(resultSet.getString("EXPR"));
@@ -380,7 +437,7 @@ public class ConfigManager {
                 EventNode node = new EventNode();
                 // for Node
                 node.setId(resultSet.getString("EN_ID"));
-                node.setType("EVENT_NODE");
+                node.setType("event");
 
                 // for EventNode
                 node.setImportance(resultSet.getString("IMPORTANCE"));
@@ -420,13 +477,46 @@ public class ConfigManager {
 
 
     public static String getConfig() {
-        // FIXME: если объектов нет, то надо бы создать (не во время вычислений, естественно)
+
+        // GET from DATABASE
+
+        List<SensorNode> sensorNodes = ConfigManager.getSensorNodes();
+        List<ArithmeticalNode> arithmeticalNodes = ConfigManager.getArithmeticalNodes();
+        List<LogicalNode> logicalNodes = ConfigManager.getLogicalNodes();
+        List<EventNode> eventNodes = ConfigManager.getEventNodes();
+
+
+        ArrayList<Node> allNodes = new ArrayList<>();
+
+        allNodes.addAll(sensorNodes);
+        allNodes.addAll(arithmeticalNodes);
+        allNodes.addAll(logicalNodes);
+        allNodes.addAll(eventNodes);
+
+
+        for (Node node: allNodes) {
+
+            List<String> parentsIDs = getParentsForNode(node.getId());
+
+            for (String parentId : parentsIDs) {
+
+                Node nn = allNodes
+                        .stream()
+                        .filter((n -> parentId.equals(n.getId())))
+                        .findFirst()
+                        .get();
+
+                node.addInput(nn);
+            }
+        }
+
+
 
         ObjectMapper mapper = new ObjectMapper();
 
         ArrayNode arrayConf = mapper.createArrayNode();
 
-        for (Node node: NodeMaster.allNodes) {
+        for (Node node: allNodes) {
 
             ObjectNode nodeConf = mapper.createObjectNode();
             ObjectNode paramConf = mapper.createObjectNode();

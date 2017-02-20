@@ -15,7 +15,7 @@ function updateSensorsPanel() {
                 if (sensors[i] == id)
                     flag = false;
 
-            if (flag) {
+          ``  if (flag) {
                 sensors.push(id);
 
                 var checkboxPanel = document.createElement("input");

@@ -27,9 +27,12 @@ class ArithmeticalNodeAdd extends Component {
 
         return (
             <form>
-                <p>id: <input type='text' ref={inp => this.id_input = inp}/></p>
-                <p>expr: <input type='text' ref={inp => this.expr_input = inp}/></p>
-                <p>integrable: <input type='checkbox' ref={inp => this.integrable_input = inp}/></p>
+                <p>id</p>
+                <input className='text-field' type='text' ref={inp => this.id_input = inp}/>
+                <p>expr</p>
+                <input className='text-field' type='text' ref={inp => this.expr_input = inp}/>
+                <p>integrable <input type='checkbox' ref={inp => this.integrable_input = inp}/></p>
+
                 <button type='button' onClick={this.addTo.bind(this)}>Добавить</button>
             </form>
         );

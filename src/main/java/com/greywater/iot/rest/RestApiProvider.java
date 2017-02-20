@@ -54,6 +54,25 @@ public class RestApiProvider {
         return Response.ok("saved").build();
     }
 
+    @POST
+    @Path("storeConfig")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response storeConfig(String config) {
+
+        try {
+
+            ConfigManager.storeConfig(config);
+            NodeMaster.constructed = false;
+
+        } catch (RandomServerException e) {
+            e.printStackTrace();
+            return Response.ok(e.getMessage()).status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+
+        return Response.ok("saved").build();
+    }
+
 
 
     @GET
@@ -62,6 +81,7 @@ public class RestApiProvider {
     public List<SensorNode> getSensorsInfo() {
         return NodeMaster.sensorNodes;
     }
+
 
     @GET
     @Path("sensorValues")
@@ -93,9 +113,18 @@ public class RestApiProvider {
     @Path("getNodes")
     @Produces(MediaType.APPLICATION_JSON)
     public Response test() {
-        NodeMaster.init1();
         return Response.ok(ConfigManager.getConfig()).build();
     }
+
+    @GET
+    @Path("loadConfig")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response loadConfig() {
+        return Response.ok(ConfigManager.loadConfig()).build();
+    }
+
+
+
 
     @GET
     @Path("stop")
@@ -113,10 +142,13 @@ public class RestApiProvider {
     @Produces(MediaType.APPLICATION_JSON)
     public Response start() {
 
-        NodeMaster.init();
-        System.out.println("STARTED!!!");
-
-        return Response.ok("started").build();
+        try {
+            NodeMaster.start();
+            System.out.println("STARTED!!!");
+            return Response.ok("started").build();
+        } catch (RandomServerException e) {
+            return Response.ok(e.getMessage()).build();
+        }
     }
 
 
