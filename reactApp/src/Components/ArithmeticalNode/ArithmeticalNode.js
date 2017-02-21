@@ -9,9 +9,7 @@ class ArithmeticalNode extends Component {
 
         return (
             <div>
-                <div>id: {node_id+''}</div>
-                <div>expr: {arithm_expr+''}</div>
-                <div>integr: {arithm_integrable+''}</div>
+                <div><b>{node_id+''}:</b> {arithm_expr+''}, {arithm_integrable+''}</div>
             </div>
         );
     }

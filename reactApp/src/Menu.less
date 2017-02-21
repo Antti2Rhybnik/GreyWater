@@ -1,0 +1,55 @@
+@radius: 5px;
+@radius_left: @radius 0 0 @radius;
+@radius_right: 0 @radius @radius 0;
+
+@dark_grey: #535353;
+@light_grey: #fcfcfc;
+@shadow_color: #cbcbcb;
+@font_color_dark: #575757;
+@bg_color: #e4e4e4;
+
+.Menu {
+  display: flex;
+
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+  border-radius: @radius;
+
+}
+
+.Menu-item {
+
+  padding: 5px;
+  background-color: @light_grey;
+
+  &:hover {
+    background-color: #dddddd;
+  }
+
+  transition: background-color 0.3s;
+
+}
+
+.Menu-item.first {
+  border-radius: @radius_left;
+  &:hover {
+    border-radius: @radius_left;
+  }
+}
+
+.Menu-item.last {
+  border-radius: @radius_right;
+  &:hover {
+    border-radius: @radius_right;
+  }
+}
+
+.Menu-item.selected {
+
+  background-color: @dark_grey;
+  color: white;
+
+  &:hover {
+    background-color: @dark_grey;
+  }
+
+}

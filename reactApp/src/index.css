@@ -1,5 +1,44 @@
+@font-face {
+  font-family: osx;
+  /* Имя шрифта */
+  src: url(fonts/SF-UI-Text-Regular.otf);
+  /* Путь к файлу со шрифтом */
+}
+html,
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  width: 100%;
+  height: 100%;
+  font-family: osx, monospace;
+  user-select: none;
+  cursor: default;
+}
+.osx-button {
+  border-radius: 5px;
+  outline: none;
+  background-color: #fcfcfc;
+  border: 0;
+  padding: 5px;
+  transition: background-color 0.3s;
+  font-family: osx, monospace;
+  font-size: medium;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+}
+.osx-button:hover {
+  background-color: #cbcbcb;
+}
+.osx-button:active {
+  background-color: #4e8dda;
+}
+.osx-button.img {
+  display: flex;
+  padding: 2px;
+}
+* {
+  padding: 0;
+  margin: 0;
+}
+input {
+  display: block;
 }

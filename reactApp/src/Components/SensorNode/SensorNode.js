@@ -9,9 +9,7 @@ class SensorNode extends Component {
 
         return (
             <div>
-                <div>id: {node_id+''}</div>
-                <div>name: {sensor_type+''}</div>
-                <div>units: {sensor_unit+''}</div>
+                <div><b>{node_id+''}:</b> {sensor_type+''}, {sensor_unit+''}</div>
             </div>
         );
     }

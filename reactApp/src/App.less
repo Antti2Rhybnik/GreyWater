@@ -1,17 +1,30 @@
+@bg-grey: #eaeaea;
+@bg-grey2: #f0eff4;
+@bg_dark_grey: #9b999e;
+
+.App {
+
+}
+
+
 .App-cnt {
   display: flex;
   justify-content: space-between;
 }
+
 .main-wrapper {
   margin: 0 20px;
 }
+
 .main-header {
-  background: linear-gradient(0deg, #eaeaea, #f0eff4);
+  background: linear-gradient(0deg,  @bg-grey, @bg-grey2);
   padding: 10px;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #9b999e;
+  border-bottom: 1px solid @bg_dark_grey;
 }
+
 .header-item {
   padding: 0 5px;
 }
+

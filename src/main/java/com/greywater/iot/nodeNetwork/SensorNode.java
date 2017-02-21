@@ -10,6 +10,7 @@ public class SensorNode extends Node<Double> {
 
     Long sensorId;
     String sensorType;
+    String sensorUnit;
 
     public SensorNode() {
         super();
@@ -50,5 +51,13 @@ public class SensorNode extends Node<Double> {
 
     public void setSensorType(String sensorType) {
         this.sensorType = sensorType;
+    }
+
+    public String getSensorUnit() {
+        return sensorUnit;
+    }
+
+    public void setSensorUnit(String sensorUnit) {
+        this.sensorUnit = sensorUnit;
     }
 }
