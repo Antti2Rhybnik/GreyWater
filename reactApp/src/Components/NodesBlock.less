@@ -1,0 +1,49 @@
+@blue: #4e8dda;
+
+.NodesBlock {
+
+}
+
+.NodesBlock-item {
+
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &:hover {
+    background-color: #dddddd;
+  }
+
+}
+
+.NodesBlock-item.selected {
+    background-color: @blue;
+    color: white;
+
+}
+
+
+.NodesBlock-delete {
+  border: none;
+  outline: none;
+  background-color: #ff3800;
+  height: 10px;
+  width: 10px;
+  margin: 0;
+  padding: 0;
+  border-radius: 50%;
+  box-sizing: border-box;
+
+  &:hover {
+     background-color: #ff6559;
+  }
+
+}
+
+.NodesBlock-list {
+  overflow-y: scroll;
+  height: 300px;
+  min-width: 200px;
+  max-width: 400px;
+}
