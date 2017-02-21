@@ -9,6 +9,7 @@ build/
 
 reactApp/build
 reactApp/.idea
+*.css
 
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -- is a black hole >>
 reactApp/node_modules
