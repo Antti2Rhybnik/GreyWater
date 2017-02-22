@@ -41,7 +41,7 @@ public class EventNode extends Node<String> {
 
     public void writeEvent(String nodeID, Connection conn) throws SQLException, NamingException {
 
-        String sqlQuery = "insert into NEO_77I8IO0F4PQ8TZ67A28RD0L2L.EVENTS(ID, EVENT_TIME, EVENT_MESSAGE, EVENT_IMPORTANCE, NODE_ID) values(?,?,?,?,?)";
+        String sqlQuery = "insert into NEO_77I8IO0F4PQ8TZ67A28RD0L2L.EVENTS(ID, EVENT_TIME, EVENT_MESSAGE, EVENT_IMPORTANCE, NODE_ID, CHECK_FLAG) values(?,?,?,?,?,?)";
 
         PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
 
@@ -56,16 +56,38 @@ public class EventNode extends Node<String> {
         pstmt.setString(3, message);
         pstmt.setString(4, importance);
         pstmt.setString(5, nodeID);
+        pstmt.setString(6, "0");
 
         pstmt.execute();
     }
 
-    void eval() {
+     void eval() {
 
         inputs.forEach(node -> {
             if ((Boolean) node.getState()) try (Connection conn = PersistManager.newConnection()) {
                 try {
-                    writeEvent(node.getId(), conn);
+                    String prevEvent = Message.getLastEvent();
+                    String prevID = Message.getLastID();
+                    if ((prevEvent.compareTo(this.getMessage()) != 0) && (prevID.compareTo(node.getId()) != 0)) {
+                        writeEvent(node.getId(), conn);
+                    }
+                } catch (NamingException e) {
+                    e.printStackTrace();
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            else try (Connection conn = PersistManager.newConnection()) {
+                try {
+                    String prevEvent = Message.getLastEvent();
+                    String prevID = Message.getLastID();
+                    if ((prevEvent.compareTo("ok") != 0) && (prevID.compareTo(node.getId()) != 0)) {
+                        String oldMessage = this.getMessage();
+                        this.setMessage("ok");
+                        writeEvent(node.getId(), conn);
+                        this.setMessage(oldMessage);
+                    }
                 } catch (NamingException e) {
                     e.printStackTrace();
                 }
