@@ -121,6 +121,22 @@ public class RestApiProvider {
 
         return Message.getEvent(node_id);
     }
+    
+    @GET
+    @Path("getLastUncheckedEvent")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getLastUncheckedEvent() {
+
+        return Message.getLastUncheckedEvent();
+    }
+
+    @GET
+    @Path("getAllUncheckedEvent")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getAllUncheckedEvent() {
+
+        return Message.getAllUncheckedEvent();
+    }
 
     @GET
     @Path("getNodes")
@@ -135,9 +151,6 @@ public class RestApiProvider {
     public Response loadConfig() {
         return Response.ok(ConfigManager.loadConfig()).build();
     }
-
-
-
 
     @GET
     @Path("stop")
