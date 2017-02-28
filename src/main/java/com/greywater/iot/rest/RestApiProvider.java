@@ -139,6 +139,22 @@ public class RestApiProvider {
     }
 
     @GET
+    @Path("getLastUncheckedEventWithID")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getLastUncheckedEventWithID(@QueryParam("node_id") String node_id) {
+
+        return Message.getLastUncheckedEventWithID(node_id);
+    }
+
+    @GET
+    @Path("getAllUncheckedEventWithID")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getAllUncheckedEventWithID(@QueryParam("node_id") String node_id) {
+
+        return Message.getAllUncheckedEventWithID(node_id);
+    }
+
+    @GET
     @Path("getNodes")
     @Produces(MediaType.APPLICATION_JSON)
     public Response test() {
