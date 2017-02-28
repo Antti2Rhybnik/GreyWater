@@ -174,6 +174,7 @@ public class Message implements Serializable {
         }
     }
 
+    //получаем последний эвент в независимости от номера ноды и флага проверки
     public static String getLastEvent() {
         String sqlQuery = "SELECT EVENT_MESSAGE FROM EVENTS ORDER BY EVENT_TIME DESC LIMIT 1";
         String res = "";
@@ -195,6 +196,7 @@ public class Message implements Serializable {
         }
     }
 
+    //получаем последний эвент определенной ноды в независимости от флага проверки
     public static String getEvent(String node_id) {
         String sqlQuery = "SELECT EVENT_MESSAGE FROM EVENTS WHERE NODE_ID = ? ORDER BY EVENT_TIME DESC LIMIT 1";
         String res = "";
@@ -217,6 +219,7 @@ public class Message implements Serializable {
         }
     }
 
+    //получаем последний записанный id в независимости от флага
     public static String getLastID() {
         String sqlQuery = "SELECT NODE_ID FROM EVENTS ORDER BY EVENT_TIME DESC LIMIT 1";
         String res = "";
@@ -238,6 +241,7 @@ public class Message implements Serializable {
         }
     }
 
+    //получаем последний непроверенный эвент в независимости от номера ноды
     public static String getLastUncheckedEvent() {
         String sqlQuery = "SELECT EVENT_MESSAGE, EVENT_TIME FROM EVENTS WHERE CHECK_FLAG='0' ORDER BY EVENT_TIME DESC LIMIT 1";
         String res = "";
@@ -260,6 +264,7 @@ public class Message implements Serializable {
 
             PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
             pstmt.execute();
+
         } catch (SQLException e) {
 
             e.printStackTrace();
@@ -268,6 +273,7 @@ public class Message implements Serializable {
         return res;
     }
 
+    //получаем все непроверенные эвенты в независимости от номера ноды
     public static String getAllUncheckedEvent() {
         String sqlQuery = "SELECT EVENT_MESSAGE, EVENT_TIME FROM EVENTS WHERE CHECK_FLAG='0'";
         String res = "";
@@ -290,6 +296,75 @@ public class Message implements Serializable {
 
             PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
             pstmt.execute();
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            return res;
+        }
+        return res;
+    }
+
+    //получаем последний непроверенный эвент в зависимости от номера ноды
+    public static String getLastUncheckedEventWithID(String node_id) {
+        String sqlQuery = "SELECT EVENT_MESSAGE, EVENT_TIME FROM EVENTS WHERE CHECK_FLAG='0' AND NODE_ID = ? ORDER BY EVENT_TIME DESC LIMIT 1";
+        String res = "";
+        try(Connection conn = PersistManager.newConnection()) {
+
+            PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
+            pstmt.setString(1, node_id);
+            ResultSet resultSet = pstmt.executeQuery();
+
+            while (resultSet.next()) {
+                res = resultSet.getString("EVENT_MESSAGE") + " " + resultSet.getString("EVENT_TIME");
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            return res;
+        }
+        sqlQuery = "UPDATE EVENTS SET CHECK_FLAG = '1' WHERE CHECK_FLAG='0' AND NODE_ID = ? AND EVENT_TIME=(SELECT MAX(EVENT_TIME) FROM EVENTS)";
+        try(Connection conn = PersistManager.newConnection()) {
+
+            PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
+            pstmt.setString(1, node_id);
+            pstmt.execute();
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            return res;
+        }
+        return res;
+    }
+
+    //получаем все непроверенные эвенты в зависимости от номера ноды
+    public static String getAllUncheckedEventWithID(String node_id) {
+        String sqlQuery = "SELECT EVENT_MESSAGE, EVENT_TIME FROM EVENTS WHERE CHECK_FLAG='0' AND NODE_ID = ? ";
+        String res = "";
+        try(Connection conn = PersistManager.newConnection()) {
+
+            PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
+            pstmt.setString(1, node_id);
+            ResultSet resultSet = pstmt.executeQuery();
+
+            while (resultSet.next()) {
+                res = resultSet.getString("EVENT_MESSAGE") + " " + resultSet.getString("EVENT_TIME");
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            return res;
+        }
+        sqlQuery = "UPDATE EVENTS SET CHECK_FLAG = '1' WHERE CHECK_FLAG='0' AND NODE_ID = ? ";
+        try(Connection conn = PersistManager.newConnection()) {
+
+            PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
+            pstmt.setString(1, node_id);
+            pstmt.execute();
+
         } catch (SQLException e) {
 
             e.printStackTrace();
