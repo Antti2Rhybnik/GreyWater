@@ -1,7 +1,7 @@
 package com.greywater.iot.nodeNetwork;
 
-import com.greywater.iot.persistence.PersistManager;
 import com.greywater.iot.jpa.Message;
+import com.greywater.iot.persistence.PersistManager;
 
 import javax.naming.NamingException;
 import java.sql.Connection;
@@ -67,9 +67,8 @@ public class EventNode extends Node<String> {
         inputs.forEach(node -> {
             if ((Boolean) node.getState()) try (Connection conn = PersistManager.newConnection()) {
                 try {
-                    String prevEvent = Message.getLastEvent();
-                    String prevID = Message.getLastID();
-                    if ((prevEvent.compareTo(this.getMessage()) != 0) && (prevID.compareTo(node.getId()) != 0)) {
+                    String prevEvent = Message.getEvent(node.getId());
+                    if (prevEvent.compareTo(this.getMessage()) != 0) {
                         writeEvent(node.getId(), conn);
                     }
                 } catch (NamingException e) {
@@ -81,9 +80,8 @@ public class EventNode extends Node<String> {
             }
             else try (Connection conn = PersistManager.newConnection()) {
                 try {
-                    String prevEvent = Message.getLastEvent();
-                    String prevID = Message.getLastID();
-                    if ((prevEvent.compareTo("ok") != 0) && (prevID.compareTo(node.getId()) != 0)) {
+                    String prevEvent = Message.getEvent(node.getId());
+                    if (prevEvent.compareTo("ok") != 0) {
                         String oldMessage = this.getMessage();
                         this.setMessage("ok");
                         writeEvent(node.getId(), conn);
