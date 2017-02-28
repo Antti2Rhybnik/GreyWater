@@ -1,6 +1,7 @@
 package com.greywater.iot.nodeNetwork;
 
 import com.greywater.iot.persistence.PersistManager;
+import com.greywater.iot.jpa.Message;
 
 import javax.naming.NamingException;
 import java.sql.Connection;
