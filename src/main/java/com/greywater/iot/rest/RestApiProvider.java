@@ -3,30 +3,16 @@ package com.greywater.iot.rest;
 import com.google.gson.Gson;
 import com.greywater.iot.config.ConfigManager;
 import com.greywater.iot.config.SaveConfigException;
-import com.greywater.iot.gwcontext.GWContext;
 import com.greywater.iot.jpa.*;
 import com.greywater.iot.nodeNetwork.ArithmeticalNode;
 import com.greywater.iot.nodeNetwork.NodeHistoryRecord;
 import com.greywater.iot.nodeNetwork.NodeMaster;
-import com.greywater.iot.nodeNetwork.SensorNode;
 import com.greywater.iot.persistence.HANA;
-import com.greywater.iot.persistence.PersistManager;
-import org.eclipse.persistence.platform.database.HANAPlatform;
 
 import javax.inject.Singleton;
-import javax.naming.NamingException;
-import javax.persistence.*;
-import javax.script.Compilable;
-import javax.script.CompiledScript;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /*Это основной инструмент общения с веб клиентом.
@@ -175,6 +161,14 @@ public class RestApiProvider {
     public String getAllUncheckedEventWithID(@QueryParam("node_id") String node_id) {
 
         return HANA.getAllUncheckedEventWithID(node_id);
+    }
+
+    //для теста клиента
+    @GET
+    @Path("toNull")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String toNull() {
+        return HANA.toNull();
     }
 
     @GET
