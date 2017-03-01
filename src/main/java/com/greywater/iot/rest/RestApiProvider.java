@@ -134,7 +134,7 @@ public class RestApiProvider {
     @Produces(MediaType.TEXT_PLAIN)
     public String getLastEvent() {
 
-        return Message.getLastEvent();
+        return HANA.getLastEvent();
     }
 
     @GET
@@ -142,7 +142,7 @@ public class RestApiProvider {
     @Produces(MediaType.TEXT_PLAIN)
     public String getEvent(@QueryParam("node_id") String node_id) {
 
-        return Message.getEvent(node_id);
+        return HANA.getEvent(node_id);
     }
 
     @GET
@@ -150,7 +150,7 @@ public class RestApiProvider {
     @Produces(MediaType.TEXT_PLAIN)
     public String getLastUncheckedEvent() {
 
-        return Message.getLastUncheckedEvent();
+        return HANA.getLastUncheckedEvent();
     }
 
     @GET
@@ -158,7 +158,7 @@ public class RestApiProvider {
     @Produces(MediaType.TEXT_PLAIN)
     public String getAllUncheckedEvent() {
 
-        return Message.getAllUncheckedEvent();
+        return HANA.getAllUncheckedEvent();
     }
 
     @GET
@@ -166,7 +166,7 @@ public class RestApiProvider {
     @Produces(MediaType.TEXT_PLAIN)
     public String getLastUncheckedEventWithID(@QueryParam("node_id") String node_id) {
 
-        return Message.getLastUncheckedEventWithID(node_id);
+        return HANA.getLastUncheckedEventWithID(node_id);
     }
 
     @GET
@@ -174,7 +174,7 @@ public class RestApiProvider {
     @Produces(MediaType.TEXT_PLAIN)
     public String getAllUncheckedEventWithID(@QueryParam("node_id") String node_id) {
 
-        return Message.getAllUncheckedEventWithID(node_id);
+        return HANA.getAllUncheckedEventWithID(node_id);
     }
 
     @GET
