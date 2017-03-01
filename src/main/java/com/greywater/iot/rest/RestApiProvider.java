@@ -1,13 +1,17 @@
 package com.greywater.iot.rest;
 
+import com.google.gson.Gson;
 import com.greywater.iot.config.ConfigManager;
 import com.greywater.iot.config.SaveConfigException;
 import com.greywater.iot.gwcontext.GWContext;
 import com.greywater.iot.jpa.*;
 import com.greywater.iot.nodeNetwork.ArithmeticalNode;
+import com.greywater.iot.nodeNetwork.NodeHistoryRecord;
 import com.greywater.iot.nodeNetwork.NodeMaster;
 import com.greywater.iot.nodeNetwork.SensorNode;
+import com.greywater.iot.persistence.HANA;
 import com.greywater.iot.persistence.PersistManager;
+import org.eclipse.persistence.platform.database.HANAPlatform;
 
 import javax.inject.Singleton;
 import javax.naming.NamingException;
@@ -73,21 +77,21 @@ public class RestApiProvider {
         return Response.ok("saved").build();
     }
 
-
-
-    @GET
-    @Path("sensorsInfo")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<SensorNode> getSensorsInfo() {
-        return NodeMaster.sensorNodes;
-    }
-
     @GET
     @Path("sensorValues")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Message> getSensorValues(@QueryParam("id") Long id, @QueryParam("limit") Integer limit) {
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getSensorValues(@QueryParam("id") Long id, @QueryParam("limit") Integer limit) {
 
-        return Message.getMessages(id, limit);
+        try {
+
+            List<Message> messages = HANA.getMessages(id, limit);
+            String json = new Gson().toJson(messages);
+            return Response.ok(json, MediaType.APPLICATION_JSON).build();
+
+        } catch (RandomServerException e) {
+            e.printStackTrace();
+            return Response.ok(e.getMessage()).status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GET
@@ -96,13 +100,32 @@ public class RestApiProvider {
     public String getNodeState(@QueryParam("id") String id) {
 
         String state = "";
-        for (ArithmeticalNode an: NodeMaster.arithmeticalNodes) {
+        for (ArithmeticalNode an : NodeMaster.arithmeticalNodes) {
             if (an.getId().equals(id)) {
                 state = an.getState().toString();
             }
         }
 
         return state;
+    }
+
+
+    // TODO
+    @GET
+    @Path("getNodeHistory")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getNodeHistory(@QueryParam("id") String id, @QueryParam("limit") int limit) {
+
+        try {
+
+            List<NodeHistoryRecord> records = HANA.nodeHisory(id, limit);
+            String json = new Gson().toJson(records);
+            return Response.ok(json, MediaType.APPLICATION_JSON).build();
+
+        } catch (RandomServerException e) {
+            e.printStackTrace();
+            return Response.ok(e.getMessage()).status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
@@ -121,7 +144,7 @@ public class RestApiProvider {
 
         return Message.getEvent(node_id);
     }
-    
+
     @GET
     @Path("getLastUncheckedEvent")
     @Produces(MediaType.TEXT_PLAIN)
@@ -158,7 +181,7 @@ public class RestApiProvider {
     @Path("getNodes")
     @Produces(MediaType.APPLICATION_JSON)
     public Response test() {
-        return Response.ok(ConfigManager.getConfig()).build();
+        return Response.ok("test string").build();
     }
 
     @GET

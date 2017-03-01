@@ -171,8 +171,6 @@ public class ConfigManager {
     }
 
 
-
-
     private static void writeNode(String id, String type, Connection conn) throws SQLException {
 
         String sqlQuery = "insert into NEO_77I8IO0F4PQ8TZ67A28RD0L2L.NODES(NODE_ID, NODE_TYPE) values(?,?)";

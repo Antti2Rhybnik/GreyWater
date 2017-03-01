@@ -19,7 +19,7 @@ import java.sql.*;
  */
 
 @XmlRootElement
-public class Message implements Serializable {
+final public class Message implements Serializable {
 
     private String gDevice;
     private Date gCreated;
@@ -54,38 +54,6 @@ public class Message implements Serializable {
 
     public void setSensorValue(Double sensorValue) {
         this.sensorValue = sensorValue;
-    }
-
-    public static List<Message> getMessages(Long id, Integer limit) {
-        List<Message> messages = new ArrayList<>();
-
-        String sqlQuery = "SELECT * FROM MESSAGES_TABLE WHERE SENSOR_ID = ? ORDER BY G_CREATED DESC LIMIT ?";
-
-        try (Connection conn = PersistManager.newConnection()) {
-
-            PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
-
-            pstmt.setLong(1, id);
-            pstmt.setInt(2, limit);
-
-            ResultSet resultSet = pstmt.executeQuery();
-
-            while (resultSet.next()) {
-
-                Message msg = new Message();
-                msg.setgDevice(resultSet.getString("G_DEVICE"));
-                msg.setgCreated(resultSet.getDate("G_CREATED"));
-                msg.setSensorId(resultSet.getLong("SENSOR_ID"));
-                msg.setSensorValue(resultSet.getDouble("SENSOR_VALUE"));
-
-                messages.add(msg);
-            }
-
-        }  catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return messages;
     }
 
     public static void updateLastMessages() {
