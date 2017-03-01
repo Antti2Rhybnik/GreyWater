@@ -275,4 +275,22 @@ public class HANA {
         }
         return res;
     }
+
+
+
+    //для теста клиента
+    public static String toNull() {
+        String res = "";
+        String sqlQuery = "UPDATE EVENTS SET CHECK_FLAG=0";
+        try(Connection conn = PersistManager.newConnection()) {
+
+            PreparedStatement pstmt = conn.prepareStatement(sqlQuery);
+            pstmt.execute();
+            return res;
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            return res;
+        }
+    }
 }
