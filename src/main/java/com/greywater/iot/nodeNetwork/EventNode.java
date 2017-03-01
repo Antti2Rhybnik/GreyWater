@@ -1,6 +1,7 @@
 package com.greywater.iot.nodeNetwork;
 
 import com.greywater.iot.jpa.Message;
+import com.greywater.iot.persistence.HANA;
 import com.greywater.iot.persistence.PersistManager;
 
 import javax.naming.NamingException;
@@ -67,7 +68,7 @@ public class EventNode extends Node<String> {
         inputs.forEach(node -> {
             if ((Boolean) node.getState()) try (Connection conn = PersistManager.newConnection()) {
                 try {
-                    String prevEvent = Message.getEvent(node.getId());
+                    String prevEvent = HANA.getEvent(node.getId());
                     if (prevEvent.compareTo(this.getMessage()) != 0) {
                         writeEvent(node.getId(), conn);
                     }
@@ -80,7 +81,7 @@ public class EventNode extends Node<String> {
             }
             else try (Connection conn = PersistManager.newConnection()) {
                 try {
-                    String prevEvent = Message.getEvent(node.getId());
+                    String prevEvent = HANA.getEvent(node.getId());
                     if (prevEvent.compareTo("ok") != 0) {
                         String oldMessage = this.getMessage();
                         this.setMessage("ok");
