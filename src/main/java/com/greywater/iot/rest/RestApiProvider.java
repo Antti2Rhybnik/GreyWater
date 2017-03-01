@@ -104,7 +104,7 @@ public class RestApiProvider {
 
         try {
 
-            List<NodeHistoryRecord> records = HANA.nodeHisory(id, limit);
+            List<NodeHistoryRecord> records = HANA.nodeHistory(id, limit);
             String json = new Gson().toJson(records);
             return Response.ok(json, MediaType.APPLICATION_JSON).build();
 

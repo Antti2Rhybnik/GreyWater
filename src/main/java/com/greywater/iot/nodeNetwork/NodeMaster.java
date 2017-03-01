@@ -123,6 +123,7 @@ public class NodeMaster {
         scheduler.scheduleAtFixedRate(NodeMaster::process, 0, 3, TimeUnit.SECONDS);
     }
 
+    // метод строит ноды, необходимые для обработки
     public static void constructObjects() throws IOException {
 
         allNodes = new ArrayList<>();
@@ -157,6 +158,7 @@ public class NodeMaster {
                         Long sensorId = params.get("sensor_id").asLong();
                         String sensorType = params.get("sensor_type").asText();
                         String sensorUnit = params.get("sensor_unit").asText();
+                        String sqlStr = params.get("sql_str").asText();
 
 //                        System.out.println(sensorId + " "  + sensorType + " " + sensorUnit);
 
@@ -164,6 +166,7 @@ public class NodeMaster {
                         sn.setSensorId(sensorId);
                         sn.setSensorType(sensorType);
                         sn.setSensorUnit(sensorUnit);
+                        sn.setSqlStr(sqlStr);
                         sn.setId(nodeID);
                         sensorNodes.add(sn);
                         allNodes.add(sn);
@@ -177,6 +180,7 @@ public class NodeMaster {
                         an.setExpr(arithmExpr);
                         an.setIntegrable(arithmIntegrable);
                         an.setId(nodeID);
+
                         arithmeticalNodes.add(an);
                         allNodes.add(an);
                         break;
