@@ -173,7 +173,7 @@ public class NodeMaster {
                         break;
                     case "arithmetical":
 
-                        String arithmExpr = params.get("expr").asText();
+                        String arithmExpr = params.get("arithm_expr").asText();
                         Boolean arithmIntegrable = params.get("integrable").asBoolean();
 
                         ArithmeticalNode an = new ArithmeticalNode();
@@ -186,7 +186,7 @@ public class NodeMaster {
                         break;
                     case "logical":
 
-                        String logicExpr = params.get("expr").asText();
+                        String logicExpr = params.get("logic_expr").asText();
 
                         LogicalNode ln = new LogicalNode();
                         ln.setExpr(logicExpr);
@@ -196,8 +196,8 @@ public class NodeMaster {
                         break;
                     case "event":
 
-                        String importance = params.get("importance").asText();
-                        String msg = params.get("msg").asText();
+                        String importance = params.get("event_importance").asText();
+                        String msg = params.get("event_msg").asText();
 
                         EventNode en = new EventNode();
                         en.setMessage(msg);

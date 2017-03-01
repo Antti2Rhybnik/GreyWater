@@ -32,6 +32,7 @@ public class ArithmeticalNode extends EvaluableNode<Double> {
             state = result;
         }
 
+        this.storeToHistory();
         System.out.println("ArithmeticalNode " + id + ": " + state);
 
     }
@@ -45,7 +46,7 @@ public class ArithmeticalNode extends EvaluableNode<Double> {
         this.integrable = integrable;
     }
 
-    public void storeToHistory() throws RandomServerException {
+    private void storeToHistory() {
 
         try(Connection conn = PersistManager.newConnection()) {
 
@@ -62,7 +63,7 @@ public class ArithmeticalNode extends EvaluableNode<Double> {
             pstmt.execute();
 
         } catch (SQLException e) {
-            throw new RandomServerException("Something wrong with Database", e);
+            e.printStackTrace();
         }
     }
 }
