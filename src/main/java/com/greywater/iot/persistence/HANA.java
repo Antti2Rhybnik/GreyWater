@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HANA {
-    public static List<NodeHistoryRecord> nodeHistory(String nodeId, int limit) throws RandomServerException {
+    public static List<NodeHistoryRecord> nodeHisory(String nodeId, int limit) throws RandomServerException {
         List<NodeHistoryRecord> history = new ArrayList<>();
 
         String sqlQuery = "SELECT * FROM NODE_HISTORY WHERE NODE_ID = ? ORDER BY T DESC LIMIT ?";
@@ -177,7 +177,7 @@ public class HANA {
 
     //получаем все непроверенные эвенты в независимости от номера ноды
     public static String getAllUncheckedEvent() {
-        String sqlQuery = "SELECT EVENT_MESSAGE, EVENT_TIME FROM EVENTS WHERE CHECK_FLAG='0'";
+        String sqlQuery = "SELECT NODE_ID, EVENT_MESSAGE, EVENT_TIME FROM EVENTS WHERE CHECK_FLAG='0'";
         String res = "";
         try(Connection conn = PersistManager.newConnection()) {
 
@@ -185,7 +185,7 @@ public class HANA {
             ResultSet resultSet = pstmt.executeQuery();
 
             while (resultSet.next()) {
-                res = res + resultSet.getString("EVENT_MESSAGE") + " " + resultSet.getString("EVENT_TIME") + "\n";
+                res = res + resultSet.getString("NODE_ID") + " " + resultSet.getString("EVENT_MESSAGE") + " " + resultSet.getString("EVENT_TIME") + "\n";
             }
 
         } catch (SQLException e) {
