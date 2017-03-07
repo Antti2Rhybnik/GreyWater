@@ -62,7 +62,7 @@ public class HANA {
 
                 Message msg = new Message();
                 msg.setgDevice(resultSet.getString("G_DEVICE"));
-                msg.setgCreated(resultSet.getDate("G_CREATED"));
+                msg.setgCreated(resultSet.getTimestamp("G_CREATED"));
                 msg.setSensorId(resultSet.getLong("SENSOR_ID"));
                 msg.setSensorValue(resultSet.getDouble("SENSOR_VALUE"));
 
