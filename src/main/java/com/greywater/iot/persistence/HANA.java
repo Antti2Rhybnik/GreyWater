@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HANA {
-    public static List<NodeHistoryRecord> nodeHisory(String nodeId, int limit) throws RandomServerException {
+    public static List<NodeHistoryRecord> nodeHistory(String nodeId, int limit) throws RandomServerException {
         List<NodeHistoryRecord> history = new ArrayList<>();
 
         String sqlQuery = "SELECT * FROM NODE_HISTORY WHERE NODE_ID = ? ORDER BY T DESC LIMIT ?";
